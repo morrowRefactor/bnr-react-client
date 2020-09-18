@@ -13,26 +13,36 @@ class App extends Component {
     this.state = {
       navbar: 'hidden',
       videos: [],
-      vidResources: []
+      vidResources: [],
+      comments: [],
+      users: []
     };
   };
 
   updateState = () => {
     Promise.all([
       fetch(`${config.API_ENDPOINT}/api/videos`),
-      fetch(`${config.API_ENDPOINT}/api/vid-resources`)
+      fetch(`${config.API_ENDPOINT}/api/vid-resources`),
+      fetch(`${config.API_ENDPOINT}/api/comments`),
+      fetch(`${config.API_ENDPOINT}/api/users`)
     ])
-    .then(([vidRes, vidResoRes]) => {
+    .then(([vidRes, vidResoRes, commRes, userRes]) => {
       if (!vidRes.ok)
         return vidRes.json().then(e => Promise.reject(e));
       if (!vidResoRes.ok)
         return vidResoRes.json().then(e => Promise.reject(e));
-      return Promise.all([vidRes.json(), vidResoRes.json()]);
+      if (!commRes.ok)
+        return commRes.json().then(e => Promise.reject(e));
+      if (!userRes.ok)
+        return userRes.json().then(e => Promise.reject(e));
+      return Promise.all([vidRes.json(), vidResoRes.json(), commRes.json(), userRes.json()]);
     })
-    .then(([videos, vidResources]) => {
+    .then(([videos, vidResources, comments, users]) => {
       this.setState({
         videos: videos,
-        vidResources: vidResources
+        vidResources: vidResources,
+        comments: comments,
+        users: users
       })
     })
     .catch(error => {
@@ -57,6 +67,8 @@ class App extends Component {
       navbar: this.state.navbar,
       videos: this.state.videos,
       vidResources: this.state.vidResources,
+      comments: this.state.comments,
+      users: this.state.users,
       refreshState: this.updateState,
       toggleNav: this.toggleNav
     };
