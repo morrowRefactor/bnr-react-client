@@ -17,6 +17,7 @@ class Homepage extends Component {
         const recentVids = getRecents.map(vid => 
             <VideoBlock
                 key={vid.id}
+                vid={vid.id}
                 title={vid.title}
                 description={vid.description}
                 date_posted={vid.date_posted}

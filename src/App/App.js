@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
+import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';
@@ -11,22 +12,27 @@ class App extends Component {
     super(props)
     this.state = {
       navbar: 'hidden',
-      videos: []
+      videos: [],
+      vidResources: []
     };
   };
 
   updateState = () => {
     Promise.all([
-      fetch(`${config.API_ENDPOINT}/api/videos`)
+      fetch(`${config.API_ENDPOINT}/api/videos`),
+      fetch(`${config.API_ENDPOINT}/api/vid-resources`)
     ])
-    .then(([vidRes]) => {
+    .then(([vidRes, vidResoRes]) => {
       if (!vidRes.ok)
         return vidRes.json().then(e => Promise.reject(e));
-      return Promise.all([vidRes.json()]);
+      if (!vidResoRes.ok)
+        return vidResoRes.json().then(e => Promise.reject(e));
+      return Promise.all([vidRes.json(), vidResoRes.json()]);
     })
-    .then(([videos]) => {
+    .then(([videos, vidResources]) => {
       this.setState({
-        videos: videos
+        videos: videos,
+        vidResources: vidResources
       })
     })
     .catch(error => {
@@ -50,6 +56,8 @@ class App extends Component {
     const value = {
       navbar: this.state.navbar,
       videos: this.state.videos,
+      vidResources: this.state.vidResources,
+      refreshState: this.updateState,
       toggleNav: this.toggleNav
     };
 
@@ -57,6 +65,10 @@ class App extends Component {
       <APIContext.Provider value={value}>
         <div className="App">
           <NavBar />
+          <Route
+            path='/videos/:vid'
+            component={MainVideoPage}
+          />
           <Route 
             exact
             path='/'
