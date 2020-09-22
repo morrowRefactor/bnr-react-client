@@ -1,0 +1,9 @@
+.commentsUserName,
+.commentsText {
+    margin-bottom: 0px;
+}
+
+.commentsText,
+.commentsDate {
+    margin-top: 0px;
+}

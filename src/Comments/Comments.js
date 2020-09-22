@@ -17,9 +17,9 @@ class Comments extends Component {
 
         return (
             <section className='Comments'>
-                <p>{user.name}</p>
-                <p>{this.props.comment}</p>
-                <p>{this.getCleanDate(this.props.date_posted)}</p>
+                <p className='commentsUserName'>{user.name}</p>
+                <p className='commentsText'>{this.props.comment}</p>
+                <p className='commentsDate'>{this.getCleanDate(this.props.date_posted)}</p>
             </section>
         );
     }
