@@ -15,7 +15,9 @@ class App extends Component {
       videos: [],
       vidResources: [],
       comments: [],
-      users: []
+      users: [],
+      tagsRef: [],
+      vidTags: []
     };
   };
 
@@ -24,9 +26,11 @@ class App extends Component {
       fetch(`${config.API_ENDPOINT}/api/videos`),
       fetch(`${config.API_ENDPOINT}/api/vid-resources`),
       fetch(`${config.API_ENDPOINT}/api/comments`),
-      fetch(`${config.API_ENDPOINT}/api/users`)
+      fetch(`${config.API_ENDPOINT}/api/users`),
+      fetch(`${config.API_ENDPOINT}/api/tags`),
+      fetch(`${config.API_ENDPOINT}/api/vid-tags`)
     ])
-    .then(([vidRes, vidResoRes, commRes, userRes]) => {
+    .then(([vidRes, vidResoRes, commRes, userRes, tagsRes, vidTagsRes]) => {
       if (!vidRes.ok)
         return vidRes.json().then(e => Promise.reject(e));
       if (!vidResoRes.ok)
@@ -35,14 +39,20 @@ class App extends Component {
         return commRes.json().then(e => Promise.reject(e));
       if (!userRes.ok)
         return userRes.json().then(e => Promise.reject(e));
-      return Promise.all([vidRes.json(), vidResoRes.json(), commRes.json(), userRes.json()]);
+      if (!tagsRes.ok)
+        return tagsRes.json().then(e => Promise.reject(e));
+      if (!vidTagsRes.ok)
+        return vidTagsRes.json().then(e => Promise.reject(e));
+      return Promise.all([vidRes.json(), vidResoRes.json(), commRes.json(), userRes.json(), tagsRes.json(), vidTagsRes.json()]);
     })
-    .then(([videos, vidResources, comments, users]) => {
+    .then(([videos, vidResources, comments, users, tags, vidTags]) => {
       this.setState({
         videos: videos,
         vidResources: vidResources,
         comments: comments,
-        users: users
+        users: users,
+        tagsRef: tags,
+        vidTags: vidTags
       })
     })
     .catch(error => {
@@ -69,6 +79,8 @@ class App extends Component {
       vidResources: this.state.vidResources,
       comments: this.state.comments,
       users: this.state.users,
+      tagsRef: this.state.tagsRef,
+      vidTags: this.state.vidTags,
       refreshState: this.updateState,
       toggleNav: this.toggleNav
     };
