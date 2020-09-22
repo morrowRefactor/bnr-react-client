@@ -6,6 +6,8 @@ export default React.createContext({
     vidResources: [],
     comments: [],
     users: [],
+    tagsRef: [],
+    vidTags: [],
     refreshState: () => {},
     toggleNav: () => {}
 });
