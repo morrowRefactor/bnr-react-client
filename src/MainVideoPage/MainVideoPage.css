@@ -3,3 +3,27 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.mainVideoPageVideo {
+    width: 100px;
+}
+
+.MainVideoPage_resources,
+.MainVideoPage_comments,
+.MainVideoPage_relatedVids {
+    border: 1px solid gray;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.mainVideoPage_resourcesHeader,
+.mainVideoPage_commentsHeader,
+.mainVideoPage_relatedVidsHeader {
+    position: relative;
+    top: -0.75em;
+    display: inline;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px 5px 0px 5px;
+}

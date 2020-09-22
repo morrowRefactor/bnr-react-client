@@ -22,7 +22,7 @@ class MainVideoPage2 extends Component {
     }
 
     render() {
-        let video = { id: this.props.match.params.vid, title: '', description: '', embed_code: '', date_posted: '' };
+        let video = { id: this.props.match.params.vid, title: '', description: '', embed_code: `<iframe src="https://www.youtube.com/embed/cywyb3Y6Qxg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`, date_posted: '' };
         let vidResources = [];
         let comments = [];
         let vidTags = [];
@@ -30,7 +30,7 @@ class MainVideoPage2 extends Component {
         let extraVideos;
 
         // since component is stateless, check context to fetch data if needed
-        if(this.context.videos.length < 1) {
+        if(this.context.comments.length < 1) {
             this.getVideos();
         }
         else {
@@ -142,12 +142,16 @@ class MainVideoPage2 extends Component {
                 });
                 comments = sortDates;
             }
+
+            // insert video iframe
+            document.getElementById('iframe').innerHTML = video.embed_code;
+            console.log(video.embed_code)
         }
 
         function renderResourcesHeader() {
             if(vidResources.length > 0) {
                 return (
-                    <h3>Resources for this Video</h3>
+                    <h3 className='mainVideoPage_resourcesHeader'>Resources for this Video</h3>
                 )
             }
         }
@@ -157,6 +161,7 @@ class MainVideoPage2 extends Component {
                 return vidResources.map(res =>
                     <VideoResources
                         key={res.id}
+                        className='mainVideoPage_resourcesFeat'
                         description={res.description}
                         link={res.link}
                     />
@@ -183,15 +188,23 @@ class MainVideoPage2 extends Component {
         return (
             <section className='MainVideoPage'>
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
+                <div className='mainVideoPageVideo' id='iframe'></div>
                 <p className='mainVideoDesc'>{video.description}</p>
                 <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
-                {renderResourcesHeader()}
-                {renderResourcesList()}
-                <h3>Comments</h3>
-                {renderComments()}
-                <h3>Related Videos</h3>
-                {relatedVideos}
-                {extraVideos}
+                <div className='MainVideoPage_resources'>
+                    {renderResourcesHeader()}
+                    {renderResourcesList()}
+                </div>
+                <div className='MainVideoPage_comments'>
+                    <h3 className='mainVideoPage_commentsHeader'>Comments</h3>
+                    {renderComments()}
+                </div>
+                <div className='MainVideoPage_relatedVids'>
+                    <h3 className='mainVideoPage_relatedVidsHeader'>Related Videos</h3>
+                    {relatedVideos}
+                    {extraVideos}
+                    <p className='mainVideoPage_relatedVidsMore'>Browse all videos</p>
+                </div>
             </section>
         );
     }
