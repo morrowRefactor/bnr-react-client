@@ -13,7 +13,7 @@ class Navbar extends Component {
                 <div className='hamburger'><button className='hamburgerButton' onClick={() => {this.context.toggleNav()}}>&#9776;</button></div>
                 <div className='break'></div>
                 <ul className={this.context.navbar}>
-                    <li><a className='topNavLink' href='https://github.com/morrowRefactor' target='_blank' title='Kurt Morrow GitHub' rel='noopener noreferrer'>Videos</a></li>
+                    <li><Link className='topNavLink' to='/browse-videos'>Videos</Link></li>
                     <li><Link className='topNavLink' to='/about'>About</Link></li>
                 </ul>
             </nav>

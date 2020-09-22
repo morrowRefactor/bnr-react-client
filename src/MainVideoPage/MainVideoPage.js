@@ -28,6 +28,7 @@ class MainVideoPage2 extends Component {
         let vidTags = [];
         let relatedVideos;
         let extraVideos;
+        let vidLink;
 
         // since component is stateless, check context to fetch data if needed
         if(this.context.comments.length < 1) {
@@ -144,8 +145,7 @@ class MainVideoPage2 extends Component {
             }
 
             // insert video iframe
-            document.getElementById('iframe').innerHTML = video.embed_code;
-            console.log(video.embed_code)
+            vidLink = `https://www.youtube.com/embed/cywyb3Y6Qxg`
         }
 
         function renderResourcesHeader() {
@@ -188,7 +188,7 @@ class MainVideoPage2 extends Component {
         return (
             <section className='MainVideoPage'>
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                <div className='mainVideoPageVideo' id='iframe'></div>
+                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
                 <p className='mainVideoDesc'>{video.description}</p>
                 <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
                 <div className='MainVideoPage_resources'>
@@ -203,7 +203,7 @@ class MainVideoPage2 extends Component {
                     <h3 className='mainVideoPage_relatedVidsHeader'>Related Videos</h3>
                     {relatedVideos}
                     {extraVideos}
-                    <p className='mainVideoPage_relatedVidsMore'>Browse all videos</p>
+                    <p className='mainVideoPage_relatedVidsMore'><Link to='/browse-videos'>Browse all videos</Link></p>
                 </div>
             </section>
         );

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
+import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import APIContext from '../APIContext';
 import config from '../config';
@@ -92,6 +93,11 @@ class App extends Component {
           <Route
             path='/videos/:vid'
             component={MainVideoPage}
+          />
+          <Route
+            exact
+            path='/browse-videos'
+            component={BrowseVideos}
           />
           <Route 
             exact
