@@ -15,6 +15,7 @@ class Navbar extends Component {
                 <ul className={this.context.navbar}>
                     <li><Link className='topNavLink' to='/browse-videos'>Videos</Link></li>
                     <li><Link className='topNavLink' to='/about'>About</Link></li>
+                    <li><Link className='topNavLink' to='/add-video'>Admin</Link></li>
                 </ul>
             </nav>
         );

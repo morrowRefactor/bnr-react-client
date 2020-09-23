@@ -4,6 +4,7 @@ import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
 import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
+import AddVideos from '../AddVideos/AddVideos';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';
@@ -98,6 +99,11 @@ class App extends Component {
             exact
             path='/browse-videos'
             component={BrowseVideos}
+          />
+          <Route
+            exact
+            path='/add-video'
+            component={AddVideos}
           />
           <Route 
             exact
