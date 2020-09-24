@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
 import './BrowseVideos.css';

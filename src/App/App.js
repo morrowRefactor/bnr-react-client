@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
 import BrowseVideos from '../BrowseVideos/BrowseVideos';
@@ -116,4 +116,4 @@ class App extends Component {
   };
 };
 
-export default App;
+export default withRouter(App);

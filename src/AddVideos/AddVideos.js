@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
 import config from '../config';
 import './AddVideos.css';
@@ -73,8 +73,14 @@ class AddVideos extends Component {
   };
 
   updateTags(tag) {
+    let tagsIDs = [];
+    const tags = document.getElementsByName('tags');
+    for (let checkbox of tags) {
+      if (checkbox.checked)
+        tagsIDs.push(parseInt(checkbox.value))
+    }
     this.setState({
-      tags: {value: tag, touched: true}
+      tags: { value: tagsIDs, touched: true }
     })
   };
 
@@ -155,19 +161,20 @@ class AddVideos extends Component {
           }
           return res.json()
         })
-        .then(data => {
-          this.handleTagsPost(input.tags, data);
+        .then(newVid => {
+            this.handleTagsPost(input.tags, newVid);
         })
         .catch(error => {
           this.setState({ error })
         })
   };
 
-  handleTagsPost(tagID, vid) {
+  handleTagsPost(newTags, newVid) {
     const newVidTag = {
-      tag_id: parseInt(tagID),
-      vid_id: vid.id
+      tags: newTags,
+      vid_id: newVid.id
     }
+
     fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
         method: 'POST',
         body: JSON.stringify(newVidTag),
@@ -181,11 +188,8 @@ class AddVideos extends Component {
               throw error
             })
           }
-          return res.json()
-        })
-        .then(data => {
-          const cleanLink = vid.title.replace(/\s+/g, '-').toLowerCase();
-          this.props.history.push(`/videos/${vid.id}/${cleanLink}`);
+          const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+          this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
         })
         .catch(error => {
           this.setState({ error })
@@ -265,21 +269,13 @@ class AddVideos extends Component {
                 <label htmlFor='tagsRef'>
                         Add relevant topic tags
                     </label>
-                    <select
-                        name='tagsRef'
-                        aria-labelledby='tagsRef'
-                        id='tagsRef'
-                        onChange={e => this.updateTags(e.target.value)}
-                        required
-                    >
-                        <option>Select</option>
-                        {this.state.tagsRef.map(type =>
-                            <option value={type.id} key={type.id}>
-                                {type.tag}
-                            </option>
-                        )}
-                    </select>
-                  {this.state.tags.touched && (
+                {this.state.tagsRef.map(type =>
+                  <section className='tagsRef_select'>
+                    <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
+                    <label htmlFor={type.id} >{type.tag}</label>
+                  </section>
+                )}
+                {this.state.tags.touched && (
                     <ValidationError message={tagsError} />
                   )}
                 <div className='AddDestinationForm_buttons'>
@@ -299,4 +295,4 @@ class AddVideos extends Component {
   };
 };
 
-export default AddVideos;
+export default withRouter(AddVideos);

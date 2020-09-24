@@ -4,7 +4,6 @@ import VideoResources from '../VideoResources/VideoResources';
 import Comments from '../Comments/Comments';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
-import config from '../config';
 import './MainVideoPage.css';
 
 class MainVideoPage2 extends Component {
@@ -22,7 +21,8 @@ class MainVideoPage2 extends Component {
     }
 
     render() {
-        let video = { id: this.props.match.params.vid, title: '', description: '', embed_code: `<iframe src="https://www.youtube.com/embed/cywyb3Y6Qxg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`, date_posted: '' };
+        const vidCheck = this.context.videos.find( ({ id }) => id === parseInt(this.props.match.params.vid));
+        let video = { id: this.props.match.params.vid, title: '', description: '', embed_code: `https://www.youtube.com/embed/cywyb3Y6Qxg`, date_posted: '' };
         let vidResources = [];
         let comments = [];
         let vidTags = [];
@@ -31,7 +31,7 @@ class MainVideoPage2 extends Component {
         let vidLink;
 
         // since component is stateless, check context to fetch data if needed
-        if(this.context.comments.length < 1) {
+        if(this.context.comments.length < 1 || !vidCheck) {
             this.getVideos();
         }
         else {
@@ -67,7 +67,6 @@ class MainVideoPage2 extends Component {
 
             // take list of matching vidTags and create clean array of unique video IDs
             let fullVidIDList = [];
-            const vidIDs = vidTagMatches[0].map(v => v.vid_id);
             for (let i = 0; i < vidTagMatches.length; i++) {
                 let arr = vidTagMatches[i].map(v => v.vid_id);
                 arr.forEach(id => fullVidIDList.push(id))
@@ -188,7 +187,7 @@ class MainVideoPage2 extends Component {
         return (
             <section className='MainVideoPage'>
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
                 <p className='mainVideoDesc'>{video.description}</p>
                 <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
                 <div className='MainVideoPage_resources'>
