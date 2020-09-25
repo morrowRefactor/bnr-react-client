@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import VideoResources from '../VideoResources/VideoResources';
 import Comments from '../Comments/Comments';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
 import './MainVideoPage.css';
 
-class MainVideoPage2 extends Component {
+class MainVideoPage extends Component {
     static contextType = APIContext;
 
     getVideos() {
@@ -18,6 +18,14 @@ class MainVideoPage2 extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
+    }
+
+    renderAdminOptions = () => {
+        return (
+            <div className='MainVideoPage_admin'>
+                Edit/Delete Video
+            </div>
+        )
     }
 
     render() {
@@ -187,7 +195,8 @@ class MainVideoPage2 extends Component {
         return (
             <section className='MainVideoPage'>
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                {this.renderAdminOptions()}
                 <p className='mainVideoDesc'>{video.description}</p>
                 <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
                 <div className='MainVideoPage_resources'>
@@ -209,4 +218,4 @@ class MainVideoPage2 extends Component {
     }
 }
 
-export default MainVideoPage2;
+export default withRouter(MainVideoPage);

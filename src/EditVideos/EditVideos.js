@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import AddVidResource from '../AddVidResource/AddVidResource';
 import ValidationError from '../ValidationError/ValidationError';
 import config from '../config';
-import './AddVideos.css';
-import VideoResources from '../VideoResources/VideoResources';
+import './EditVideos.css';
 
-class AddVideos extends Component {
+class EditVideos extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -18,9 +16,7 @@ class AddVideos extends Component {
       description: { value: '', touched: false },
       link: { value: '', touched: false },
       date: { value: '', touched: false },
-      tags: { value: [], touched: false },
-      vidRes: { value: [], touched: false },
-      resCount: [ 1 ]
+      tags: { value: [], touched: false }
     };
   };
 
@@ -56,7 +52,17 @@ class AddVideos extends Component {
   }
 
   componentDidMount() {
-    this.updateState();
+    if(this.context.comments.length < 1) {
+        this.updateState();
+    }
+    else {
+        this.setState({
+            videos: this.context.videos,
+            vidResources: this.context.vidResources,
+            tagsRef: this.context.tagsRef,
+            vidTags: this.context.vidTags
+        })
+    }
   }
 
   // update component state with form input values
@@ -87,6 +93,7 @@ class AddVideos extends Component {
       tags: { value: tagsIDs, touched: true }
     })
   };
+
 
   //validate form field inputs
   validateTitle() {
@@ -165,62 +172,22 @@ class AddVideos extends Component {
           return res.json()
         })
         .then(newVid => {
-          this.handleTagsPost(input, newVid);
+            this.handleTagsPost(input.tags, newVid);
         })
         .catch(error => {
           this.setState({ error })
         })
   };
 
-  handleTagsPost(input, newVid) {
+  handleTagsPost(newTags, newVid) {
     const newVidTag = {
-      tags: input.tags,
+      tags: newTags,
       vid_id: newVid.id
     }
-    
+
     fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
         method: 'POST',
         body: JSON.stringify(newVidTag),
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(error => {
-              throw error
-            })
-          }
-          this.handleVidResourcesPost(newVid);
-        })
-        .catch(error => {
-          this.setState({ error })
-        })
-  };
-
-  handleVidResourcesPost(newVid) {
-    // populate video resources array with each resources in submission
-    for(let i = 0; i < this.state.resCount.length; i++) {
-      const id = this.state.resCount[i];
-      const description = document.getElementById(`resDesc[${id}]`);
-      const link = document.getElementById(`resLink[${id}]`);
-      const newVidRes = {
-        vid_id: newVid.id,
-        description: description.value,
-        link: link.value
-      };
-      let newVidResArr = this.state.vidRes.value;
-      newVidResArr.push(newVidRes)
-      this.setState({
-        vidRes: { value: newVidResArr, touched: true }
-      })
-    }
-
-    const newResources = this.state.vidRes.value;
-    
-    fetch(`${config.API_ENDPOINT}/api/vid-resources`, {
-        method: 'POST',
-        body: JSON.stringify(newResources),
         headers: {
           'content-type': 'application/json'
         }
@@ -239,15 +206,6 @@ class AddVideos extends Component {
         })
   };
 
-  addResource = () => {
-    let newCount = this.state.resCount;
-    newCount.push(newCount.length + 1);
-    
-    this.setState({
-      resCount: newCount
-    });
-  };
-
   handleClickCancel = () => {
     this.props.history.push('/');
   };
@@ -258,14 +216,6 @@ class AddVideos extends Component {
     const linkError = this.validateLink();
     const dateError = this.validateDate();
     const tagsError = this.validateTags();
-
-    const videoResources = this.state.resCount.map(vid => 
-      <AddVidResource
-          key={vid}
-          id={vid}
-          updateVidRes={this.updateVidRes}
-      />
-    );
 
     return (
         <section className='AdminVideos'>
@@ -278,8 +228,8 @@ class AddVideos extends Component {
                     Video title
                 </label>
                 <input
-                    type='text'
-                    id='vidTitle'
+                    type="text"
+                    id="vidTitle"
                     placeholder='My New Video'
                     onChange={e => this.updateTitle(e.target.value)}
                     required
@@ -291,8 +241,8 @@ class AddVideos extends Component {
                     Video description
                 </label>
                 <input
-                    type='text'
-                    id='vidDesc'
+                    type="text"
+                    id="vidDesc"
                     placeholder='This is the most amazig video yet!'
                     onChange={e => this.updateDesc(e.target.value)}
                     required
@@ -304,8 +254,8 @@ class AddVideos extends Component {
                     YouTube link
                 </label>
                 <input
-                    type='text'
-                    id='ytLink'
+                    type="text"
+                    id="ytLink"
                     placeholder='https://www.youtube.com/embed/cywyb3Y6Qxg'
                     onChange={e => this.updateLink(e.target.value)}
                     required
@@ -317,9 +267,9 @@ class AddVideos extends Component {
                     Date posted
                 </label>
                 <input
-                    type='date'
-                    id='date'
-                    min='2018-01-01'
+                    type="date"
+                    id="date"
+                    min="2018-01-01"
                     onChange={e => this.updateDate(e.target.value)}
                     required
                 />
@@ -328,7 +278,7 @@ class AddVideos extends Component {
                 )}
                 <label htmlFor='tagsRef'>
                         Add relevant topic tags
-                </label>
+                    </label>
                 {this.state.tagsRef.map(type =>
                   <section className='tagsRef_select'>
                     <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
@@ -338,9 +288,6 @@ class AddVideos extends Component {
                 {this.state.tags.touched && (
                     <ValidationError message={tagsError} />
                   )}
-                <h3 className='vidResources'>Resources for this Video</h3>
-                {videoResources}
-                <button className='adminVideos_formResourcesMore' type='button' onClick={this.addResource}>Add more</button>
                 <div className='AddDestinationForm_buttons'>
                     <button 
                         type='submit'
@@ -358,4 +305,4 @@ class AddVideos extends Component {
   };
 };
 
-export default withRouter(AddVideos);
+export default withRouter(EditVideos);
