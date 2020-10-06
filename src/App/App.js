@@ -5,6 +5,7 @@ import Homepage from '../Homepage/Homepage';
 import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import AddVideos from '../AddVideos/AddVideos';
+import EditVideos from '../EditVideos/EditVideos';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';
@@ -104,6 +105,11 @@ class App extends Component {
             exact
             path='/add-video'
             component={AddVideos}
+          />
+          <Route
+            exact
+            path='/edit-video/:vid'
+            component={EditVideos}
           />
           <Route 
             exact

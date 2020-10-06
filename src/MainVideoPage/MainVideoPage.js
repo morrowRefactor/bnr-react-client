@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import VideoResources from '../VideoResources/VideoResources';
 import Comments from '../Comments/Comments';
 import VideoBlock from '../VideoBlock/VideoBlock';
+import EditVideos from '../EditVideos/EditVideos';
 import APIContext from '../APIContext';
 import './MainVideoPage.css';
 
@@ -18,14 +19,6 @@ class MainVideoPage extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
-    }
-
-    renderAdminOptions = () => {
-        return (
-            <div className='MainVideoPage_admin'>
-                Edit/Delete Video
-            </div>
-        )
     }
 
     render() {
@@ -192,11 +185,21 @@ class MainVideoPage extends Component {
             }
         }
 
+        
+        function renderAdminOptions() {
+            const link = `/edit-video/${video.id}`;
+            return (
+                <div className='MainVideoPage_admin'>
+                    <Link to={link}>Edit/Delete Video</Link>
+                </div>
+            )
+        }
+
         return (
             <section className='MainVideoPage'>
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
                 <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
-                {this.renderAdminOptions()}
+                {renderAdminOptions()}
                 <p className='mainVideoDesc'>{video.description}</p>
                 <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
                 <div className='MainVideoPage_resources'>

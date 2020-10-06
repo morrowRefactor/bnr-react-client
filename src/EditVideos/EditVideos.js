@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
+import APIContext from '../APIContext';
 import config from '../config';
 import './EditVideos.css';
 
 class EditVideos extends Component {
+  static contextType = APIContext;
+
   constructor(props) {
     super(props)
     this.state = {
@@ -15,7 +18,6 @@ class EditVideos extends Component {
       title: { value: '', touched: false },
       description: { value: '', touched: false },
       link: { value: '', touched: false },
-      date: { value: '', touched: false },
       tags: { value: [], touched: false }
     };
   };
@@ -78,10 +80,6 @@ class EditVideos extends Component {
     this.setState({link: {value: link, touched: true}});
   };
 
-  updateDate(date) {
-    this.setState({date: {value: date, touched: true}});
-  };
-
   updateTags(tag) {
     let tagsIDs = [];
     const tags = document.getElementsByName('tags');
@@ -89,6 +87,7 @@ class EditVideos extends Component {
       if (checkbox.checked)
         tagsIDs.push(parseInt(checkbox.value))
     }
+
     this.setState({
       tags: { value: tagsIDs, touched: true }
     })
@@ -120,13 +119,6 @@ class EditVideos extends Component {
     };
   };
 
-  validateDate() {
-    const date = this.state.date.value.trim();
-    if (date.length === 0) {
-      return 'A posted date is required';
-    };
-  };
-
   validateTags() {
     const tags = this.state.tags.value;
     if (tags.length === 0) {
@@ -137,28 +129,34 @@ class EditVideos extends Component {
   // normalize form input values before passing to the POST function
   validateInput = e => {
     e.preventDefault();
-    const input = {
-        title: this.state.title.value,
-        description: this.state.description.value,
-        embed_code: this.state.link.value,
-        date_posted: this.state.date.value,
-        tags: this.state.tags.value
+    const currentVid = this.state.videos.find(({ id }) => id === parseInt(this.props.match.params.vid));
+    let updatedVid = {
+      id: parseInt(this.props.match.params.vid),
+      title: currentVid.title,
+      description: currentVid.description,
+      embed_code: currentVid.embed_code,
+      date_posted: currentVid.date_posted
     };
-
-   this.handleSubmit(input);
-  };
-
-  handleSubmit(input) {
-    const newVid = {
-      title: input.title,
-      description: input.description,
-      embed_code: input.embed_code,
-      date_posted: input.date_posted
+    
+    if(currentVid.title !== this.state.title.value && this.state.title.touched === true) {
+      updatedVid.title = this.state.title.value;
+    }
+    if(currentVid.description !== this.state.description.value && this.state.description.touched === true) {
+      updatedVid.description = this.state.description.value;
+    }
+    if(currentVid.embed_code !== this.state.link.value && this.state.link.touched === true) {
+      updatedVid.embed_code = this.state.link.value;
     }
 
-    fetch(`${config.API_ENDPOINT}/api/videos`, {
-        method: 'POST',
-        body: JSON.stringify(newVid),
+   this.handleSubmit(updatedVid);
+  };
+
+  handleSubmit = (input) => {
+    this.handleTagsPost(input);
+/*
+    fetch(`${config.API_ENDPOINT}/api/videos/${input.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
         headers: {
           'content-type': 'application/json'
         }
@@ -172,54 +170,167 @@ class EditVideos extends Component {
           return res.json()
         })
         .then(newVid => {
-            this.handleTagsPost(input.tags, newVid);
+            this.handleTagsPost(input);
         })
         .catch(error => {
           this.setState({ error })
-        })
+        })*/
   };
 
-  handleTagsPost(newTags, newVid) {
-    const newVidTag = {
-      tags: newTags,
-      vid_id: newVid.id
+  handleTagsPost = (input) => {
+    if(this.state.tags.touched === false) {
+      const cleanLink = input.title.replace(/\s+/g, '-').toLowerCase();
+      this.props.history.push(`/videos/${input.id}/${cleanLink}`);
     }
-
-    fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
-        method: 'POST',
-        body: JSON.stringify(newVidTag),
-        headers: {
-          'content-type': 'application/json'
+    else {
+      let currentTags = [];
+      for(let i = 0; i < this.state.vidTags.length; i++) {
+        if(this.state.vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
+          let newArr = currentTags;
+          newArr.push(this.state.vidTags[i].tag_id);
+          currentTags = newArr;
         }
-      })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(error => {
-              throw error
-            })
+      }
+
+      let newTags = [];
+      for(let i = 0; i < this.state.tags.value.length; i++) {
+        const checkTag = currentTags.includes(this.state.tags.value[i]);
+        if(checkTag === false) {
+          let newArr = newTags;
+          newArr.push(this.state.tags.value[i]);
+          newTags = newArr;
+        }
+      }
+
+      
+      let tagsToDelete = [];
+      for(let i = 0; i < currentTags.length; i++) {
+        const checkTag = this.state.tags.value.includes(currentTags[i]);
+        if(checkTag === false) {
+          let newArr = tagsToDelete;
+          newArr.push(currentTags[i]);
+          tagsToDelete = newArr;
+        }
+      }
+
+      if(newTags.length > 0) {
+        const newVidTags = {
+          tags: newTags,
+          vid_id: input.id
+        }
+        
+        fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
+          method: 'POST',
+          body: JSON.stringify(newVidTags),
+          headers: {
+            'content-type': 'application/json'
           }
-          const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
-          this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
         })
-        .catch(error => {
-          this.setState({ error })
+          .then(res => {
+            if (!res.ok) {
+              return res.json().then(error => {
+                throw error
+              })
+            }
+            /*
+            const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+            this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);*/
+          })
+          .catch(error => {
+            this.setState({ error })
+          })
+      }
+
+      if(tagsToDelete.length > 0) {
+        let deleteIDs = [];
+        const allVidTags = this.state.vidTags.filter(function(t) {
+          return t.vid_id === input.id;
+        });
+
+        for(let i = 0; i < tagsToDelete.length; i++) {
+          const checkTag = allVidTags.find(({ tag_id }) => tag_id === tagsToDelete[i]);
+          if(checkTag) {
+            let newArr = deleteIDs;
+            newArr.push(checkTag.id);
+            deleteIDs = newArr;
+          }
+        }
+
+        /*
+        fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
+          method: 'DELETE',
+          body: JSON.stringify(newVidTag),
+          headers: {
+            'content-type': 'application/json'
+          }
         })
+          .then(res => {
+            if (!res.ok) {
+              return res.json().then(error => {
+                throw error
+              })
+            }
+            const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+            this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
+          })
+          .catch(error => {
+            this.setState({ error })
+          })*/
+      }
+      
+    }
   };
 
   handleClickCancel = () => {
     this.props.history.push('/');
   };
 
+  // pre-check select options for tags related to this video
+  renderTags = tagID => {
+    let thisVidTags = [];
+    for(let i = 0; i < this.state.vidTags.length; i++) {
+      if(this.state.vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
+        const addTag = thisVidTags;
+        addTag.push(this.state.vidTags[i].tag_id)
+        thisVidTags = addTag;
+      }
+    }
+
+    const findTag = thisVidTags.find(id => id === tagID);
+    const checkedTag = this.state.tags.value.find(id => id === tagID);
+    if(findTag && !checkedTag && this.state.tags.touched === false) {
+      return true;
+    }
+    if(findTag && !checkedTag && this.state.tags.touched === true) {
+      return false;
+    }
+    if(findTag && this.state.tags.touched === false) {
+      return true;
+    }
+    if(findTag && checkedTag) {
+      return true;
+    }
+    if(!findTag && checkedTag) {
+      return true
+    }
+    else {
+      return false;
+    }
+  }
+
   render() {
+    const findVid = this.context.videos.filter(vid => 
+      vid.id === parseInt(this.props.match.params.vid)
+    );
+    const thisVideo = findVid[0];
     const titleError = this.validateTitle();
     const descError = this.validateDesc();
     const linkError = this.validateLink();
-    const dateError = this.validateDate();
     const tagsError = this.validateTags();
 
     return (
         <section className='AdminVideos'>
-            <h1 className='adminVideosHeader'>Add a Video</h1>
+            <h1 className='adminVideosHeader'>Edit {thisVideo.title}</h1>
             <form 
                 className='AdminVideos_form'
                 onSubmit={this.validateInput}
@@ -230,7 +341,7 @@ class EditVideos extends Component {
                 <input
                     type="text"
                     id="vidTitle"
-                    placeholder='My New Video'
+                    defaultValue={thisVideo.title}
                     onChange={e => this.updateTitle(e.target.value)}
                     required
                 />
@@ -243,7 +354,7 @@ class EditVideos extends Component {
                 <input
                     type="text"
                     id="vidDesc"
-                    placeholder='This is the most amazig video yet!'
+                    defaultValue={thisVideo.description}
                     onChange={e => this.updateDesc(e.target.value)}
                     required
                 />
@@ -256,32 +367,19 @@ class EditVideos extends Component {
                 <input
                     type="text"
                     id="ytLink"
-                    placeholder='https://www.youtube.com/embed/cywyb3Y6Qxg'
+                    defaultValue={thisVideo.embed_code}
                     onChange={e => this.updateLink(e.target.value)}
                     required
                 />
                 {this.state.link.touched && (
                     <ValidationError message={linkError} />
                 )}
-                <label htmlFor='date'>
-                    Date posted
-                </label>
-                <input
-                    type="date"
-                    id="date"
-                    min="2018-01-01"
-                    onChange={e => this.updateDate(e.target.value)}
-                    required
-                />
-                {this.state.date.touched && (
-                    <ValidationError message={dateError} />
-                )}
                 <label htmlFor='tagsRef'>
                         Add relevant topic tags
                     </label>
                 {this.state.tagsRef.map(type =>
                   <section className='tagsRef_select'>
-                    <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
+                    <input value={type.id} key={type.id} type='checkbox' name='tags' checked={this.renderTags(type.id)} onChange={e => this.updateTags(e.target.value)}/>
                     <label htmlFor={type.id} >{type.tag}</label>
                   </section>
                 )}
