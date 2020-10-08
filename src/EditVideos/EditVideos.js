@@ -134,7 +134,7 @@ class EditVideos extends Component {
       id: parseInt(this.props.match.params.vid),
       title: currentVid.title,
       description: currentVid.description,
-      embed_code: currentVid.embed_code,
+      youtube_id: currentVid.youtube_id,
       date_posted: currentVid.date_posted
     };
     
@@ -144,8 +144,8 @@ class EditVideos extends Component {
     if(currentVid.description !== this.state.description.value && this.state.description.touched === true) {
       updatedVid.description = this.state.description.value;
     }
-    if(currentVid.embed_code !== this.state.link.value && this.state.link.touched === true) {
-      updatedVid.embed_code = this.state.link.value;
+    if(currentVid.youtube_id !== this.state.link.value && this.state.link.touched === true) {
+      updatedVid.youtube_id = this.state.link.value;
     }
 
    this.handleSubmit(updatedVid);
@@ -338,54 +338,62 @@ class EditVideos extends Component {
                 <label htmlFor='vidTitle'>
                     Video title
                 </label>
-                <input
-                    type="text"
-                    id="vidTitle"
-                    defaultValue={thisVideo.title}
-                    onChange={e => this.updateTitle(e.target.value)}
-                    required
-                />
-                {this.state.title.touched && (
-                    <ValidationError message={titleError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type="text"
+                      id="vidTitle"
+                      defaultValue={thisVideo.title}
+                      onChange={e => this.updateTitle(e.target.value)}
+                      required
+                  />
+                  {this.state.title.touched && (
+                      <ValidationError message={titleError} />
+                  )}
+                </section>
                 <label htmlFor='vidDesc'>
                     Video description
                 </label>
-                <input
-                    type="text"
-                    id="vidDesc"
-                    defaultValue={thisVideo.description}
-                    onChange={e => this.updateDesc(e.target.value)}
-                    required
-                />
-                {this.state.description.touched && (
-                    <ValidationError message={descError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type="text"
+                      id="vidDesc"
+                      defaultValue={thisVideo.description}
+                      onChange={e => this.updateDesc(e.target.value)}
+                      required
+                  />
+                  {this.state.description.touched && (
+                      <ValidationError message={descError} />
+                  )}
+                </section>
                 <label htmlFor='ytLink'>
                     YouTube link
                 </label>
-                <input
-                    type="text"
-                    id="ytLink"
-                    defaultValue={thisVideo.embed_code}
-                    onChange={e => this.updateLink(e.target.value)}
-                    required
-                />
-                {this.state.link.touched && (
-                    <ValidationError message={linkError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type="text"
+                      id="ytLink"
+                      defaultValue={thisVideo.youtube_id}
+                      onChange={e => this.updateLink(e.target.value)}
+                      required
+                  />
+                  {this.state.link.touched && (
+                      <ValidationError message={linkError} />
+                  )}
+                </section>
                 <label htmlFor='tagsRef'>
                         Add relevant topic tags
-                    </label>
-                {this.state.tagsRef.map(type =>
-                  <section className='tagsRef_select'>
-                    <input value={type.id} key={type.id} type='checkbox' name='tags' checked={this.renderTags(type.id)} onChange={e => this.updateTags(e.target.value)}/>
-                    <label htmlFor={type.id} >{type.tag}</label>
-                  </section>
-                )}
-                {this.state.tags.touched && (
-                    <ValidationError message={tagsError} />
+                </label>
+                <section className='adminVideos_formInput'>
+                  {this.state.tagsRef.map(type =>
+                    <section className='tagsRef_select'>
+                      <input value={type.id} key={type.id} type='checkbox' name='tags' checked={this.renderTags(type.id)} onChange={e => this.updateTags(e.target.value)}/>
+                      <label htmlFor={type.id} >{type.tag}</label>
+                    </section>
                   )}
+                  {this.state.tags.touched && (
+                      <ValidationError message={tagsError} />
+                  )}
+                </section>
                 <div className='AddDestinationForm_buttons'>
                     <button 
                         type='submit'

@@ -15,10 +15,11 @@ class VideoBlock extends Component {
 
     render() {
         const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
+        const thumbnail = 'https://img.youtube.com/vi/' + this.props.youtube_id + '/hqdefault.jpg';
 
         return (
             <section className='VideoBlock'>
-                <div className='videoBlockImage'></div>
+                <img className='videoBlockImage' src={thumbnail} alt={this.props.title} />
                 <section className='VideoBlock_details'>
                     <Link 
                         className='videoBlockLink' 

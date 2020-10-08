@@ -71,6 +71,7 @@ class BrowseVideos extends Component {
                 title={vid.title}
                 description={vid.description}
                 date_posted={vid.date_posted}
+                youtube_id={vid.youtube_id}
             />
         );
 
@@ -81,7 +82,7 @@ class BrowseVideos extends Component {
                     className='BrowseVideos_form'
                 >
                     <label htmlFor='tagsRef'>
-                        Filter by content
+                        Filter by content:
                     </label>
                     <select
                         name='tagsRef'

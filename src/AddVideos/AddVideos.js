@@ -105,11 +105,11 @@ class AddVideos extends Component {
 
   validateLink() {
     const link = this.state.link.value.trim();
-    if (!link.includes('embed')) {
-      return `The link should include the word "embed" (ex: https://www.youtube.com/embed/cywyb3Y6Qxg)`;
+    if (link.length > 15) {
+      return `The link should only contain the video ID in the YouTube URL (ex: just submit 'cywyb3Y6Qxg', rather than https://www.youtube.com/cywyb3Y6Qxg)`;
     };
     if (link.length === 0) {
-      return 'A YouTube embed link is required';
+      return 'A YouTube video ID is required';
     };
   };
 
@@ -133,7 +133,7 @@ class AddVideos extends Component {
     const input = {
         title: this.state.title.value,
         description: this.state.description.value,
-        embed_code: this.state.link.value,
+        youtube_id: this.state.link.value,
         date_posted: this.state.date.value,
         tags: this.state.tags.value
     };
@@ -145,7 +145,7 @@ class AddVideos extends Component {
     const newVid = {
       title: input.title,
       description: input.description,
-      embed_code: input.embed_code,
+      youtube_id: input.youtube_id,
       date_posted: input.date_posted
     }
 
@@ -277,70 +277,82 @@ class AddVideos extends Component {
                 <label htmlFor='vidTitle'>
                     Video title
                 </label>
-                <input
-                    type='text'
-                    id='vidTitle'
-                    placeholder='My New Video'
-                    onChange={e => this.updateTitle(e.target.value)}
-                    required
-                />
-                {this.state.title.touched && (
-                    <ValidationError message={titleError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type='text'
+                      id='vidTitle'
+                      placeholder='My New Video'
+                      onChange={e => this.updateTitle(e.target.value)}
+                      required
+                  />
+                  {this.state.title.touched && (
+                      <ValidationError message={titleError} />
+                  )}
+                </section>
                 <label htmlFor='vidDesc'>
                     Video description
                 </label>
-                <input
-                    type='text'
-                    id='vidDesc'
-                    placeholder='This is the most amazig video yet!'
-                    onChange={e => this.updateDesc(e.target.value)}
-                    required
-                />
-                {this.state.description.touched && (
-                    <ValidationError message={descError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type='text'
+                      id='vidDesc'
+                      placeholder='This is the most amazig video yet!'
+                      onChange={e => this.updateDesc(e.target.value)}
+                      required
+                  />
+                  {this.state.description.touched && (
+                      <ValidationError message={descError} />
+                  )}
+                </section>
                 <label htmlFor='ytLink'>
-                    YouTube link
+                    YouTube Video ID
                 </label>
-                <input
-                    type='text'
-                    id='ytLink'
-                    placeholder='https://www.youtube.com/embed/cywyb3Y6Qxg'
-                    onChange={e => this.updateLink(e.target.value)}
-                    required
-                />
-                {this.state.link.touched && (
-                    <ValidationError message={linkError} />
-                )}
+                <section className='adminVideos_formInput'>
+                  <input
+                      type='text'
+                      id='ytLink'
+                      placeholder='cywyb3Y6Qxg'
+                      onChange={e => this.updateLink(e.target.value)}
+                      required
+                  />
+                  {this.state.link.touched && (
+                      <ValidationError message={linkError} />
+                  )}
+                </section>
                 <label htmlFor='date'>
                     Date posted
                 </label>
-                <input
-                    type='date'
-                    id='date'
-                    min='2018-01-01'
-                    onChange={e => this.updateDate(e.target.value)}
-                    required
-                />
-                {this.state.date.touched && (
-                    <ValidationError message={dateError} />
-                )}
-                <label htmlFor='tagsRef'>
-                        Add relevant topic tags
-                </label>
-                {this.state.tagsRef.map(type =>
-                  <section className='tagsRef_select'>
-                    <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
-                    <label htmlFor={type.id} >{type.tag}</label>
-                  </section>
-                )}
-                {this.state.tags.touched && (
-                    <ValidationError message={tagsError} />
+                <p className='dateHelperText'>(date uploaded to YouTube, not this site)</p>
+                <section className='adminVideos_formInput'>
+                  <input
+                      type='date'
+                      id='date'
+                      min='2018-01-01'
+                      onChange={e => this.updateDate(e.target.value)}
+                      required
+                  />
+                  {this.state.date.touched && (
+                      <ValidationError message={dateError} />
                   )}
+                </section>
+                <label htmlFor='tagsRef'>
+                        Add relevant topic tags:
+                </label>
+                <p className='tagsRefHelperText'>(check all that apply)</p>
+                <section className='adminVideos_formInput'>
+                  {this.state.tagsRef.map(type =>
+                    <section className='tagsRef_select'>
+                      <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
+                      <label htmlFor={type.id} >{type.tag}</label>
+                    </section>
+                  )}
+                  {this.state.tags.touched && (
+                      <ValidationError message={tagsError} />
+                    )}
+                </section>
                 <h3 className='vidResources'>Resources for this Video</h3>
                 {videoResources}
-                <button className='adminVideos_formResourcesMore' type='button' onClick={this.addResource}>Add more</button>
+                <button className='adminVideos_formResourcesMore' type='button' onClick={this.addResource}>Add another resource</button>
                 <div className='AddDestinationForm_buttons'>
                     <button 
                         type='submit'

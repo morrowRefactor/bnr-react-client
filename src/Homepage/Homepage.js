@@ -20,6 +20,7 @@ class Homepage extends Component {
                 title={vid.title}
                 description={vid.description}
                 date_posted={vid.date_posted}
+                youtube_id={vid.youtube_id}
             />
         );
 

@@ -5,7 +5,18 @@
 }
 
 .mainVideoPageVideo {
-    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mainVideoDate {
+    margin-top: 0px;
+    font-size: 14px;
+}
+
+.mainVideoDesc {
+    padding: 10px;
+    margin-bottom: 30px;
 }
 
 .MainVideoPage_resources,

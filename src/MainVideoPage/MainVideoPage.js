@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import VideoResources from '../VideoResources/VideoResources';
 import Comments from '../Comments/Comments';
 import VideoBlock from '../VideoBlock/VideoBlock';
-import EditVideos from '../EditVideos/EditVideos';
 import APIContext from '../APIContext';
 import './MainVideoPage.css';
 
@@ -23,7 +22,7 @@ class MainVideoPage extends Component {
 
     render() {
         const vidCheck = this.context.videos.find( ({ id }) => id === parseInt(this.props.match.params.vid));
-        let video = { id: this.props.match.params.vid, title: '', description: '', embed_code: `https://www.youtube.com/embed/cywyb3Y6Qxg`, date_posted: '' };
+        let video = { id: this.props.match.params.vid, title: '', description: '', youtube_id: '', date_posted: '' };
         let vidResources = [];
         let comments = [];
         let vidTags = [];
@@ -98,6 +97,7 @@ class MainVideoPage extends Component {
                     title={vid.title}
                     description={vid.description}
                     date_posted={vid.date_posted}
+                    youtube_id={vid.youtube_id}
                 />
             );
 
@@ -128,6 +128,7 @@ class MainVideoPage extends Component {
                         title={vid.title}
                         description={vid.description}
                         date_posted={vid.date_posted}
+                        youtube_id={vid.youtube_id}
                     />
                 );
             }
@@ -145,7 +146,7 @@ class MainVideoPage extends Component {
             }
 
             // insert video iframe
-            vidLink = `https://www.youtube.com/embed/cywyb3Y6Qxg`
+            vidLink = 'https://www.youtube.com/embed/' + video.youtube_id;
         }
 
         function renderResourcesHeader() {
@@ -200,8 +201,8 @@ class MainVideoPage extends Component {
                 <h1 className='mainVideoPageTitle'>{video.title}</h1>
                 <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
                 {renderAdminOptions()}
+                <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
                 <p className='mainVideoDesc'>{video.description}</p>
-                <p className='mainVideoDate'>{this.getCleanDate(video.date_posted)}</p>
                 <div className='MainVideoPage_resources'>
                     {renderResourcesHeader()}
                     {renderResourcesList()}

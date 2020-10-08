@@ -1,0 +1,44 @@
+.AdminVideos {
+    margin-bottom: 30px;
+}
+
+.AdminVideos_form > label {
+    display: inline-block;
+    width: 100%;
+}
+
+.adminVideos_formInput {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.adminVideos_formInput > input {
+    width: 80%;
+}
+
+.tagsRefHelperText,
+.dateHelperText {
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.tagsRef_select {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.adminVideos_formResourcesMore {
+    margin-bottom: 20px;
+}
+
+.AddDestinationForm_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
