@@ -6,6 +6,7 @@ import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import AddVideos from '../AddVideos/AddVideos';
 import EditVideos from '../EditVideos/EditVideos';
+import CreateUser from '../CreateUser/CreateUser';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';
@@ -110,6 +111,11 @@ class App extends Component {
             exact
             path='/edit-video/:vid'
             component={EditVideos}
+          />
+          <Route
+            exact
+            path='/create-account'
+            component={CreateUser}
           />
           <Route 
             exact

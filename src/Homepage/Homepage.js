@@ -26,11 +26,13 @@ class Homepage extends Component {
 
         return (
             <section className='Homepage'>
-                <img className='homepageImage' alt='Beer and News Report' src='https://img1.wsimg.com/isteam/ip/e5e48fd9-dca1-4bb0-a3e0-ccda5f5780e0/Cheers%202.png/:/' />
-                <div className='homepageAbout'>
-                    <p>With this news, you need a beer!</p>
-                    <p>See the news from a different aspect.  Check it out.</p>
-                </div>
+                <section className='Homepage_about'>
+                    <img className='homepageImage' alt='Beer and News Report' src='https://img1.wsimg.com/isteam/ip/e5e48fd9-dca1-4bb0-a3e0-ccda5f5780e0/Cheers%202.png/:/' />
+                    <div className='homepageAbout'>
+                        <p>With this news, you need a beer!</p>
+                        <p>See the news from a different aspect.  Check it out.</p>
+                    </div>
+                </section>
                 <section className='RecentVideos'>
                     <h3 className='recentVideosTitle'><span>Recent Videos</span></h3>
                     {recentVids}

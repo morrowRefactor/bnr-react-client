@@ -15,3 +15,25 @@
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
 }
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .Homepage {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+    }
+
+    .Homepage_about {
+        width: 33%;
+        margin-right: 20px;
+        padding-right: 20px;
+        border-right: 1px solid gray;
+    }
+
+    .recentVideosTitle {
+        font-size: 24px;
+        border: none;
+        margin-top: 0px;
+    }
+}

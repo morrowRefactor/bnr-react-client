@@ -38,3 +38,20 @@
     margin-right: auto;
     padding: 0px 5px 0px 5px;
 }
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .MainVideoPage {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .MainVideoPage_feature {
+        width: 65%;
+        padding-right: 20px;
+    }
+
+    .MainVideoPage_relatedVids {
+        width: 35%;
+    }
+}

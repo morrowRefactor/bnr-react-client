@@ -23,3 +23,15 @@
 .videoBlockLink {
     text-decoration: none;
 }
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .VideoBlock {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .videoBlockImage {
+        width: 30%;
+    }
+}

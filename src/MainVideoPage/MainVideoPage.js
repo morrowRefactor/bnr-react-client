@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import VideoResources from '../VideoResources/VideoResources';
+import AddComment from '../AddComment/AddComment';
 import Comments from '../Comments/Comments';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
@@ -198,19 +199,24 @@ class MainVideoPage extends Component {
 
         return (
             <section className='MainVideoPage'>
-                <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
-                {renderAdminOptions()}
-                <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
-                <p className='mainVideoDesc'>{video.description}</p>
-                <div className='MainVideoPage_resources'>
-                    {renderResourcesHeader()}
-                    {renderResourcesList()}
-                </div>
-                <div className='MainVideoPage_comments'>
-                    <h3 className='mainVideoPage_commentsHeader'>Comments</h3>
-                    {renderComments()}
-                </div>
+                <section className='MainVideoPage_feature'>
+                    <h1 className='mainVideoPageTitle'>{video.title}</h1>
+                    <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                    {renderAdminOptions()}
+                    <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
+                    <p className='mainVideoDesc'>{video.description}</p>
+                    <div className='MainVideoPage_resources'>
+                        {renderResourcesHeader()}
+                        {renderResourcesList()}
+                    </div>
+                    <div className='MainVideoPage_comments'>
+                        <h3 className='mainVideoPage_commentsHeader'>Comments</h3>
+                        <AddComment
+                            videoID={video.id}
+                        />
+                        {renderComments()}
+                    </div>
+                </section>
                 <div className='MainVideoPage_relatedVids'>
                     <h3 className='mainVideoPage_relatedVidsHeader'>Related Videos</h3>
                     {relatedVideos}
