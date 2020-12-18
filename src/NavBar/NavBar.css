@@ -94,7 +94,7 @@ button:hover,
     cursor: pointer;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
     .Topnav {
         background-color: white;
         border-bottom: solid 2px rgb(16, 60, 16);
@@ -130,7 +130,7 @@ button:hover,
     }
 
     .topNavLink {
-        font-size: 18px;
+        font-size: 16px;
         background-color: white;
         color: rgb(16, 60, 16);
     }

@@ -1,0 +1,57 @@
+.RelatedVidBlock {
+    width: 90%;
+    margin: 0px auto 10px auto;
+    padding: 10px;
+}
+
+.relatedVidBlockImage {
+    margin-right: auto;
+    margin-left: auto;
+    width: 70%;
+    border: 1px solid gray;
+}
+
+.RelatedVidBlock_details {
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+    padding: 5px;
+}
+
+.relatedVidBlockLink {
+    text-decoration: none;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .RelatedVidBlock {
+        display: flex;
+        flex-direction: row;
+        margin: 0px auto 0px auto;
+    }
+
+    .relatedVidBlockImage {
+        width: 23%;
+        height: 90%;
+        margin-top: 10px;
+    }
+
+    .RelatedVidBlock_details {
+        text-align: left;
+        padding: 0px 10px 0px 20px;
+    }
+
+    .relatedVidBlockTitle {
+        margin: 0px auto 0px auto;
+    }
+
+    .relatedVidBlockDesc {
+        font-size: 14px;
+        margin: 0px auto 5px auto;
+    }
+
+    .relatedVidBlockPostDate {
+        font-size: 12px;
+        margin-top: 0px;
+    }
+}

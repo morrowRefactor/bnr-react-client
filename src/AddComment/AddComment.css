@@ -1,0 +1,19 @@
+.AddComment_form > label {
+    display: inline-block;
+    width: 100%;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .AddComment {
+        width: 95%;
+        border-top: 1px solid gray;
+        padding-top: 10px;
+        text-align: left;
+    }
+
+    .AddComment_form > input {
+        width: 50%;
+        height: 5em;
+    }
+}

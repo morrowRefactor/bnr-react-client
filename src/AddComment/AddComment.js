@@ -20,14 +20,18 @@ class AddComment extends Component {
         e.preventDefault()
         const videoID = this.props.videoID;
         const comment = this.state.comment.value;
-
+        /*
         AuthApiService.postComment(videoID, comment)
           .then(this.context.addComment)
           .then(() => {
             text.value = ''
           })
-          .catch(this.context.setError)
-      }
+          .catch(this.context.setError)*/
+    }
+
+    updateComment(comm) {
+        this.setState({comment: {value: comm, touched: true}});
+    };
 
     validateComment() {
         const comment = this.state.comment.value.trim();
@@ -58,7 +62,7 @@ class AddComment extends Component {
                         type='text'
                         id='comment'
                         placeholder='Now that is some news. I need a beer!'
-                        onChange={e => this.updateTitle(e.target.value)}
+                        onChange={e => this.updateComment(e.target.value)}
                         required
                     />
                     {this.state.comment.touched && (

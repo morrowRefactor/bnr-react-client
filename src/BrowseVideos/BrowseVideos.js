@@ -77,28 +77,32 @@ class BrowseVideos extends Component {
 
         return (
             <section className='BrowseVideos'>
-                <h1 className='browseVideosHeader'>Browse Videos</h1>
-                <form 
-                    className='BrowseVideos_form'
-                >
-                    <label htmlFor='tagsRef'>
-                        Filter by content:
-                    </label>
-                    <select
-                        name='tagsRef'
-                        aria-labelledby='tagsRef'
-                        id='tagsRef'
-                        onChange={e => this.updateFilter(e.target.value)}
-                        required
-                    >
-                        <option value='all'>All</option>
-                        {tagsRef.map(type =>
-                            <option value={type.id} key={type.id}>
-                                {type.tag}
-                            </option>
-                        )}
-                    </select>
-                </form>
+                <section className='BrowseVideos_formInfo'>
+                    <section className='browseVideos_desktopAdj'>
+                        <h1 className='browseVideosHeader'>Browse Videos</h1>
+                        <form 
+                            className='BrowseVideos_form'
+                        >
+                            <label htmlFor='tagsRef'>
+                                Filter by content:
+                            </label>
+                            <select
+                                name='tagsRef'
+                                aria-labelledby='tagsRef'
+                                id='tagsRef'
+                                onChange={e => this.updateFilter(e.target.value)}
+                                required
+                            >
+                                <option value='all'>All</option>
+                                {tagsRef.map(type =>
+                                    <option value={type.id} key={type.id}>
+                                        {type.tag}
+                                    </option>
+                                )}
+                            </select>
+                        </form>
+                    </section>
+                </section>
                 <section className='BrowseVideos_videos'>
                     {videos}
                 </section>

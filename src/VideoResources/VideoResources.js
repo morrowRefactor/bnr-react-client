@@ -7,7 +7,7 @@ class VideoResources extends Component {
         return (
             <section className='VideoResources'>
                 <p className='videoResourcesDesc'>{this.props.description}</p>
-                <p className='videoResourcesLink'>{this.props.link}</p>
+                <p className='videoResourcesLink'><a href={this.props.link} title={this.props.description}>{this.props.link}</a></p>
             </section>
         );
     }

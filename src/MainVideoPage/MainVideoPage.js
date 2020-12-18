@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import VideoResources from '../VideoResources/VideoResources';
 import AddComment from '../AddComment/AddComment';
 import Comments from '../Comments/Comments';
-import VideoBlock from '../VideoBlock/VideoBlock';
+import RelatedVidBlock from '../RelatedVidBlock/RelatedVidBlock';
 import APIContext from '../APIContext';
 import './MainVideoPage.css';
 
@@ -30,9 +30,11 @@ class MainVideoPage extends Component {
         let relatedVideos;
         let extraVideos;
         let vidLink;
+        let vidWidth;
+        let vidHeight;
 
         // since component is stateless, check context to fetch data if needed
-        if(this.context.comments.length < 1 || !vidCheck) {
+        if(this.context.videos.length < 1 || !vidCheck) {
             this.getVideos();
         }
         else {
@@ -92,7 +94,7 @@ class MainVideoPage extends Component {
             const getRecents = sortRelatedVids.slice(0, 5);
 
             relatedVideos = getRecents.map(vid => 
-                <VideoBlock
+                <RelatedVidBlock
                     key={vid.id}
                     vid={vid.id}
                     title={vid.title}
@@ -103,7 +105,7 @@ class MainVideoPage extends Component {
             );
 
             // add more videos if needed to Related Videos section
-            if(getRecents.length < 5) {
+            if(getRecents.length < 10) {
                 let allVids = this.context.videos.sort(function(a,b){
                     return new Date(b.date_posted) - new Date(a.date_posted);
                 });
@@ -121,9 +123,9 @@ class MainVideoPage extends Component {
                     }}
                 )
 
-                const delta = allOtherVids.slice(0, (5 - getRecents.length));
+                const delta = allOtherVids.slice(0, (10 - getRecents.length));
                 extraVideos = delta.map(vid => 
-                    <VideoBlock
+                    <RelatedVidBlock
                         key={vid.id}
                         vid={vid.id}
                         title={vid.title}
@@ -146,8 +148,20 @@ class MainVideoPage extends Component {
                 comments = sortDates;
             }
 
-            // insert video iframe
+            // insert video iframe and video dimensions
             vidLink = 'https://www.youtube.com/embed/' + video.youtube_id;
+
+            if(window.screen.width < 768) {
+                const widthAdj = window.screen.width * .55;
+                vidWidth = Math.floor(widthAdj);
+                vidHeight = Math.floor(widthAdj * .56);
+            }
+
+            if(window.screen.width > 799) {
+                const widthAdj = window.screen.width * .48;
+                vidWidth = Math.floor(widthAdj);
+                vidHeight = Math.floor(widthAdj * .56);
+            }
         }
 
         function renderResourcesHeader() {
@@ -200,21 +214,23 @@ class MainVideoPage extends Component {
         return (
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
-                    <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                    <div className='mainVideoPageVideo' id='iframe'><iframe width="300" src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
-                    {renderAdminOptions()}
-                    <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
-                    <p className='mainVideoDesc'>{video.description}</p>
+                    <div className='mainVideoPageVideo' id='iframe'><iframe width={vidWidth} height={vidHeight} src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                    <section className='mainVideoPage_featureAbout'>
+                        <h1 className='mainVideoPageTitle'>{video.title}</h1>
+                        <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
+                        {renderAdminOptions()}
+                        <p className='mainVideoDesc'>{video.description}</p>
+                    </section>
                     <div className='MainVideoPage_resources'>
                         {renderResourcesHeader()}
                         {renderResourcesList()}
                     </div>
                     <div className='MainVideoPage_comments'>
                         <h3 className='mainVideoPage_commentsHeader'>Comments</h3>
+                        {renderComments()}
                         <AddComment
                             videoID={video.id}
                         />
-                        {renderComments()}
                     </div>
                 </section>
                 <div className='MainVideoPage_relatedVids'>

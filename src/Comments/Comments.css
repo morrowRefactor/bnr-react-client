@@ -3,7 +3,17 @@
     margin-bottom: 0px;
 }
 
-.commentsText,
-.commentsDate {
+.commentsDetails {
     margin-top: 0px;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .Comments {
+        text-align: left;
+    }
+
+    .commentsDetails {
+        font-size: 12px;
+    }
 }

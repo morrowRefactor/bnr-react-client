@@ -1,7 +1,42 @@
+.BrowseVideos {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .BrowseVideos > form {
     margin-bottom: 20px;
 }
 
 .BrowseVideos_form > label {
     margin-right: 10px;
+}
+
+@media (min-width: 800px) {
+    .BrowseVideos {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+    }
+
+    .BrowseVideos_formInfo {
+        width: 35%;
+        margin-right: auto 20px auto auto;
+        border-right: 1px solid gray;
+    }
+
+    .browseVideos_desktopAdj {
+        position: fixed;
+        padding-top: 7vh;
+        margin-left: 5%;
+    }
+
+    .browseVideosHeader {
+        font-size: 24px;
+        
+    }
+
+    .BrowseVideos_videos {
+        width: 65%;
+    }
 }

@@ -6,6 +6,7 @@ import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import AddVideos from '../AddVideos/AddVideos';
 import EditVideos from '../EditVideos/EditVideos';
+import UserLogin from '../UserLogin/UserLogin';
 import CreateUser from '../CreateUser/CreateUser';
 import APIContext from '../APIContext';
 import config from '../config';
@@ -116,6 +117,11 @@ class App extends Component {
             exact
             path='/create-account'
             component={CreateUser}
+          />
+          <Route
+            exact
+            path='/login'
+            component={UserLogin}
           />
           <Route 
             exact

@@ -31,7 +31,29 @@
         flex-direction: row;
     }
 
+    .VideoBlock_details {
+        text-align: left;
+        padding: 0px 20px 0px 20px;
+    }
+
     .videoBlockImage {
-        width: 30%;
+        width: 20%;
+        height: 90%;
+        margin-top: 10px;
+    }
+
+    .videoBlockTitle {
+        font-size: 22px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .videoBlockDesc {
+        margin: 5px auto 5px auto;
+    }
+
+    .videoBlockPostDate {
+        font-size: 12px;
+        margin-top: 0px;
     }
 }

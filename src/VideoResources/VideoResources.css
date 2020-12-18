@@ -5,3 +5,10 @@
 .videoResourcesLink {
     margin-top: 0px;
 }
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .VideoResources {
+        text-align: left;
+    }
+}

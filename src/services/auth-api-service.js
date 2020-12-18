@@ -1,27 +1,8 @@
-import TokenService from './token-service';
 import config from '../config';
 
 const AuthApiService = {
-  postComment(articleId, text) {
-    return fetch(`${config.API_ENDPOINT}/api/comments`, {
-        method: 'POST',
-        headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-        },
-        body: JSON.stringify({
-        article_id: articleId,
-        text,
-        }),
-    })
-        .then(res =>
-        (!res.ok)
-            ? res.json().then(e => Promise.reject(e))
-            : res.json()
-        )
-  },
   postLogin(credentials) {
-    return fetch(`${config.API_ENDPOINT}/auth/login`, {
+    return fetch(`${config.API_ENDPOINT}/api/auth/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -35,7 +16,7 @@ const AuthApiService = {
       )
   },
   postUser(user) {
-    return fetch(`${config.API_ENDPOINT}/users`, {
+    return fetch(`${config.API_ENDPOINT}/api/users`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

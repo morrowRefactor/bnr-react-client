@@ -44,14 +44,45 @@
     .MainVideoPage {
         display: flex;
         flex-direction: row;
+        padding-top: 30px;
     }
 
     .MainVideoPage_feature {
-        width: 65%;
+        width: 60%;
         padding-right: 20px;
     }
 
+    .mainVideoPage_featureAbout {
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    .mainVideoPageTitle {
+        font-size: 28px;
+        margin-bottom: 0px;
+    }
+
+    .mainVideoDate {
+        display: inline-block;
+        margin-bottom: 0px;
+    }
+
+    .mainVideoDesc {
+        padding: 0px;
+        margin-bottom: 30px;
+    }
+
+    .MainVideoPage_resources,
+    .MainVideoPage_comments {
+        padding: 0px 0px 30px 20px;
+    }
+
     .MainVideoPage_relatedVids {
-        width: 35%;
+        width: 40%;
+    }
+
+    .mainVideoPage_relatedVidsMore {
+        text-align: left;
+        margin-left: 7%;
     }
 }

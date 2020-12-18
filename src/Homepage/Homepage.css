@@ -25,15 +25,24 @@
     }
 
     .Homepage_about {
-        width: 33%;
+        width: 35%;
         margin-right: 20px;
         padding-right: 20px;
         border-right: 1px solid gray;
+    }
+
+    .homepage_aboutDesktopAdj {
+        position: fixed;
+        padding-top: 7vh;
     }
 
     .recentVideosTitle {
         font-size: 24px;
         border: none;
         margin-top: 0px;
+    }
+
+    .RecentVideos {
+        width: 65%;
     }
 }
