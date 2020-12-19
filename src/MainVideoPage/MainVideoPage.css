@@ -39,6 +39,10 @@
     padding: 0px 5px 0px 5px;
 }
 
+.mainVideoPageLoginPrompt {
+    text-align: left;
+}
+
 /*tablet and desktop adjustments*/
 @media (min-width: 800px) {
     .MainVideoPage {

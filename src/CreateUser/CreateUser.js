@@ -93,11 +93,14 @@ class CreateUser extends Component {
             });
         }
         else {
+            const timeElapsed = Date.now();
+            const today = new Date(timeElapsed).toISOString();
+            
             AuthApiService.postUser({
                 name: this.state.name.value,
                 email: this.state.email.value,
                 password: this.state.password.value,
-                joined_date: new Date()
+                joined_date: today
             })
             .then(res => {
                 TokenService.saveAuthToken(res.authToken);

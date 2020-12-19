@@ -8,6 +8,8 @@ import AddVideos from '../AddVideos/AddVideos';
 import EditVideos from '../EditVideos/EditVideos';
 import UserLogin from '../UserLogin/UserLogin';
 import CreateUser from '../CreateUser/CreateUser';
+import PrivateRoute from '../Utils/PrivateRoute';
+import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';

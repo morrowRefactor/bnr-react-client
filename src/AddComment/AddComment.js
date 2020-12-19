@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
 import AuthApiService from '../services/auth-api-service';
+import TokenService from '../services/token-service';
 import APIContext from '../APIContext';
 import config from '../config';
 import './AddComment.css';
@@ -18,15 +19,33 @@ class AddComment extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
-        const videoID = this.props.videoID;
-        const comment = this.state.comment.value;
-        /*
-        AuthApiService.postComment(videoID, comment)
-          .then(this.context.addComment)
-          .then(() => {
-            text.value = ''
-          })
-          .catch(this.context.setError)*/
+        const timeElapsed = Date.now();
+        const today = new Date(timeElapsed).toISOString();
+        const newComment = {
+            uid: this.props.uid,
+            vid_id: this.props.videoID,
+            comment: this.state.comment.value,
+            date_posted: today
+        };
+        
+        fetch(`${config.API_ENDPOINT}/api/comments`, {
+            method: 'POST',
+            body: JSON.stringify(newComment),
+            headers: {
+              'content-type': 'application/json',
+              'authorization': `bearer ${TokenService.getAuthToken()}`
+            }
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(error => {
+                    throw error
+                })
+            }
+        })
+        .catch(error => {
+            this.setState({ error })
+        })
     }
 
     updateComment(comm) {

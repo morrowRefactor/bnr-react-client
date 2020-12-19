@@ -4,6 +4,8 @@ import VideoResources from '../VideoResources/VideoResources';
 import AddComment from '../AddComment/AddComment';
 import Comments from '../Comments/Comments';
 import RelatedVidBlock from '../RelatedVidBlock/RelatedVidBlock';
+import TokenService from '../services/token-service';
+import jwt_decode from 'jwt-decode';
 import APIContext from '../APIContext';
 import './MainVideoPage.css';
 
@@ -32,6 +34,15 @@ class MainVideoPage extends Component {
         let vidLink;
         let vidWidth;
         let vidHeight;
+        let userID;
+
+        // check for logged in users and admin
+        const loggedInUser = TokenService.hasAuthToken();
+        if(loggedInUser) {
+            const token = TokenService.getAuthToken();
+            const user = jwt_decode(token);
+            userID = user.id;
+        }
 
         // since component is stateless, check context to fetch data if needed
         if(this.context.videos.length < 1 || !vidCheck) {
@@ -218,7 +229,10 @@ class MainVideoPage extends Component {
                     <section className='mainVideoPage_featureAbout'>
                         <h1 className='mainVideoPageTitle'>{video.title}</h1>
                         <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
-                        {renderAdminOptions()}
+                        {userID === 1
+                            ? renderAdminOptions()
+                            : ''
+                        }
                         <p className='mainVideoDesc'>{video.description}</p>
                     </section>
                     <div className='MainVideoPage_resources'>
@@ -228,9 +242,10 @@ class MainVideoPage extends Component {
                     <div className='MainVideoPage_comments'>
                         <h3 className='mainVideoPage_commentsHeader'>Comments</h3>
                         {renderComments()}
-                        <AddComment
-                            videoID={video.id}
-                        />
+                        {loggedInUser
+                            ? <AddComment videoID={video.id} uid={userID} />
+                            : <p className='mainVideoPageLoginPrompt'><Link to='/login'>Log in</Link> or <Link to='/create-account'>create account</Link> to post a comment</p>
+                        }
                     </div>
                 </section>
                 <div className='MainVideoPage_relatedVids'>
