@@ -12,6 +12,10 @@
     margin-right: 10px;
 }
 
+#search {
+    margin-bottom: 20px;
+}
+
 @media (min-width: 800px) {
     .BrowseVideos {
         display: flex;

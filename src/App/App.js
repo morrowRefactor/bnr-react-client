@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
+import Footer from '../Footer/Footer';
 import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import AddVideos from '../AddVideos/AddVideos';
@@ -130,6 +131,7 @@ class App extends Component {
             path='/'
             component={Homepage}
           />
+          <Footer />
         </div>
       </APIContext.Provider>
     );

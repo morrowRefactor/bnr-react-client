@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
-import AuthApiService from '../services/auth-api-service';
 import TokenService from '../services/token-service';
 import APIContext from '../APIContext';
 import config from '../config';
@@ -42,6 +41,9 @@ class AddComment extends Component {
                     throw error
                 })
             }
+
+            this.setState({comment: { value: '', touched: false }});
+            this.context.refreshState();
         })
         .catch(error => {
             this.setState({ error })

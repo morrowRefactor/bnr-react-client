@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Select from 'react-select';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
 import './BrowseVideos.css';
@@ -9,7 +10,8 @@ class BrowseVideos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filteredVids: { value: [], touched: false }
+            filteredVids: { value: [], touched: false },
+            vidTitle: { value: '', touched: false }
         }
     };
 
@@ -18,6 +20,12 @@ class BrowseVideos extends Component {
             this.context.refreshState();
         }
     }
+
+    updateTitle = title => {
+        this.setState({
+            vidTitle: { value: title.value, touched: true }
+        });
+    };
 
     updateFilter = e => {
         if(e === 'all') {
@@ -60,6 +68,14 @@ class BrowseVideos extends Component {
             })
         }
 
+        let vidTitles = [];
+        this.context.videos.forEach(vid => {
+            let thisVid = {};
+            thisVid.value = vid.title;
+            thisVid.label = vid.title;
+            vidTitles.push(thisVid);
+        });
+
         const tagsRef = this.context.tagsRef;
         const recentVids = this.state.filteredVids.value.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
@@ -83,6 +99,16 @@ class BrowseVideos extends Component {
                         <form 
                             className='BrowseVideos_form'
                         >
+                            <label htmlFor='search'>
+                                Search by Title
+                            </label>
+                            <Select
+                                id='search'
+                                options={vidTitles}
+                                onChange={e => this.updateTitle(e)} 
+                                value={vidTitles.filter(obj => obj.value === this.state.vidTitle.value)}
+                                required
+                            />
                             <label htmlFor='tagsRef'>
                                 Filter by content:
                             </label>
