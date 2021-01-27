@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
 import AuthApiService from '../services/auth-api-service';
 import TokenService from '../services/token-service';
@@ -110,6 +111,7 @@ class UserLogin extends Component {
                             onChange={e => this.updatePass(e.target.value)}
                             required
                         />
+                        <p><Link className='userLoginForgotPassword' to='/reset-password'>Forgot password?</Link></p>
                         {this.state.password.touched && (
                             <ValidationError message={passError} />
                         )}

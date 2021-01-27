@@ -178,7 +178,7 @@ class MainVideoPage extends Component {
         function renderResourcesHeader() {
             if(vidResources.length > 0) {
                 return (
-                    <h3 className='mainVideoPage_resourcesHeader'>Resources for this Video</h3>
+                    <h3 className='mainVideoPage_resourcesHeader'>Video Links &amp; Resources</h3>
                 )
             }
         }

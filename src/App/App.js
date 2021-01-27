@@ -9,6 +9,7 @@ import AddVideos from '../AddVideos/AddVideos';
 import EditVideos from '../EditVideos/EditVideos';
 import UserLogin from '../UserLogin/UserLogin';
 import CreateUser from '../CreateUser/CreateUser';
+import ResetPassword from '../ResetPassword/ResetPassword';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
 import APIContext from '../APIContext';
@@ -125,6 +126,11 @@ class App extends Component {
             exact
             path='/login'
             component={UserLogin}
+          />
+          <Route
+            exact
+            path='/reset-password'
+            component={ResetPassword}
           />
           <Route 
             exact
