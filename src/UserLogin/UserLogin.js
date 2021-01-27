@@ -84,38 +84,42 @@ class UserLogin extends Component {
                     className='UserLogin_form'
                     onSubmit={this.handleSubmit}
                 >
-                    <label htmlFor='userEmail'>
-                        Email address
-                    </label>
-                    <input
-                        type='text'
-                        id='userEmail'
-                        placeholder='jane-doe@gmail.com'
-                        onChange={e => this.updateEmail(e.target.value)}
-                        required
-                    />
-                    {this.state.email.touched && (
-                        <ValidationError message={emailError} />
-                    )}
-                    <label htmlFor='userPass'>
-                        Password
-                    </label>
-                    <input
-                        type='text'
-                        id='userPass'
-                        placeholder='Letmein123!'
-                        onChange={e => this.updatePass(e.target.value)}
-                        required
-                    />
-                    {this.state.password.touched && (
-                        <ValidationError message={passError} />
-                    )}
-                    <div className='userLogin_formCredError'>
-                        {this.state.loginError.status
-                            ? this.state.loginError.value
-                            : ''
-                        }
-                    </div>
+                    <section className='UserLogin_formField'>
+                        <label htmlFor='userEmail'>
+                            Email address
+                        </label>
+                        <input
+                            type='text'
+                            id='userEmail'
+                            placeholder='jane-doe@gmail.com'
+                            onChange={e => this.updateEmail(e.target.value)}
+                            required
+                        />
+                        {this.state.email.touched && (
+                            <ValidationError message={emailError} />
+                        )}
+                    </section>
+                    <section className='UserLogin_formField'>
+                        <label htmlFor='userPass'>
+                            Password
+                        </label>
+                        <input
+                            type='text'
+                            id='userPass'
+                            placeholder='Letmein123!'
+                            onChange={e => this.updatePass(e.target.value)}
+                            required
+                        />
+                        {this.state.password.touched && (
+                            <ValidationError message={passError} />
+                        )}
+                        <div className='userLogin_formCredError'>
+                            {this.state.loginError.status
+                                ? this.state.loginError.value
+                                : ''
+                            }
+                        </div>
+                    </section>
                     <div className='UserLoginForm_buttons'>
                         <button 
                             type='submit'

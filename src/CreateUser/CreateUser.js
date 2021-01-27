@@ -128,58 +128,66 @@ class CreateUser extends Component {
                     className='CreateUser_form'
                     onSubmit={this.handleSubmit}
                 >
-                    <label htmlFor='userName'>
-                        Name
-                    </label>
-                    <input
-                        type='text'
-                        id='userName'
-                        placeholder='Jane Doe'
-                        onChange={e => this.updateUserName(e.target.value)}
-                        required
-                    />
-                    {this.state.name.touched && (
-                        <ValidationError message={nameError} />
-                    )}
-                    <label htmlFor='userEmail'>
-                        Email address
-                    </label>
-                    <input
-                        type='text'
-                        id='userEmail'
-                        placeholder='jane-doe@gmail.com'
-                        onChange={e => this.updateEmail(e.target.value)}
-                        required
-                    />
-                    {this.state.email.touched && (
-                        <ValidationError message={emailError} />
-                    )}
-                    <label htmlFor='userPass'>
-                        Password
-                    </label>
-                    <input
-                        type='password'
-                        id='userPass'
-                        onChange={e => this.updatePass(e.target.value)}
-                        required
-                    />
-                    {this.state.passwordError.value
-                        ? <div className='passwordError'>{this.state.passwordError.value}</div>
-                        : ''
-                    }
-                    <label htmlFor='userPassConfirm'>
-                        Confirm Password
-                    </label>
-                    <input
-                        type='password'
-                        id='userPassConfirm'
-                        onChange={e => this.updatePassConfirm(e.target.value)}
-                        required
-                    />
-                    {this.state.confirmPassError.value
-                        ? <div className='passwordError'>{this.state.cofirmPassError.value}</div>
-                        : ''
-                    }
+                    <section className='CreateUser_formField'>
+                        <label htmlFor='userName'>
+                            Name
+                        </label>
+                        <input
+                            type='text'
+                            id='userName'
+                            placeholder='Jane Doe'
+                            onChange={e => this.updateUserName(e.target.value)}
+                            required
+                        />
+                        {this.state.name.touched && (
+                            <ValidationError message={nameError} />
+                        )}
+                    </section>
+                    <section className='CreateUser_formField'>
+                        <label htmlFor='userEmail'>
+                            Email address
+                        </label>
+                        <input
+                            type='text'
+                            id='userEmail'
+                            placeholder='jane-doe@gmail.com'
+                            onChange={e => this.updateEmail(e.target.value)}
+                            required
+                        />
+                        {this.state.email.touched && (
+                            <ValidationError message={emailError} />
+                        )}
+                    </section>
+                    <section className='CreateUser_formField'>
+                        <label htmlFor='userPass'>
+                            Password
+                        </label>
+                        <input
+                            type='password'
+                            id='userPass'
+                            onChange={e => this.updatePass(e.target.value)}
+                            required
+                        />
+                        {this.state.passwordError.value
+                            ? <div className='passwordError'>{this.state.passwordError.value}</div>
+                            : ''
+                        }
+                    </section>
+                    <section className='CreateUser_formField'>
+                        <label htmlFor='userPassConfirm'>
+                            Confirm Password
+                        </label>
+                        <input
+                            type='password'
+                            id='userPassConfirm'
+                            onChange={e => this.updatePassConfirm(e.target.value)}
+                            required
+                        />
+                        {this.state.confirmPassError.value
+                            ? <div className='passwordError'>{this.state.cofirmPassError.value}</div>
+                            : ''
+                        }
+                    </section>
                     <div className='CreateUserForm_buttons'>
                         <button 
                             type='submit'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import VideoBlock from '../VideoBlock/VideoBlock';
+import SearchedVid from '../SearchedVid/SearchedVid';
 import APIContext from '../APIContext';
 import './BrowseVideos.css';
 
@@ -11,7 +12,8 @@ class BrowseVideos extends Component {
         super(props);
         this.state = {
             filteredVids: { value: [], touched: false },
-            vidTitle: { value: '', touched: false }
+            searchedVid: { value: '', touched: false },
+            foundVid: false
         }
     };
 
@@ -21,9 +23,26 @@ class BrowseVideos extends Component {
         }
     }
 
-    updateTitle = title => {
+    handleSearch = searchTitle => {
+        const searchedVid = this.context.videos.find(({ title }) => title === searchTitle.value);
+
+        if(searchedVid) {
+            this.setState({
+                searchedVid: { value: searchTitle.value, touched: true },
+                foundVid: true
+            }); 
+        }
+        else{
+            this.setState({
+                searchedVid: { value: searchTitle.value, touched: true }
+            });
+        }
+    };
+
+    clearSearch = () => {
         this.setState({
-            vidTitle: { value: title.value, touched: true }
+            searchedVid: { value: '', touched: false },
+            foundVid: false
         });
     };
 
@@ -60,6 +79,24 @@ class BrowseVideos extends Component {
         }
     }
 
+    renderSearchedVid = () => {
+        const searchedVid = this.context.videos.find(({ title }) => title === this.state.searchedVid.value);
+
+        if(searchedVid) {
+            return (
+                <SearchedVid
+                    key={searchedVid.id}
+                    vid={searchedVid.id}
+                    title={searchedVid.title}
+                    description={searchedVid.description}
+                    date_posted={searchedVid.date_posted}
+                    youtube_id={searchedVid.youtube_id}
+                    clearSearch={this.clearSearch}
+                />
+            )
+        }
+    }
+
     render() {
         // populate all videos by default
         if (this.context.videos.length > 1 && this.state.filteredVids.touched === false) {
@@ -68,6 +105,7 @@ class BrowseVideos extends Component {
             })
         }
 
+        // populate search options with video titles
         let vidTitles = [];
         this.context.videos.forEach(vid => {
             let thisVid = {};
@@ -76,7 +114,7 @@ class BrowseVideos extends Component {
             vidTitles.push(thisVid);
         });
 
-        const tagsRef = this.context.tagsRef;
+        // array of videos to display based on filter criteria
         const recentVids = this.state.filteredVids.value.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
@@ -105,8 +143,8 @@ class BrowseVideos extends Component {
                             <Select
                                 id='search'
                                 options={vidTitles}
-                                onChange={e => this.updateTitle(e)} 
-                                value={vidTitles.filter(obj => obj.value === this.state.vidTitle.value)}
+                                onChange={e => this.handleSearch(e)}
+                                value={vidTitles.filter(obj => obj.value === this.state.searchedVid.value)}
                                 required
                             />
                             <label htmlFor='tagsRef'>
@@ -120,7 +158,7 @@ class BrowseVideos extends Component {
                                 required
                             >
                                 <option value='all'>All</option>
-                                {tagsRef.map(type =>
+                                {this.context.tagsRef.map(type =>
                                     <option value={type.id} key={type.id}>
                                         {type.tag}
                                     </option>
@@ -130,6 +168,15 @@ class BrowseVideos extends Component {
                     </section>
                 </section>
                 <section className='BrowseVideos_videos'>
+                    {this.state.foundVid
+                        ? <h3 className='browseVideos_subHeader'>Your search</h3>
+                        : ''
+                    }
+                    {this.renderSearchedVid()}
+                    {this.state.foundVid
+                        ? <h3 className='browseVideos_subHeader'>All videos</h3>
+                        : ''
+                    }
                     {videos}
                 </section>
             </section>

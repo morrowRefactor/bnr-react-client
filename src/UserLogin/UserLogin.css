@@ -1,0 +1,21 @@
+.UserLogin_form {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.UserLogin_formField {
+    margin-bottom: 20px;
+}
+
+.UserLogin_formField > label {
+    display: inline-block;
+    width: 100%;
+}
+
+@media (min-width: 800px) {
+    .UserLogin {
+        text-align: center;
+    }
+}
