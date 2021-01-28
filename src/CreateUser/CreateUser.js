@@ -81,15 +81,17 @@ class CreateUser extends Component {
         if(!regexPasswordCheck.test(this.state.password.value)) {
             this.setState({
                 passwordError: { 
-                    value: 'Password must contain at least one capital letter, one number, one special character, and be at least 8 characters long'},
+                    value: 'Password must contain at least one capital letter, one number, one special character, and be at least 8 characters long',
                     status: true
+                }
             });
         }
-        if(this.state.password.value !== this.state.confirmPassword.value) {
+        else if(this.state.password.value !== this.state.confirmPassword.value) {
             this.setState({
                 confirmPassError: { 
-                    value: 'Passwords must be an identical character match'},
+                    value: 'Passwords must be an identical character match',
                     status: true
+                }
             });
         }
         else {

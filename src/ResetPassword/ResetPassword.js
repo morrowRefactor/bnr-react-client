@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
 import APIContext from '../APIContext';
+import config from '../config';
 import './ResetPassword.css';
 
 class ResetPassword extends Component {
@@ -39,7 +40,34 @@ class ResetPassword extends Component {
             }
             
             const tempPass = this.randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-            
+            const newTempLogin = {
+                uid: checkEmail.id,
+                email: this.state.email.value,
+                password: tempPass
+            };
+            console.log('tempass', tempPass);
+
+            fetch(`${config.API_ENDPOINT}/api/reset-password`, {
+                method: 'POST',
+                body: JSON.stringify(newTempLogin),
+                headers: {
+                  'content-type': 'application/json'
+                }
+              })
+                .then(res => {
+                  if (!res.ok) {
+                    return res.json().then(error => {
+                      throw error
+                    })
+                  }
+
+                  return res.json().then(newPass => {
+                    this.props.history.push(`/reset-password-confirm/${newPass.id}`);
+                  }) 
+                })
+                .catch(error => {
+                  this.setState({ error })
+                })
         }
     }
 

@@ -15,8 +15,7 @@ class UserLogin extends Component {
         super(props)
         this.state = {
           email: { value: '', touched: false },
-          password: { value: '', touched: false },
-          loginError: { value: '', status: false }
+          password: { value: '', touched: false }
         };
     };
 
@@ -28,12 +27,9 @@ class UserLogin extends Component {
             password: this.state.password.value,
         })
         .then(res => {
-            if(res.status === 400) {
+            if(!res.ok) {
                 this.setState({ 
-                    loginError: { 
-                        value: 'User Name or Password is incorrect.',
-                        status: true
-                    }
+                    error: 'User Name or Password is incorrect.'
                 })
             }
             
@@ -116,8 +112,8 @@ class UserLogin extends Component {
                             <ValidationError message={passError} />
                         )}
                         <div className='userLogin_formCredError'>
-                            {this.state.loginError.status
-                                ? this.state.loginError.value
+                            {this.state.error
+                                ? this.state.error
                                 : ''
                             }
                         </div>

@@ -10,6 +10,8 @@ import EditVideos from '../EditVideos/EditVideos';
 import UserLogin from '../UserLogin/UserLogin';
 import CreateUser from '../CreateUser/CreateUser';
 import ResetPassword from '../ResetPassword/ResetPassword';
+import TempPasswordConfirm from '../TempPasswordConfirm/TempPasswordConfirm';
+import ChangePassword from '../ChangePassword/ChangePassword';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
 import APIContext from '../APIContext';
@@ -131,6 +133,14 @@ class App extends Component {
             exact
             path='/reset-password'
             component={ResetPassword}
+          />
+          <Route
+            path='/reset-password-confirm/:id'
+            component={TempPasswordConfirm}
+          />
+          <Route
+            path='/change-password/:uid'
+            component={ChangePassword}
           />
           <Route 
             exact

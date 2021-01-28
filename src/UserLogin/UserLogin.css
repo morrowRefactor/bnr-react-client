@@ -23,6 +23,10 @@
     font-size: 12px;
 }
 
+.userLogin_formCredError {
+    color: red;
+}
+
 @media (min-width: 800px) {
     .UserLogin {
         text-align: center;
