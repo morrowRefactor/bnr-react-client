@@ -17,13 +17,11 @@ class CreateUser extends Component {
           password: { value: '', touched: false },
           confirmPassword: { value: '', touched: false },
           passwordError: { value: '', status: false },
-          confirmPassError: { value: '', status: false }
+          confirmPassError: { value: '', status: false },
+          emailError: { value: '', status: false },
+          showChar: false
         };
     };
-
-    handleSubmit = e => {
-        e.preventDefault();
-    }
 
     updateUserName(name) {
         this.setState({name: {value: name, touched: true}});
@@ -75,10 +73,30 @@ class CreateUser extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
+
+        // clear any previous error messages
+        if(this.state.emailError.status === true || this.state.passwordError.status === true || this.state.confirmPassError.status === true) {
+            this.setState({
+                emailError: { value: '', status: false},
+                passwordError: { value: '', status: false},
+                confirmPassError: { value: '', status: false},
+            })
+        }
         
-        // validate that password has required characters
+        // validate that email and password have required characters
+        const emailCheck1 = this.state.email.value.indexOf('@');
+        const emailCheck2 = this.state.email.value.indexOf('.');
         const regexPasswordCheck = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
-        if(!regexPasswordCheck.test(this.state.password.value)) {
+        
+        if(emailCheck1 === -1 || !emailCheck2 == -1) {
+            this.setState({
+                emailError : {
+                    value: 'A valid email address is required',
+                    status: true
+                }
+            });
+        }
+        else if(!regexPasswordCheck.test(this.state.password.value) || this.state.password.value.length < 8) {
             this.setState({
                 passwordError: { 
                     value: 'Password must contain at least one capital letter, one number, one special character, and be at least 8 characters long',
@@ -95,23 +113,33 @@ class CreateUser extends Component {
             });
         }
         else {
-            const timeElapsed = Date.now();
-            const today = new Date(timeElapsed).toISOString();
-            
-            AuthApiService.postUser({
-                name: this.state.name.value,
-                email: this.state.email.value,
-                password: this.state.password.value,
-                joined_date: today
-            })
-            .then(res => {
-                TokenService.saveAuthToken(res.authToken);
-                this.props.history.push(`/`);
-            })
-            .catch(res => {
-                this.setState({ error: res.error })
-            })
+            this.postUser();
         }
+    };
+
+    postUser = () => {
+        const timeElapsed = Date.now();
+        const today = new Date(timeElapsed).toISOString();
+        
+        AuthApiService.postUser({
+            name: this.state.name.value,
+            email: this.state.email.value,
+            password: this.state.password.value,
+            joined_date: today
+        })
+        .then(res => {
+            if(res.authToken) {
+                TokenService.saveAuthToken(res.authToken);
+                this.props.history.push(`/my-account/${res.id}`);
+            }
+        })
+        .catch(res => {
+            this.setState({ error: res.error })
+        })
+    }
+
+    toggleChars = () => {
+        this.setState({ showChar: this.state.showChar ? false : true });
     };
 
     handleClickCancel = () => {
@@ -122,6 +150,7 @@ class CreateUser extends Component {
     render() {
         const nameError = this.validateUserName();
         const emailError = this.validateUserEmail();
+        const showChar = this.state.showChar ? 'text' : 'password';
 
         return (
             <section className='CreateUser'>
@@ -159,19 +188,24 @@ class CreateUser extends Component {
                         {this.state.email.touched && (
                             <ValidationError message={emailError} />
                         )}
+                        {this.state.emailError.status
+                            ? <div className='createUserError'>{this.state.emailError.value}</div>
+                            : ''
+                        }
                     </section>
                     <section className='CreateUser_formField'>
                         <label htmlFor='userPass'>
                             Password
                         </label>
                         <input
-                            type='password'
+                            type={showChar}
                             id='userPass'
                             onChange={e => this.updatePass(e.target.value)}
                             required
                         />
-                        {this.state.passwordError.value
-                            ? <div className='passwordError'>{this.state.passwordError.value}</div>
+                        <button className='createUserToggleChar' onClick={() => this.toggleChars()}>Show characters</button>
+                        {this.state.passwordError.status
+                            ? <div className='createUserError'>{this.state.passwordError.value}</div>
                             : ''
                         }
                     </section>
@@ -180,13 +214,13 @@ class CreateUser extends Component {
                             Confirm Password
                         </label>
                         <input
-                            type='password'
+                            type={showChar}
                             id='userPassConfirm'
                             onChange={e => this.updatePassConfirm(e.target.value)}
                             required
                         />
-                        {this.state.confirmPassError.value
-                            ? <div className='passwordError'>{this.state.cofirmPassError.value}</div>
+                        {this.state.confirmPassError.status
+                            ? <div className='createUserError'>{this.state.confirmPassError.value}</div>
                             : ''
                         }
                     </section>

@@ -1,0 +1,48 @@
+.editUserText {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.editUserFieldToggle {
+    border: none;
+    background-color: white;
+    font-size: 12px;
+    padding: 0px;
+}
+
+.EditUser_form {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.EditUser_formField {
+    margin-bottom: 20px;
+}
+
+.EditUser_formField > label {
+    display: inline-block;
+    width: 100%;
+}
+
+.EditUser_formField > p {
+    margin-top: 0px;
+}
+
+.errorText {
+    color: red;
+    font-size: 12px;
+}
+
+.EditUser_formField > div {
+    margin-left: 0px;
+}
+
+@media (min-width: 800px) {
+    .EditUser {
+        text-align: center;
+    }
+}

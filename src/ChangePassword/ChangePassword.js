@@ -63,7 +63,7 @@ class ChangePassword extends Component {
                     })
                 }
     
-                console.log('good')
+                this.props.history.push(`/my-account/${user.id}`);
             })
             .catch(error => {
                 this.setState({ error })
@@ -87,7 +87,7 @@ class ChangePassword extends Component {
     }
 
     handleClickCancel = () => {
-        this.props.history.push('/');
+        this.props.history.push(`/my-account/${this.props.match.params.uid}`);
     };
   
     render() {

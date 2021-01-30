@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 import TokenService from '../services/token-service';
 import APIContext from '../APIContext';
 import './NavBar.css';
@@ -18,6 +19,21 @@ class Navbar extends Component {
               onClick={this.handleLogoutClick}
               to='/'>
               Logout
+            </Link>
+          </li>
+        );
+    };
+
+    renderAccountLink() {
+      const token = TokenService.getAuthToken();
+      const user = jwt_decode(token);
+      const link = `/my-account/${user.id}`;
+      
+        return (
+          <li className='topNavLink'>
+            <Link
+              to={link}>
+              My Account
             </Link>
           </li>
         );
@@ -62,6 +78,10 @@ class Navbar extends Component {
                 <ul className={this.context.navbar}>
                     <li><Link className='topNavLink' to='/browse-videos'>Videos</Link></li>
                     <li><Link className='topNavLink' to='/about'>About</Link></li>
+                    {TokenService.hasAuthToken()
+                        ? this.renderAccountLink()
+                        : this.renderPlaceholder()
+                    }
                     {TokenService.hasAuthToken()
                         ? this.renderLogoutLink()
                         : this.renderCreateLink()

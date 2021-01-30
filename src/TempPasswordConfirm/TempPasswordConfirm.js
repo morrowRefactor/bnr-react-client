@@ -58,6 +58,7 @@ class TempPasswordConfirm extends Component {
 
                   return res.json().then(newPass => {
                     TokenService.saveAuthToken(newPass.authToken);
+                    this.removeTempPass();
                     this.props.history.push(`/change-password/${tempLogin.uid}`);
                   }) 
                 })
@@ -65,7 +66,7 @@ class TempPasswordConfirm extends Component {
                   this.setState({ error })
                 })
         }
-    }
+    };
 
     getEmail = () => {
         fetch(`${config.API_ENDPOINT}/api/reset-password/${this.props.match.params.id}`, {
@@ -91,7 +92,28 @@ class TempPasswordConfirm extends Component {
             .catch(error => {
               this.setState({ error })
             })
-    }
+    };
+
+    removeTempPass = () => {
+        fetch(`${config.API_ENDPOINT}/api/reset-password/${this.props.match.params.id}`, {
+            method: 'DELETE',
+            body: JSON.stringify(),
+            headers: {
+              'content-type': 'application/json',
+              'authorization': `bearer ${TokenService.getAuthToken()}`
+            }
+          })
+            .then(res => {
+              if (!res.ok) {
+                return res.json().then(error => {
+                  throw error
+                })
+              }
+            })
+            .catch(error => {
+              this.setState({ error })
+            })
+    };
 
     updateTempPass = pass => {
         this.setState({password: {value: pass, touched: true}});
