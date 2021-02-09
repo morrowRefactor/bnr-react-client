@@ -8,9 +8,14 @@
     line-height: 40px;
     width: 100%;
     direction: rtl;
+    position: relative;
     margin-bottom: 25px;
-    border-bottom: 1.5px solid rgb(16, 60, 16);
-    box-shadow: 0px 4px rgb(0,0,0,0.15);
+    border-bottom: 1.5px solid rgb(84, 84, 84);
+    box-shadow: 0px 2px rgb(0,0,0,0.15);
+}
+
+.topNavLogo {
+    display: none;
 }
 
 .topNavHeader {
@@ -19,7 +24,7 @@
 
 .topnavHeaderLink {
     font-size: 18px;
-    color: rgb(16, 60, 16);
+    color: rgb(84, 84, 84);
     font-weight: bold;
     text-decoration: none;
 }
@@ -31,22 +36,30 @@
     min-width: 50px;
     padding: 5px 5px 5px 5px;
 }
+
+.TopNav_contentContainer {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 150px;
+    background-color: white;
+    text-align: right;
+    border-right: 1px solid rgb(84, 84, 84);
+    border-left: 1px solid rgb(84, 84, 84);
+    border-bottom: 1px solid rgb(84, 84, 84);
+}
   
 .Topnav ul {
     list-style: none;
     margin: 0px 0px 0px auto;
     padding-right: 10px;
+    padding-left: 0px;
     direction: ltr;
-}
-  
-.Topnav li {
-    display: inline-block;
-    padding-left: 20px;
 }
 
 .menulink {
     text-decoration: none;
-    color: rgb(16, 60, 16);
+    color: rgb(84, 84, 84);
 }
   
 .hamburger {
@@ -65,16 +78,6 @@
     visibility: visible;
 }
 
-.show {
-    margin-right: 0px;
-    margin-left: auto;
-    transition-timing-function: ease;
-}
-
-.hidden {
-    display: none;
-}
-
 .break {
     flex-basis: 100%;
     height: 0;
@@ -83,7 +86,7 @@
 .hamburgerButton,
 .topNavLink {
     background-color: white;
-    color: rgb(16, 60, 16);
+    color: rgb(84, 84, 84);
     border: none;
     text-decoration: none;
     font-size: .90em;
@@ -94,11 +97,47 @@ button:hover,
     cursor: pointer;
 }
 
-@media (min-width: 800px) {
+.TopNav_socialIcons {
+    display: flex;
+    flex-direction: row;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.topNavSocialIcon {
+    margin-left: 10px;
+}
+
+.topNavSocialImage {
+    height: 20px;
+}
+
+.show {
+    margin-right: 0px;
+    margin-left: auto;
+    transition-timing-function: ease;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (min-width: 1200px) {
     .Topnav {
+        width: 100%;
         background-color: white;
-        border-bottom: solid 2px rgb(16, 60, 16);
+        border-bottom: solid 1px rgb(84, 84, 84);
         padding: auto 20px auto 20px;
+    }
+
+    .topNavLogo {
+        display: inline-block;
+        margin-left: 30px;
+        padding-top: 5px;
+    }
+    
+    .topNavLogoImage {
+        width: 50px;
     }
 
     .break {
@@ -106,13 +145,13 @@ button:hover,
     }
 
     .topNavHeader {
-        margin-left: 40px;
+        margin-left: 10px;
+        line-height: 65px;
     }
 
     .topnavHeaderLink {
         font-size: 22px;
-        font-weight: bold;
-        color: rgb(16, 60, 16);
+        color: rgb(84, 84, 84);
     }
 
     .hamburger,
@@ -125,13 +164,44 @@ button:hover,
         display: inline-block;
     }
 
+    .TopNav_contentContainer {
+        position: unset;
+        display: flex;
+        flex-direction: row-reverse;
+        border: none;
+        text-align: left;
+        width: 100%;
+    }
+
     .Topnav ul {
-        margin: auto 50px auto auto;
+        display: flex;
+        flex-direction: row;
+        margin: auto auto auto 10px;
+        line-height: 65px;
+        padding: 0px;
+    }
+
+    .Topnav li {
+        display: inline-block;
+        padding-left: 20px;
     }
 
     .topNavLink {
         font-size: 16px;
         background-color: white;
-        color: rgb(16, 60, 16);
+        color: rgb(84, 84, 84);
+    }
+
+    .TopNav_socialIcons {
+        position: absolute;
+        right: 0;
+        top: 15px;
+        display: flex;
+        flex-direction: row;
+        margin-right: 30px;
+    }
+
+    .topNavSocialImage {
+        height: 25px;
     }
 }

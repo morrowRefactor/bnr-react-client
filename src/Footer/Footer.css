@@ -23,3 +23,9 @@
     height: 25px;
     margin-left: 20px;
 }
+
+@media (min-width: 800px) {
+    .Footer {
+        display: none;
+    }
+}
