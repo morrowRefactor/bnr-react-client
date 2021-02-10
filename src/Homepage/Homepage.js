@@ -12,8 +12,8 @@ class Homepage extends Component {
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
 
-        const getRecents = sortDates.slice(1, 6);
-        const latestVid = getRecents[0] || {};
+        const getRecents = window.innerWidth >= 1200 ? sortDates.slice(1, 6) : sortDates.slice(0, 5);
+        const latestVid = sortDates[0] || {};
         const latestVidText = latestVid.title ? latestVid.title.replace(/\s+/g, '-').toLowerCase() : '';
         const latestVidThumb = 'https://img.youtube.com/vi/' + latestVid.youtube_id + '/hqdefault.jpg';
         

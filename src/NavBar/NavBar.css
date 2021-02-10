@@ -42,6 +42,7 @@
     z-index: 1;
     background-color: white;
     text-align: right;
+    margin-right: 10px;
     border-right: 1px solid rgb(84, 84, 84);
     border-left: 1px solid rgb(84, 84, 84);
     border-bottom: 1px solid rgb(84, 84, 84);
@@ -124,7 +125,7 @@ button:hover,
     .Topnav {
         width: 100%;
         background-color: white;
-        border-bottom: solid 1px rgb(84, 84, 84);
+        border-bottom: solid 1px rgb(217, 217, 217);
         padding: auto 20px auto 20px;
     }
 
@@ -144,6 +145,7 @@ button:hover,
 
     .topNavHeader {
         margin-left: 10px;
+        margin-right: 10px;
         line-height: 65px;
     }
 
@@ -160,6 +162,7 @@ button:hover,
     .show,
     .hidden {
         display: inline-block;
+        width: 50%;
     }
 
     .TopNav_contentContainer {
