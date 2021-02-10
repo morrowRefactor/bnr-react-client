@@ -1,12 +1,52 @@
 .Homepage {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+}
+
+.Homepage_desktopFeature,
+.homepageSpacer {
+    display: none;
+}
+
+.homepageBackgroundImage {
+    width: 100%;
+    opacity: 0.1;
+}
+
+.Homepage_background {
+    margin-top: 0px;
+    background-image: url('https://user-images.githubusercontent.com/58446465/107443385-94224780-6aed-11eb-9680-837a25b7c229.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.homepageBannerText {
+    font-size: 30px;
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .homepageImage {
-    width: 200px;
-    border-radius: 3px;
+    position: relative;
+    top: -25px;
+    width: 125px;
+    border-radius: 90px;
+    border: 2px solid white;
+    margin-bottom: 0px;
+}
+
+.homepageAbout {
+    position: relative;
+    top: -20px;
+}
+
+.RecentVideos {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .recentVideosTitle {
@@ -21,28 +61,43 @@
     .Homepage {
         display: flex;
         flex-direction: row;
-        margin-bottom: 20px;
-    }
-
-    .Homepage_about {
-        width: 35%;
-        margin-right: 20px;
-        padding-right: 20px;
-        border-right: 1px solid gray;
+        width: 100%;
+        margin-top: 0px;
     }
 
     .homepage_aboutDesktopAdj {
-        position: fixed;
-        padding-top: 7vh;
+        width: 34%;
+        height: 100vh;
+    }
+
+    .Homepage_desktopFeature {
+        display: inline-block;
+        width: 90%;
+        border-top: 1px solid gray;
+    }
+
+    .homepageVidLink {
+        text-decoration: none;
+    }
+
+    .homepageLatestVidThumb {
+        width: 400px;
+    }
+
+    .homepageSpacer {
+        display: inline-block;
+        background-color: rgb(217, 217, 217, 0.75);
+        width: 0.5%;
+    }
+
+    .RecentVideos {
+        width: 65%;
+        margin: 20px 0px auto auto;
     }
 
     .recentVideosTitle {
         font-size: 24px;
         border: none;
         margin-top: 0px;
-    }
-
-    .RecentVideos {
-        width: 65%;
     }
 }

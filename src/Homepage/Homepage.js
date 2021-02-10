@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
 import './Homepage.css';
@@ -11,8 +12,11 @@ class Homepage extends Component {
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
 
-        const getRecents = sortDates.slice(0, 5);
-
+        const getRecents = sortDates.slice(1, 6);
+        const latestVid = getRecents[0] || {};
+        const latestVidText = latestVid.title ? latestVid.title.replace(/\s+/g, '-').toLowerCase() : '';
+        const latestVidThumb = 'https://img.youtube.com/vi/' + latestVid.youtube_id + '/hqdefault.jpg';
+        
         const recentVids = getRecents.map(vid => 
             <VideoBlock
                 key={vid.id}
@@ -26,15 +30,33 @@ class Homepage extends Component {
 
         return (
             <section className='Homepage'>
-                <section className='Homepage_about'>
-                    <section className='homepage_aboutDesktopAdj'>
+                <section className='homepage_aboutDesktopAdj'>
+                    <section className='Homepage_background'>
+                        <p className='homepageBannerText'>With this news,<br/>you need a beer!</p>
+                    </section>
+                    <section className='Homepage_about'>
                         <img className='homepageImage' alt='Beer and News Report' src='https://img1.wsimg.com/isteam/ip/e5e48fd9-dca1-4bb0-a3e0-ccda5f5780e0/Cheers%202.png/:/' />
                         <div className='homepageAbout'>
-                            <p>With this news, you need a beer!</p>
-                            <p>See the news from a different aspect.  Check it out.</p>
+                            <p>See the news from a different aspect.</p>
+                            <p>Check it out.</p>
                         </div>
                     </section>
+                    <section className='Homepage_desktopFeature'>
+                        <h2>Latest Video</h2>
+                        <h3>
+                            <Link 
+                                className='homepageVidLink' 
+                                to={`/videos/${latestVid.id}/${latestVidText}`}>
+                                    {latestVid.title}
+                            </Link>
+                        </h3>
+                        <Link 
+                                className='homepageVidLink' 
+                                to={`/videos/${latestVid.id}/${latestVidText}`}><img className='homepageLatestVidThumb' src={latestVidThumb} alt={latestVid.title} /></Link>
+                        <p>{latestVid.description}</p>
+                    </section>
                 </section>
+                <div className='homepageSpacer'></div>
                 <section className='RecentVideos'>
                     <h3 className='recentVideosTitle'><span>Recent Videos</span></h3>
                     {recentVids}
