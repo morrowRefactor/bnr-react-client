@@ -114,7 +114,6 @@ button:hover,
 .show {
     margin-right: 0px;
     margin-left: auto;
-    transition-timing-function: ease;
 }
 
 .hidden {

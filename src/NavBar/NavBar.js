@@ -81,7 +81,7 @@ class Navbar extends Component {
                   <section className='TopNav_contentContainer'>
                     <ul>
                         <li><Link className='topNavLink' to='/browse-videos'>Videos</Link></li>
-                        <li><Link className='topNavLink' to='/about'>About</Link></li>
+                        <li><Link className='topNavLink' to='/about'>About/Contact</Link></li>
                         {TokenService.hasAuthToken()
                             ? this.renderAccountLink()
                             : this.renderPlaceholder()

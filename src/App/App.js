@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
+import About from '../About/About';
 import BrowseVideos from '../BrowseVideos/BrowseVideos';
 import MainVideoPage from '../MainVideoPage/MainVideoPage';
 import AddVideos from '../AddVideos/AddVideos';
@@ -101,6 +102,10 @@ class App extends Component {
       <APIContext.Provider value={value}>
         <div className="App">
           <NavBar />
+          <Route 
+            path='/about'
+            component={About}
+          />
           <Route
             path='/videos/:vid'
             component={MainVideoPage}
