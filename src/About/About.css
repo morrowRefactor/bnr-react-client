@@ -3,19 +3,41 @@
     margin: 20px auto 50px auto;
 }
 
+.About_introHeader {
+    text-align: center;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+    background-color: rgb(195, 195, 195);
+}
+
+.aboutImage {
+    display: none;
+}
+
 .aboutEmailLink {
     color: black;
     text-decoration: none;
 }
 
-@media (min-width: 1200px) {
+.About_info > div {
+    width: 90%;
+    margin: 0px auto 30px auto;
+}
+
+.aboutInfoHeader {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid rgb(195, 195, 195);
+}
+
+/* tablet adjustments */
+@media (min-width: 768px) {
     .About_introHeader {
         display: flex;
         flex-direction: row;
-        width: 70%;
+        width: 100%;
         margin: auto auto 20px auto;
-        padding: 10px;
-        background-color: rgb(195, 195, 195);
         border-bottom-left-radius: 90px;
         border-top-left-radius: 90px;
         border-top-right-radius: 10px;
@@ -23,6 +45,7 @@
     }
     
     .aboutImage {
+        display: inline-block;
         width: 125px;
         border-radius: 90px;
         border: 2px solid rgb(195, 195, 195);
@@ -38,9 +61,8 @@
     .About_info {
         display: flex;
         flex-direction: row;
-        width: 70%;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
+        margin: auto;
     }
 
     .About_info > div {
@@ -52,5 +74,21 @@
     .aboutInfoCompany {
         margin-left: 2%;
         margin-right: 2%;
+    }
+
+    .aboutInfoHeader {
+        border: none;
+    }
+}
+
+/* desktop adjusments */
+@media (min-width: 1200px) {
+    .About_introHeader,
+    .About_info {
+        width: 60%;
+    }
+
+    .About_introHeader > p {
+        font-size: 20px;
     }
 }

@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row-reverse;
-    border: none;
+    border-bottom: 1px solid rgb(198, 198, 198);
     font-weight: bold;
     padding: 5px 10px 5px 10px;
     line-height: 40px;

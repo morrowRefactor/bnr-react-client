@@ -1,45 +1,68 @@
+.ContactUsForm {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid rgb(195, 195, 195);
+    border-radius: 5px;
+}
+
+.contactUsFormHeader {
+    position: relative;
+    text-align: center;
+    top: -1.4em;
+    display: inline;
+    background-color: white;
+    padding: 0px 5px 0px 5px;
+}
+
+.ContactUsForm_formField {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.ContactUsForm_formField > label {
+    display: inline-block;
+    width: 100%;
+}
+
+.contactUsMessage {
+    height: 100px;
+}
+
+.contactUsConfirmSend {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.ContactUsForm_formField > input,
+.ContactUsForm_formField > textarea {
+    width: 100%;
+    border: 1px solid rgb(195, 195, 195);
+    border-radius: 5px;
+}
+
+/* tablet adjustments */
+@media (min-width: 768px) {
+    .ContactUsForm {
+        width: 78%;
+    }
+
+    .ContactUsFormForm_buttons {
+        text-align: left;
+    }
+}
+
 /* desktop adjustments */
 @media (min-width: 1200px) {
     .ContactUsForm {
-        width: 50%;
+        width: 40%;
         margin: 20px auto auto auto;
         padding: 0px 50px 20px 50px;
-        text-align: left;
-        border: 1px solid rgb(195, 195, 195);
-        border-radius: 5px;
     }
 
     .contactUsFormHeader {
-        position: relative;
-        text-align: center;
-        top: -0.75em;
-        display: inline;
-        background-color: white;
-        padding: 0px 5px 0px 5px;
-    }
-
-    .ContactUsForm_formField {
-        margin-bottom: 20px;
-    }
-
-    .ContactUsForm_formField > label {
-        display: inline-block;
-        width: 100%;
-    }
-    
-    .ContactUsForm_formField > input,
-    .ContactUsForm_formField > textarea {
-        width: 100%;
-        border: 1px solid rgb(195, 195, 195);
-        border-radius: 5px;
-    }
-
-    .contactUsMessage {
-        height: 100px;
-    }
-
-    .contactUsConfirmSend {
-        font-size: 14px;
-        margin-top: 20px;
+        top: -0.85em;
     }
 }
