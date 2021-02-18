@@ -41,6 +41,11 @@
 .homepageAbout {
     position: relative;
     top: -20px;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    border-top: 1px solid rgb(195, 195, 195);
+    border-bottom: 1px solid rgb(195, 195, 195);
 }
 
 .RecentVideos {
@@ -52,12 +57,47 @@
 .recentVideosTitle {
     display: block;
     width: 100%;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
 }
 
-/*tablet and desktop adjustments*/
-@media (min-width: 800px) {
+/* tablet adjustments */
+@media (min-width: 768px) {
+    .homepageBannerText {
+        font-size: 40px;
+        padding-left: 40px;
+    }
+
+    .Homepage_about {
+        display: flex;
+        flex-direction: row;
+        width: 90%;
+        padding: 10px;
+        margin: 20px auto 20px auto;
+        background-color: rgb(235, 235, 235);
+        border-bottom-left-radius: 90px;
+        border-top-left-radius: 90px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .homepageImage {
+        width: 150px;
+        top: auto;
+    }
+
+    .homepageAbout {
+        font-size: 18px;
+        border: none;
+        top: auto;
+        padding: 20px;
+    }
+
+    .homepageAbout > p {
+        margin: 10px auto 10px auto;
+    }
+}
+
+/* desktop adjustments */
+@media (min-width: 1200px) {
     .Homepage {
         display: flex;
         flex-direction: row;
@@ -69,11 +109,15 @@
         width: 34%;
         height: 100vh;
     }
+    
+    .homepageAbout {
+        font-size: 16px;
+    }
 
     .Homepage_desktopFeature {
         display: inline-block;
         width: 90%;
-        border-top: 1px solid gray;
+        border-top: 1px solid rgb(195, 195, 195);
     }
 
     .homepageVidLink {

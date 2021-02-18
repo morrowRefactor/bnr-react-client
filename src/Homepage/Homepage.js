@@ -37,8 +37,8 @@ class Homepage extends Component {
                     <section className='Homepage_about'>
                         <img className='homepageImage' alt='Beer and News Report' src='https://img1.wsimg.com/isteam/ip/e5e48fd9-dca1-4bb0-a3e0-ccda5f5780e0/Cheers%202.png/:/' />
                         <div className='homepageAbout'>
-                            <p>See the news from a different aspect.</p>
-                            <p>Check it out.</p>
+                        <p>We believe that the world has become too serious and we need to have a beer and a couple laughs.</p>
+                        <p>See the news from a different aspect.</p>
                         </div>
                     </section>
                     <section className='Homepage_desktopFeature'>

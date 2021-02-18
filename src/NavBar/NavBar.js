@@ -12,6 +12,12 @@ class Navbar extends Component {
         TokenService.clearAuthToken()
     };
 
+    handleMenuToggle = () => {
+        if(window.innerWidth < 1200) {
+            this.context.toggleNav()
+        }
+    };
+
     renderLogoutLink() {
         return (
           <li className='topNavLink'>
@@ -33,7 +39,8 @@ class Navbar extends Component {
         return (
           <li className='topNavLink'>
             <Link
-              to={link}>
+              to={link}
+              onClick={() => {this.handleMenuToggle()}}>
               {text}
             </Link>
           </li>
@@ -80,8 +87,8 @@ class Navbar extends Component {
                 <section className={this.context.navbar}>
                   <section className='TopNav_contentContainer'>
                     <ul>
-                        <li><Link className='topNavLink' to='/browse-videos'>Videos</Link></li>
-                        <li><Link className='topNavLink' to='/about'>About/Contact</Link></li>
+                        <li><Link className='topNavLink' to='/browse-videos' onClick={() => {this.handleMenuToggle()}}>Videos</Link></li>
+                        <li><Link className='topNavLink' to='/about' onClick={() => {this.handleMenuToggle()}}>About/Contact</Link></li>
                         {TokenService.hasAuthToken()
                             ? this.renderAccountLink()
                             : this.renderPlaceholder()

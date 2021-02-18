@@ -133,6 +133,36 @@ class ContactUsForm extends Component {
         });
     };
 
+    // adjust form fields for logged in users
+    userFields = field => {
+        if(TokenService.hasAuthToken()) {
+            const token = TokenService.getAuthToken();
+            const decode = jwt_decode(token);
+            const user = this.context.users.find(({ id }) => id === decode.id);
+
+            return (
+                <input
+                    type='text'
+                    id={field}
+                    defaultValue={field === 'name' ? user.name : user.email}
+                    onChange={e => this.updateName(e.target.value)}
+                    required
+                />
+            )
+        }
+        else {
+            return (
+                <input
+                    type='text'
+                    id={field}
+                    placeholder={field === 'name' ? 'Jane Doe' : 'jane-doe@gmail.com'}
+                    onChange={e => this.updateName(e.target.value)}
+                    required
+                />
+            )
+        }
+    }
+
       
     render() {
         if(this.context.users.length < 1) {
@@ -141,6 +171,8 @@ class ContactUsForm extends Component {
         const nameError = this.validateName();
         const emailError = this.validateEmail();
         const messageError = this.validateMessage();
+        const nameField = this.userFields('name');
+        const emailField = this.userFields('email');
 
         return (
             <section className='ContactUsForm'>
@@ -153,13 +185,7 @@ class ContactUsForm extends Component {
                         <label htmlFor='name'>
                             Name
                         </label>
-                        <input
-                            type='text'
-                            id='name'
-                            placeholder='Jane Doe'
-                            onChange={e => this.updateName(e.target.value)}
-                            required
-                        />
+                        {nameField}
                         {this.state.name.touched && (
                             <ValidationError message={nameError} />
                         )}
@@ -168,13 +194,7 @@ class ContactUsForm extends Component {
                         <label htmlFor='email'>
                             Email Address
                         </label>
-                        <input
-                            type='text'
-                            id='email'
-                            placeholder='jane-doe@gmail.com'
-                            onChange={e => this.updateEmail(e.target.value)}
-                            required
-                        />
+                        {emailField}
                         {this.state.email.touched && (
                             <ValidationError message={emailError} />
                         )}
