@@ -58,7 +58,8 @@ class Navbar extends Component {
           <li>
             <Link
               to='/create-account'
-              className='topNavLink'>
+              className='topNavLink'
+              onClick={() => {this.handleMenuToggle()}}>
               Create Account
             </Link>
           </li>
@@ -70,7 +71,8 @@ class Navbar extends Component {
         <li>
           <Link
             to='/login'
-            className='topNavLink'>
+            className='topNavLink'
+            onClick={() => {this.handleMenuToggle()}}>
             Log in
           </Link>
         </li>

@@ -130,6 +130,7 @@ class CreateUser extends Component {
         .then(res => {
             if(res.authToken) {
                 TokenService.saveAuthToken(res.authToken);
+                this.context.refreshState();
                 this.props.history.push(`/my-account/${res.id}`);
             }
         })

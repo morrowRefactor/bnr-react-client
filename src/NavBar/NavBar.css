@@ -40,12 +40,9 @@
     top: 100%;
     width: 150px;
     z-index: 1;
-    background-color: white;
+    background-color: rgb(235, 235, 235, 0.75);
     text-align: right;
     margin-right: 10px;
-    border-right: 1px solid rgb(84, 84, 84);
-    border-left: 1px solid rgb(84, 84, 84);
-    border-bottom: 1px solid rgb(84, 84, 84);
 }
   
 .Topnav ul {
@@ -84,11 +81,15 @@
 
 .hamburgerButton,
 .topNavLink {
-    background-color: white;
+    background-color: rgb(235, 235, 235, 0.75);
     color: rgb(84, 84, 84);
     border: none;
     text-decoration: none;
     font-size: .90em;
+}
+
+.hamburgerButton {
+    background-color: white;
 }
 
 button:hover,
@@ -171,6 +172,7 @@ button:hover,
         border: none;
         text-align: left;
         width: 100%;
+        background-color: rgb(235, 235, 235, 0.75);
     }
 
     .Topnav ul {
@@ -188,7 +190,6 @@ button:hover,
 
     .topNavLink {
         font-size: 16px;
-        background-color: white;
         color: rgb(84, 84, 84);
     }
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import TokenService from '../services/token-service';
 import AddVidResource from '../AddVidResource/AddVidResource';
+import AddVidTag from '../AddVidTag/AddVidTag';
 import ValidationError from '../ValidationError/ValidationError';
 import config from '../config';
 import './AddVideos.css';
-import VideoResources from '../VideoResources/VideoResources';
 
 class AddVideos extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class AddVideos extends Component {
     this.state = {
       videos: [],
       vidResources: [],
+      tags: [],
       tagsRef: [],
       vidTags: [],
       title: { value: '', touched: false },
@@ -20,7 +22,12 @@ class AddVideos extends Component {
       date: { value: '', touched: false },
       tags: { value: [], touched: false },
       vidRes: { value: [], touched: false },
-      resCount: [ 1 ]
+      resCount: [ 1 ],
+      tagCount: [ ],
+      vidTags: [],
+      newTags: [],
+      allTags: [],
+      tagsError: { value: '', status: false }
     };
   };
 
@@ -120,40 +127,80 @@ class AddVideos extends Component {
     };
   };
 
-  validateTags() {
-    const tags = this.state.tags.value;
-    if (tags.length === 0) {
-      return 'At least one relevant topic tag is required';
-    };
-  };
-
-  // normalize form input values before passing to the POST function
-  validateInput = e => {
-    e.preventDefault();
-    const input = {
-        title: this.state.title.value,
-        description: this.state.description.value,
-        youtube_id: this.state.link.value,
-        date_posted: this.state.date.value,
-        tags: this.state.tags.value
-    };
-
-   this.handleSubmit(input);
-  };
-
-  handleSubmit(input) {
-    const newVid = {
-      title: input.title,
-      description: input.description,
-      youtube_id: input.youtube_id,
-      date_posted: input.date_posted
+  // package form input values before passing to the POST function
+  handleSubmit = () => {
+    if(this.state.tags.value.length < 1 && this.state.tagCount.length < 1) {
+      this.setState({
+        tagsError: { value: 'At least one relevant topic tag is required', status: true }
+      })
     }
+    else {
+      this.initialSubmit();
+    }
+  }
 
-    fetch(`${config.API_ENDPOINT}/api/videos`, {
+  // first POST the new video and tags before submitting the rest of the data
+  initialSubmit = () => {
+    const newVideo = {
+      title: this.state.title.value,
+      description: this.state.description.value,
+      youtube_id: this.state.link.value,
+      date_posted: this.state.date.value 
+    };
+
+    // if new tags were provided with video, post as well
+    if(this.state.tagCount.length > 0) {
+      for(let i = 0; i < this.state.tagCount.length; i++) {
+        const id = this.state.tagCount[i];
+        const tag = document.getElementById(`newTag[${id}]`);
+        if(tag.value.length > 0) {
+          let newTagsArr = this.state.newTags;
+          newTagsArr.push(tag.value);
+          this.setState({
+            newTags: newTagsArr
+          });
+        }
+      }
+
+      Promise.all([
+        fetch(`${config.API_ENDPOINT}/api/videos`, {
+          method: 'POST',
+          body: JSON.stringify(newVideo),
+          headers: {
+            'content-type': 'application/json',
+            'authorization': `bearer ${TokenService.getAuthToken()}`
+          }
+        }),
+        fetch(`${config.API_ENDPOINT}/api/tags`, {
+          method: 'POST',
+          body: JSON.stringify(this.state.newTags),
+          headers: {
+            'content-type': 'application/json',
+            'authorization': `bearer ${TokenService.getAuthToken()}`
+          }
+        })
+      ])
+      .then(([vidRes, tagsRes]) => {
+        if (!vidRes.ok)
+          return vidRes.json().then(e => Promise.reject(e));
+        if (!tagsRes.ok)
+          return tagsRes.json().then(e => Promise.reject(e));
+        return Promise.all([vidRes.json(), tagsRes.json()]);
+        })
+      .then(([newVid, newTags]) => {
+          this.secondarySubmit(newVid, newTags);
+      })
+      .catch(error => {
+        console.error({error});
+      });
+    }
+    else {
+      fetch(`${config.API_ENDPOINT}/api/videos`, {
         method: 'POST',
-        body: JSON.stringify(newVid),
+        body: JSON.stringify(newVideo),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
         }
       })
         .then(res => {
@@ -162,82 +209,128 @@ class AddVideos extends Component {
               throw error
             })
           }
-          return res.json()
+          return res.json();
         })
         .then(newVid => {
-          this.handleTagsPost(input, newVid);
+          this.secondarySubmit(newVid);
         })
         .catch(error => {
           this.setState({ error })
         })
+    }
   };
 
-  handleTagsPost(input, newVid) {
-    const newVidTag = {
-      tags: input.tags,
-      vid_id: newVid.id
-    }
-    
-    fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
-        method: 'POST',
-        body: JSON.stringify(newVidTag),
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(error => {
-              throw error
-            })
-          }
-          this.handleVidResourcesPost(newVid);
+  // once the new video and tags are posted to db, all additional video data can be submitted
+  secondarySubmit = (newVid, newTags) => {
+    // populate video resources array
+    const resourceCheck = document.getElementById(`resLink[1]`);
+    if(resourceCheck.value.length > 1) {
+      for(let i = 0; i < this.state.resCount.length; i++) {
+        const id = this.state.resCount[i];
+        const description = document.getElementById(`resDesc[${id}]`);
+        const link = document.getElementById(`resLink[${id}]`);
+        const newVidRes = {
+          vid_id: newVid.id,
+          description: description.value,
+          link: link.value
+        };
+        let newVidResArr = this.state.vidRes.value;
+        newVidResArr.push(newVidRes)
+        this.setState({
+          vidRes: { value: newVidResArr, touched: true }
         })
-        .catch(error => {
-          this.setState({ error })
-        })
-  };
-
-  handleVidResourcesPost(newVid) {
-    // populate video resources array with each resources in submission
-    for(let i = 0; i < this.state.resCount.length; i++) {
-      const id = this.state.resCount[i];
-      const description = document.getElementById(`resDesc[${id}]`);
-      const link = document.getElementById(`resLink[${id}]`);
-      const newVidRes = {
-        vid_id: newVid.id,
-        description: description.value,
-        link: link.value
-      };
-      let newVidResArr = this.state.vidRes.value;
-      newVidResArr.push(newVidRes)
-      this.setState({
-        vidRes: { value: newVidResArr, touched: true }
-      })
+      }
     }
 
-    const newResources = this.state.vidRes.value;
+    // populate new tags array
+    if(this.state.tagCount.length > 0) {
+      for(let i = 0; i < newTags.length; i++) {
+        const newVidTag = {
+          vid_id: newVid.id,
+          tag_id: newTags[i]
+        };
+
+        let newTagArr = this.state.allTags;
+        newTagArr.push(newVidTag);
+        this.setState({
+          allTags: newTagArr
+        });
+      }
+    }
+
+    // combine any new tags with other selected tags
+    if(this.state.tags.value.length > 0) {
+      this.state.tags.value.forEach(tag => {
+        const newTag = {
+          vid_id: newVid.id,
+          tag_id: tag
+        };
+
+        let newTagArr = this.state.allTags;
+        newTagArr.push(newTag);
+        this.setState({
+          allTags: newTagArr
+        });
+      })
+    }
     
-    fetch(`${config.API_ENDPOINT}/api/vid-resources`, {
+    // POST new video data
+    if(resourceCheck.value.length > 1) {
+      Promise.all([
+        fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
+          method: 'POST',
+          body: JSON.stringify(this.state.allTags),
+          headers: {
+            'content-type': 'application/json',
+            'authorization': `bearer ${TokenService.getAuthToken()}`
+          }
+        }),
+        fetch(`${config.API_ENDPOINT}/api/vid-resources`, {
+          method: 'POST',
+          body: JSON.stringify(this.state.vidRes.value),
+          headers: {
+            'content-type': 'application/json',
+            'authorization': `bearer ${TokenService.getAuthToken()}`
+          }
+        })
+      ])
+      .then(([tagRes, resoRes]) => {
+        if (!tagRes.ok)
+          return tagRes.json().then(e => Promise.reject(e));
+        if (!resoRes.ok)
+          return resoRes.json().then(e => Promise.reject(e));
+        return Promise.all([tagRes.json(), resoRes.json()]);
+        })
+      .then(res => {
+        const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+        this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
+      })
+      .catch(error => {
+        console.error({error});
+        const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+        this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
+      });
+    }
+    else {
+      fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
         method: 'POST',
-        body: JSON.stringify(newResources),
+        body: JSON.stringify(this.state.allTags),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
         }
       })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(error => {
-              throw error
-            })
-          }
+      .then(res => {
           const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
           this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
-        })
-        .catch(error => {
+      })
+      .catch(error => {
           this.setState({ error })
-        })
-  };
+          const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
+          this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
+      })
+    }
+  }
 
   addResource = () => {
     let newCount = this.state.resCount;
@@ -246,6 +339,22 @@ class AddVideos extends Component {
     this.setState({
       resCount: newCount
     });
+  };
+
+  addTag = () => {
+    if(this.state.tagCount.length < 1) {
+      this.setState({
+        tagCount: [ 1 ]
+      });
+    }
+    else {
+      let newCount = this.state.tagCount;
+      newCount.push(newCount.length + 1);
+      
+      this.setState({
+        tagCount: newCount
+      });
+    }
   };
 
   handleClickCancel = () => {
@@ -257,7 +366,6 @@ class AddVideos extends Component {
     const descError = this.validateDesc();
     const linkError = this.validateLink();
     const dateError = this.validateDate();
-    const tagsError = this.validateTags();
 
     const videoResources = this.state.resCount.map(vid => 
       <AddVidResource
@@ -267,12 +375,18 @@ class AddVideos extends Component {
       />
     );
 
+    const newTags = this.state.tagCount.map(tag => 
+      <AddVidTag
+          key={tag}
+          id={tag}
+      />
+    );
+
     return (
         <section className='AdminVideos'>
             <h1 className='adminVideosHeader'>Add a Video</h1>
             <form 
                 className='AdminVideos_form'
-                onSubmit={this.validateInput}
             >
                 <label htmlFor='vidTitle'>
                     Video title
@@ -339,23 +453,23 @@ class AddVideos extends Component {
                         Add relevant topic tags:
                 </label>
                 <p className='tagsRefHelperText'>(check all that apply)</p>
-                <section className='adminVideos_formInput'>
+                <section className='adminVideos_formInput' id='addVideosTags'>
                   {this.state.tagsRef.map(type =>
                     <section className='tagsRef_select'>
                       <input value={type.id} key={type.id} type='checkbox' name='tags' onChange={e => this.updateTags(e.target.value)}/>
                       <label htmlFor={type.id} >{type.tag}</label>
                     </section>
                   )}
-                  {this.state.tags.touched && (
-                      <ValidationError message={tagsError} />
-                    )}
+                  {newTags}
+                  <button className='addVideosAddTags' onClick={this.addTag}>Add Tag</button>
+                  {this.state.tagsError.status ? <div className='formError'>{this.state.tagsError.value}</div> : ''}
                 </section>
                 <h3 className='vidResources'>Resources for this Video</h3>
                 {videoResources}
                 <button className='adminVideos_formResourcesMore' type='button' onClick={this.addResource}>Add another resource</button>
                 <div className='AddDestinationForm_buttons'>
                     <button 
-                        type='submit'
+                        type='button' onClick={() => this.handleSubmit()}
                     >
                         Add Video
                     </button>
