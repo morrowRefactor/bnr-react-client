@@ -172,7 +172,7 @@ button:hover,
         border: none;
         text-align: left;
         width: 100%;
-        background-color: rgb(235, 235, 235, 0.75);
+        background-color: white;
     }
 
     .Topnav ul {
@@ -191,6 +191,7 @@ button:hover,
     .topNavLink {
         font-size: 16px;
         color: rgb(84, 84, 84);
+        background-color: white;
     }
 
     .TopNav_socialIcons {

@@ -2,7 +2,8 @@
     width: 90%;
     background-color: rgb(233, 233, 233);
     margin: 0px auto 10px auto;
-    padding-top: 5px;
+    padding: 20px;
+    text-align: left;
 }
 
 .AdminVideos_formResources > label {
@@ -13,4 +14,11 @@
 .AdminVideos_formResources > input {
     width: 80%;
     margin-bottom: 10px;
+}
+
+.vidResoRemoveButton {
+    border: none;
+    color: gray;
+    font-size: 12px;
+    padding: 0px;
 }

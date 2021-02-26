@@ -1,3 +1,10 @@
 .AdminVideos_formTags {
     margin: 5px auto 5px auto;
 }
+
+.removeVidTag {
+    border: none;
+    background-color: white;
+    padding: 0px;
+    color: rgb(121, 121, 121);
+}

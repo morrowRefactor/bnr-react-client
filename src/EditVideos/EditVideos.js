@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import AddVidTag from '../AddVidTag/AddVidTag';
+import AddVidResource from '../AddVidResource/AddVidResource';
 import ValidationError from '../ValidationError/ValidationError';
+import TokenService from '../services/token-service';
 import APIContext from '../APIContext';
 import config from '../config';
 import './EditVideos.css';
@@ -11,14 +14,21 @@ class EditVideos extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      currVid: {},
+      currTagIds: [],
+      currVidResos: [],
       videos: [],
-      vidResources: [],
+      vidResources: { value: [], touched: false },
       tagsRef: [],
       vidTags: [],
       title: { value: '', touched: false },
       description: { value: '', touched: false },
       link: { value: '', touched: false },
-      tags: { value: [], touched: false }
+      tags: { value: [], touched: false },
+      tagCount: [],
+      newTags: [],
+      deletedResos: [],
+      newResoCount: []
     };
   };
 
@@ -41,9 +51,28 @@ class EditVideos extends Component {
       return Promise.all([vidRes.json(), vidResoRes.json(), tagsRes.json(), vidTagsRes.json()]);
     })
     .then(([videos, vidResources, tags, vidTags]) => {
+      const thisVid = videos.find(({ id }) => id === parseInt(this.props.match.params.vid));
+
+      let thisVidTags = [];
+      for(let i = 0; i < vidTags.length; i++) {
+        if(vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
+          thisVidTags.push(vidTags[i].tag_id);
+        }
+      }
+      
+      let vidResos = [];
+      for(let i = 0; i < vidResources.length; i++) {
+        if(vidResources[i].vid_id === parseInt(this.props.match.params.vid)) {
+          vidResos.push(vidResources[i]);
+        }
+      }
+
       this.setState({
+        currVid: thisVid,
+        currTagIds: thisVidTags,
+        currVidResos: vidResos,
         videos: videos,
-        vidResources: vidResources,
+        vidResources: { value: vidResos, touched: false },
         tagsRef: tags,
         vidTags: vidTags
       })
@@ -58,12 +87,33 @@ class EditVideos extends Component {
         this.updateState();
     }
     else {
+        const thisVid = this.context.videos.find(({ id }) => id === parseInt(this.props.match.params.vid));
+
+        let thisVidTags = [];
+        for(let i = 0; i < this.context.vidTags.length; i++) {
+          if(this.context.vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
+            const addTag = thisVidTags;
+            addTag.push(this.context.vidTags[i].tag_id)
+            thisVidTags = addTag;
+          }
+        }
+
+        let vidResos = [];
+        for(let i = 0; i < this.context.vidResources.length; i++) {
+          if(this.context.vidResources[i].vid_id === parseInt(this.props.match.params.vid)) {
+            vidResos.push(this.context.vidResources[i]);
+          }
+        }
+
         this.setState({
+            currVid: thisVid,
+            currTagIds: thisVidTags,
+            currVidResos: vidResos,
             videos: this.context.videos,
-            vidResources: this.context.vidResources,
+            vidResources: { value: vidResos, touched: false },
             tagsRef: this.context.tagsRef,
             vidTags: this.context.vidTags
-        })
+        });
     }
   }
 
@@ -93,6 +143,72 @@ class EditVideos extends Component {
     })
   };
 
+  addTag = () => {
+    if(this.state.tagCount.length < 1) {
+      this.setState({
+        tagCount: [ 1 ]
+      });
+    }
+    else {
+      let newCount = this.state.tagCount;
+      newCount.push(newCount.length + 1);
+      
+      this.setState({
+        tagCount: newCount
+      });
+    }
+  };
+
+  removeVidTag = id => {
+    const arr = this.state.tagCount;
+    const indy = arr.indexOf(id);
+    if(indy > -1) {
+      arr.splice(indy, 1);
+    }
+    this.setState({
+      tagCount: arr
+    });
+  };
+
+  addResource = () => {
+    if(this.state.newResoCount.length < 1) {
+      this.setState({
+        newResoCount: [ 1 ]
+      });
+    }
+    else {
+      let newCount = this.state.newResoCount;
+      newCount.push(newCount.length + 1);
+      
+      this.setState({
+        newResoCount: newCount
+      });
+    }
+  };
+
+  removeVidResource = id => {
+    for(let i = 0; i < this.state.vidResources.value.length; i++) {
+      if(this.state.vidResources.value[i].id === parseInt(id)) {
+        const newArr = this.state.vidResources.value;
+        newArr.splice(i, 1);
+        const delReso = this.state.deletedResos.push(parseInt(id));
+        this.setState({
+          vidResources: { value: newArr, touched: true }
+        });
+      }
+    }
+  };
+
+  removeNewVidReso = id => {
+    const arr = this.state.newResoCount;
+    const indy = arr.indexOf(id);
+    if(indy > -1) {
+      arr.splice(indy, 1);
+    }
+    this.setState({
+      newResoCount: arr
+    });
+  }
 
   //validate form field inputs
   validateTitle() {
@@ -111,8 +227,8 @@ class EditVideos extends Component {
 
   validateLink() {
     const link = this.state.link.value.trim();
-    if (!link.includes('embed')) {
-      return `The link should include the word "embed" (ex: https://www.youtube.com/embed/cywyb3Y6Qxg)`;
+    if (link.includes('youtube')) {
+      return `The link should only include the YouTube ID (ex: cywyb3Y6Qxg)`;
     };
     if (link.length === 0) {
       return 'A YouTube embed link is required';
@@ -126,39 +242,27 @@ class EditVideos extends Component {
     };
   };
 
-  // normalize form input values before passing to the POST function
-  validateInput = e => {
-    e.preventDefault();
-    const currentVid = this.state.videos.find(({ id }) => id === parseInt(this.props.match.params.vid));
-    let updatedVid = {
-      id: parseInt(this.props.match.params.vid),
-      title: currentVid.title,
-      description: currentVid.description,
-      youtube_id: currentVid.youtube_id,
-      date_posted: currentVid.date_posted
-    };
-    
-    if(currentVid.title !== this.state.title.value && this.state.title.touched === true) {
-      updatedVid.title = this.state.title.value;
-    }
-    if(currentVid.description !== this.state.description.value && this.state.description.touched === true) {
-      updatedVid.description = this.state.description.value;
-    }
-    if(currentVid.youtube_id !== this.state.link.value && this.state.link.touched === true) {
-      updatedVid.youtube_id = this.state.link.value;
-    }
-
-   this.handleSubmit(updatedVid);
-  };
-
-  handleSubmit = (input) => {
-    this.handleTagsPost(input);
-/*
-    fetch(`${config.API_ENDPOINT}/api/videos/${input.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(input),
+  handleSubmit = () => {
+    // handle any new tags added
+    if(this.state.tagCount.length > 0) {
+      for(let i = 0; i < this.state.tagCount.length; i++) {
+        const id = this.state.tagCount[i];
+        const tag = document.getElementById(`newTag[${id}]`);
+        if(tag.value.length > 0) {
+          let newTagsArr = this.state.newTags;
+          newTagsArr.push(tag.value);
+          this.setState({
+            newTags: newTagsArr
+          });
+        }
+      }
+        
+      fetch(`${config.API_ENDPOINT}/api/tags`, {
+        method: 'POST',
+        body: JSON.stringify(this.state.newTags),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
         }
       })
         .then(res => {
@@ -167,117 +271,198 @@ class EditVideos extends Component {
               throw error
             })
           }
-          return res.json()
+          return res.json();
         })
-        .then(newVid => {
-            this.handleTagsPost(input);
+        .then(newTags => {
+          this.secondarySubmit(newTags);
         })
         .catch(error => {
           this.setState({ error })
-        })*/
-  };
-
-  handleTagsPost = (input) => {
-    if(this.state.tags.touched === false) {
-      const cleanLink = input.title.replace(/\s+/g, '-').toLowerCase();
-      this.props.history.push(`/videos/${input.id}/${cleanLink}`);
+        })
     }
     else {
-      let currentTags = [];
-      for(let i = 0; i < this.state.vidTags.length; i++) {
-        if(this.state.vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
-          let newArr = currentTags;
-          newArr.push(this.state.vidTags[i].tag_id);
-          currentTags = newArr;
-        }
-      }
+      this.secondarySubmit();
+    }
+  };
 
-      let newTags = [];
-      for(let i = 0; i < this.state.tags.value.length; i++) {
-        const checkTag = currentTags.includes(this.state.tags.value[i]);
-        if(checkTag === false) {
-          let newArr = newTags;
-          newArr.push(this.state.tags.value[i]);
-          newTags = newArr;
-        }
-      }
+  secondarySubmit = (newTags) => {
+    let totalUpdates = 0;
 
-      
-      let tagsToDelete = [];
-      for(let i = 0; i < currentTags.length; i++) {
-        const checkTag = this.state.tags.value.includes(currentTags[i]);
-        if(checkTag === false) {
-          let newArr = tagsToDelete;
-          newArr.push(currentTags[i]);
-          tagsToDelete = newArr;
-        }
-      }
+    // update video info if edited
+    let editedVid = this.context.videos.find(({ id }) => id === parseInt(this.props.match.params.vid));
 
-      if(newTags.length > 0) {
-        const newVidTags = {
-          tags: newTags,
-          vid_id: input.id
-        }
-        
-        fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
-          method: 'POST',
-          body: JSON.stringify(newVidTags),
-          headers: {
-            'content-type': 'application/json'
-          }
-        })
-          .then(res => {
-            if (!res.ok) {
-              return res.json().then(error => {
-                throw error
-              })
+    if(this.state.title.touched === true || this.state.description.touched === true || this.state.link.touched === true) {
+      totalUpdates++;
+    }
+    if(this.state.title.touched === true) {
+      editedVid.title = this.state.title.value;
+    }
+    if(this.state.description.touched === true) {
+      editedVid.description = this.state.description.value;
+    }
+    if(this.state.link.touched === true) {
+      editedVid.link = this.state.link.value;
+    }
+
+    // update video tags
+    let delTags = [];
+    let addTags = [];
+    if(this.state.tags.touched === true) {
+      totalUpdates++;
+      this.state.currTagIds.forEach(tag => {
+        const tagCheck = this.state.tags.value.find(id => id === tag);
+        if(!tagCheck) {
+            for(let i = 0; i < this.context.vidTags.length; i++) {
+              if(this.context.vidTags[i].vid_id === this.state.currVid.id && this.context.vidTags[i].tag_id === tag) {
+                delTags.push(this.context.vidTags[i].id);
+              }
             }
-            /*
-            const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
-            this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);*/
-          })
-          .catch(error => {
-            this.setState({ error })
-          })
-      }
+        }
+      });
+    }
 
-      if(tagsToDelete.length > 0) {
-        let deleteIDs = [];
-        const allVidTags = this.state.vidTags.filter(function(t) {
-          return t.vid_id === input.id;
-        });
+    if(this.state.tags.touched === true) {
+      totalUpdates++;
+      this.state.tags.value.forEach(tag => {
+        const tagCheck = this.state.currTagIds.find(id => id === tag);
+        if(!tagCheck) {
+          const newTag = {
+            vid_id: this.state.currVid.id,
+            tag_id: tag
+          };
 
-        for(let i = 0; i < tagsToDelete.length; i++) {
-          const checkTag = allVidTags.find(({ tag_id }) => tag_id === tagsToDelete[i]);
-          if(checkTag) {
-            let newArr = deleteIDs;
-            newArr.push(checkTag.id);
-            deleteIDs = newArr;
+          addTags.push(newTag);
+        }
+      })
+    }
+
+    if(newTags) {
+      totalUpdates++;
+      newTags.forEach(tag => {
+        const newTag = {
+          vid_id: this.state.currVid.id,
+          tag_id: tag
+        };
+
+        addTags.push(newTag);
+      })
+    }
+    
+    // update video resources
+    let addResources = [];
+    if(this.state.newResoCount.length > 0) {
+      totalUpdates++;
+      this.state.newResoCount.forEach(res => {
+        const description = document.getElementById(`resDesc[${res}]`);
+        const link = document.getElementById(`resLink[${res}]`);
+        const newVidRes = {
+          vid_id: this.state.currVid.id,
+          description: description.value,
+          link: link.value
+        };
+
+        addResources.push(newVidRes);
+      })
+    }
+    if(this.state.deletedResos.length > 0) {
+      totalUpdates++;
+    }
+    
+    let resCheck = 0;
+    if(this.state.title.touched === true || this.state.description.touched === true || this.state.link.touched === true) {
+      fetch(`${config.API_ENDPOINT}/api/videos/${this.state.currVid.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(editedVid),
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+      })
+      .then(res => {
+        if(res.ok === true) {
+          resCheck++;
+          if(resCheck === totalUpdates) {
+            this.context.refreshState();
+            this.props.history.push(`/videos/${this.state.currVid.id}`);
           }
         }
-
-        /*
-        fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
-          method: 'DELETE',
-          body: JSON.stringify(newVidTag),
-          headers: {
-            'content-type': 'application/json'
+      });
+    }
+    if(addTags.length > 0) {
+      fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
+        method: 'POST',
+        body: JSON.stringify(addTags),
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+      })
+      .then(res => {
+        if(res.ok === true) {
+          resCheck++;
+          if(resCheck === totalUpdates) {
+            this.context.refreshState();
+            this.props.history.push(`/videos/${this.state.currVid.id}`);
           }
-        })
-          .then(res => {
-            if (!res.ok) {
-              return res.json().then(error => {
-                throw error
-              })
-            }
-            const cleanLink = newVid.title.replace(/\s+/g, '-').toLowerCase();
-            this.props.history.push(`/videos/${newVid.id}/${cleanLink}`);
-          })
-          .catch(error => {
-            this.setState({ error })
-          })*/
-      }
-      
+        }
+      });
+    }
+    if(delTags.length > 0) {
+      fetch(`${config.API_ENDPOINT}/api/vid-tags`, {
+        method: 'DELETE',
+        body: JSON.stringify(delTags),
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+      })
+      .then(res => {
+        if(res.ok === true) {
+          resCheck++;
+          if(resCheck === totalUpdates) {
+            this.context.refreshState();
+            this.props.history.push(`/videos/${this.state.currVid.id}`);
+          }
+        }
+      });
+    }
+    if(this.state.deletedResos.length > 0) {
+      fetch(`${config.API_ENDPOINT}/api/vid-resources`, {
+        method: 'DELETE',
+        body: JSON.stringify(this.state.deletedResos),
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+      })
+      .then(res => {
+        if(res.ok === true) {
+          resCheck++;
+          if(resCheck === totalUpdates) {
+            this.context.refreshState();
+            this.props.history.push(`/videos/${this.state.currVid.id}`);
+          }
+        }
+      });
+    }
+    if(addResources.length > 0) {
+      fetch(`${config.API_ENDPOINT}/api/vid-resources`, {
+        method: 'POST',
+        body: JSON.stringify(addResources),
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+      })
+      .then(res => {
+        if(res.ok === true) {
+          resCheck++;
+          if(resCheck === totalUpdates) {
+            this.context.refreshState();
+            this.props.history.push(`/videos/${this.state.currVid.id}`);
+          }
+        }
+      });
     }
   };
 
@@ -287,16 +472,7 @@ class EditVideos extends Component {
 
   // pre-check select options for tags related to this video
   renderTags = tagID => {
-    let thisVidTags = [];
-    for(let i = 0; i < this.state.vidTags.length; i++) {
-      if(this.state.vidTags[i].vid_id === parseInt(this.props.match.params.vid)) {
-        const addTag = thisVidTags;
-        addTag.push(this.state.vidTags[i].tag_id)
-        thisVidTags = addTag;
-      }
-    }
-
-    const findTag = thisVidTags.find(id => id === tagID);
+    const findTag = this.state.currTagIds.find(id => id === tagID);
     const checkedTag = this.state.tags.value.find(id => id === tagID);
     if(findTag && !checkedTag && this.state.tags.touched === false) {
       return true;
@@ -319,21 +495,32 @@ class EditVideos extends Component {
   }
 
   render() {
-    const findVid = this.context.videos.filter(vid => 
-      vid.id === parseInt(this.props.match.params.vid)
-    );
-    const thisVideo = findVid[0];
+    const thisVideo = this.context.videos.find(({ id }) => id === parseInt(this.props.match.params.vid)) || {};
     const titleError = this.validateTitle();
     const descError = this.validateDesc();
     const linkError = this.validateLink();
     const tagsError = this.validateTags();
+    const newTags = this.state.tagCount.map(tag => 
+      <AddVidTag
+          key={tag}
+          id={tag}
+          removeTag={this.removeVidTag}
+      />
+    );
+
+    const newResources = this.state.newResoCount.map(res => 
+      <AddVidResource
+          key={res}
+          id={res}
+          removeReso={this.removeNewVidReso}
+      />
+    );
 
     return (
         <section className='AdminVideos'>
             <h1 className='adminVideosHeader'>Edit {thisVideo.title}</h1>
             <form 
                 className='AdminVideos_form'
-                onSubmit={this.validateInput}
             >
                 <label htmlFor='vidTitle'>
                     Video title
@@ -355,7 +542,7 @@ class EditVideos extends Component {
                 </label>
                 <section className='adminVideos_formInput'>
                   <input
-                      type="text"
+                      type="textarea"
                       id="vidDesc"
                       defaultValue={thisVideo.description}
                       onChange={e => this.updateDesc(e.target.value)}
@@ -381,7 +568,7 @@ class EditVideos extends Component {
                   )}
                 </section>
                 <label htmlFor='tagsRef'>
-                        Add relevant topic tags
+                        Video tags
                 </label>
                 <section className='adminVideos_formInput'>
                   {this.state.tagsRef.map(type =>
@@ -390,18 +577,33 @@ class EditVideos extends Component {
                       <label htmlFor={type.id} >{type.tag}</label>
                     </section>
                   )}
+                  {newTags}
+                  <button type='button' className='editVideosAddTags' onClick={() => this.addTag()}>Add Tag</button>
                   {this.state.tags.touched && (
                       <ValidationError message={tagsError} />
                   )}
                 </section>
+                <section className='adminVideo_formInput'>
+                  Video Resources
+                  {this.state.vidResources.value.map(res =>
+                    <section className='vidReso_select'>
+                      <label htmlFor={res.id} >{res.description}</label>
+                      <p>{res.link}</p>
+                      <input value={res.id} key={res.id} type='checkbox' name='tags' onChange={e => this.removeVidResource(e.target.value)}/> <span className='editVidRemoveReso'>Delete this resource</span>
+                    </section>
+                  )}
+                  {newResources}
+                  <button type='button' className='editVideosAddResos' onClick={() => this.addResource()}>Add Resource</button>
+                </section>
                 <div className='AddDestinationForm_buttons'>
                     <button 
-                        type='submit'
+                        type='button'
+                        onClick={() => this.handleSubmit()}
                     >
-                        Add Video
+                        Submit Changes
                     </button>
                     {' '}
-                    <button type='button' onClick={this.handleClickCancel}>
+                    <button type='button' onClick={() => this.handleClickCancel()}>
                         Cancel
                     </button>
                 </div>

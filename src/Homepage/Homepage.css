@@ -33,6 +33,7 @@
     position: relative;
     top: -25px;
     width: 125px;
+    height: 125px;
     border-radius: 90px;
     border: 2px solid white;
     margin-bottom: 0px;
@@ -81,6 +82,7 @@
 
     .homepageImage {
         width: 150px;
+        height: 150px;
         top: auto;
     }
 
@@ -108,6 +110,11 @@
     .homepage_aboutDesktopAdj {
         width: 34%;
         height: 100vh;
+    }
+
+    .homepageImage {
+        margin-top: auto;
+        margin-bottom: auto;
     }
     
     .homepageAbout {

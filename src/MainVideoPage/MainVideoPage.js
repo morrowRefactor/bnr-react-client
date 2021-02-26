@@ -159,20 +159,8 @@ class MainVideoPage extends Component {
                 comments = sortDates;
             }
 
-            // insert video iframe and video dimensions
+            // insert video iframe
             vidLink = 'https://www.youtube.com/embed/' + video.youtube_id;
-
-            if(window.screen.width < 768) {
-                const widthAdj = window.screen.width * .55;
-                vidWidth = Math.floor(widthAdj);
-                vidHeight = Math.floor(widthAdj * .56);
-            }
-
-            if(window.screen.width > 799) {
-                const widthAdj = window.screen.width * .48;
-                vidWidth = Math.floor(widthAdj);
-                vidHeight = Math.floor(widthAdj * .56);
-            }
         }
 
         function renderResourcesHeader() {
@@ -225,7 +213,7 @@ class MainVideoPage extends Component {
         return (
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
-                    <div className='mainVideoPageVideo' id='iframe'><iframe width={vidWidth} height={vidHeight} src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                    <div className='mainVideoPageVideo' id='iframe'><iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
                     <section className='mainVideoPage_featureAbout'>
                         <h1 className='mainVideoPageTitle'>{video.title}</h1>
                         <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>

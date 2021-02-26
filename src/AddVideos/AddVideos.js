@@ -357,6 +357,28 @@ class AddVideos extends Component {
     }
   };
 
+  removeVidTag = id => {
+    const arr = this.state.tagCount;
+    const indy = arr.indexOf(id);
+    if(indy > -1) {
+      arr.splice(indy, 1);
+    }
+    this.setState({
+      tagCount: arr
+    });
+  };
+
+  removeResource = id => {
+    const arr = this.state.resCount;
+    const indy = arr.indexOf(id);
+    if(indy > -1) {
+      arr.splice(indy, 1);
+    }
+    this.setState({
+      resCount: arr
+    });
+  }
+
   handleClickCancel = () => {
     this.props.history.push('/');
   };
@@ -372,6 +394,7 @@ class AddVideos extends Component {
           key={vid}
           id={vid}
           updateVidRes={this.updateVidRes}
+          removeReso={this.removeResource}
       />
     );
 
@@ -379,6 +402,7 @@ class AddVideos extends Component {
       <AddVidTag
           key={tag}
           id={tag}
+          removeTag={this.removeVidTag}
       />
     );
 

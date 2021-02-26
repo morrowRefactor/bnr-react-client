@@ -1,12 +1,23 @@
 .MainVideoPage {
     width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto 30px auto;
 }
 
 .mainVideoPageVideo {
+    position: relative;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
+    padding-bottom: 56.25%;
+    padding-top: 25px;
+}
+
+.mainVideoPageVideo > iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .mainVideoDate {
@@ -43,8 +54,23 @@
     text-align: left;
 }
 
-/*tablet and desktop adjustments*/
-@media (min-width: 800px) {
+/* tablet adjustments */
+@media (min-width: 768px) {
+    .mainVideoPage_featureAbout {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+    }
+
+    .mainVideoDesc {
+        padding: 0px;
+        margin-bottom: 30px;
+    }
+}
+
+/* desktop adjustments*/
+@media (min-width: 1200px) {
     .MainVideoPage {
         display: flex;
         flex-direction: row;

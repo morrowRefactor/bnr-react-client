@@ -19,6 +19,7 @@ class AddVidTag extends Component {
                     placeholder='Global Chinchilla Policy'
                     required
                 />
+                <button className='removeVidTag' onClick={() => this.props.removeTag(this.props.id)}>Remove</button>
             </section>
         );
     }

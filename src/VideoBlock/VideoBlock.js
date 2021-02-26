@@ -16,6 +16,7 @@ class VideoBlock extends Component {
     render() {
         const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
         const thumbnail = 'https://img.youtube.com/vi/' + this.props.youtube_id + '/hqdefault.jpg';
+        const description = window.innerWidth < 768 ? `${this.props.description.substring(0, 100)}... ` : this.props.description;
 
         return (
             <section className='VideoBlock'>
@@ -27,7 +28,7 @@ class VideoBlock extends Component {
                     >
                         <h3 className='videoBlockTitle'>{this.props.title}</h3>
                     </Link>
-                    <p className='videoBlockDesc'>{this.props.description}</p>
+                    <p className='videoBlockDesc'>{description}</p>
                     <p className='videoBlockPostDate'>Posted: {this.getCleanDate(this.props.date_posted)}</p>
                 </section>
             </section>

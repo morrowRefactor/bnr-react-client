@@ -30,6 +30,7 @@ class AddVidResource extends Component {
                     placeholder='http://www.google.com'
                     required
                 />
+                <button className='vidResoRemoveButton' onClick={() => this.props.removeReso(this.props.id)}>X   Delete resource</button>
             </section>
         );
     }
