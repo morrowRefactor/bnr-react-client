@@ -1,7 +1,7 @@
-.UserLogin_form {
-    width: 60%;
-    margin-left: auto;
+.UserLogin {
+    width: 25%;
     margin-right: auto;
+    margin-left: auto;
     text-align: left;
 }
 
@@ -27,8 +27,8 @@
     color: red;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1200px) {
     .UserLogin {
-        text-align: center;
+        width: 20%;
     }
 }

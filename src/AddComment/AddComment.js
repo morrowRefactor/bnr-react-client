@@ -79,8 +79,7 @@ class AddComment extends Component {
                     <label htmlFor='comment'>
                         Add a comment
                     </label>
-                    <input
-                        type='text'
+                    <textarea
                         id='comment'
                         placeholder='Now that is some news. I need a beer!'
                         onChange={e => this.updateComment(e.target.value)}

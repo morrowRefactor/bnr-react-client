@@ -12,6 +12,10 @@ import './MainVideoPage.css';
 class MainVideoPage extends Component {
     static contextType = APIContext;
 
+    componentDidMount() {
+        window.scrollTo(0, 0)
+    }
+
     getVideos() {
         this.context.refreshState();
     }
@@ -32,8 +36,6 @@ class MainVideoPage extends Component {
         let relatedVideos;
         let extraVideos;
         let vidLink;
-        let vidWidth;
-        let vidHeight;
         let userID;
 
         // check for logged in users and admin
@@ -189,6 +191,7 @@ class MainVideoPage extends Component {
                 return comments.map(comm =>
                     <Comments
                         key={comm.id}
+                        id={comm.id}
                         uid={comm.uid}
                         comment={comm.comment}
                         date_posted={comm.date_posted}
@@ -196,7 +199,7 @@ class MainVideoPage extends Component {
                 );
             }
             else {
-                return <p>No comments</p>
+                return <p className='firstToComment'>Be the first to comment!</p>
             }
         }
 
@@ -214,9 +217,9 @@ class MainVideoPage extends Component {
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
                     <div className='mainVideoPageVideo' id='iframe'><iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
+                    <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
                     <section className='mainVideoPage_featureAbout'>
                         <h1 className='mainVideoPageTitle'>{video.title}</h1>
-                        <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
                         {userID === 1
                             ? renderAdminOptions()
                             : ''
@@ -232,7 +235,7 @@ class MainVideoPage extends Component {
                         {renderComments()}
                         {loggedInUser
                             ? <AddComment videoID={video.id} uid={userID} />
-                            : <p className='mainVideoPageLoginPrompt'><Link to='/login'>Log in</Link> or <Link to='/create-account'>create account</Link> to post a comment</p>
+                            : <p className='mainVideoPageLoginPrompt'><Link to={{ pathname: '/login', state: { vid: this.props.match.params.vid}}}>Log in</Link> or <Link to={{ pathname: '/create-account', state: { vid: this.props.match.params.vid}}}>create account</Link> to post a comment</p>
                         }
                     </div>
                 </section>

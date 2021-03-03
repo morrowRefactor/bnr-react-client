@@ -1,10 +1,25 @@
+.AddComment {
+    padding-top: 20px;
+    border-top: 1px solid rgb(210, 210, 210);
+}
+
+.AddComment_form {
+    text-align: left;
+}
+
 .AddComment_form > label {
     display: inline-block;
     width: 100%;
+    margin-bottom: 5px;
 }
 
-/*tablet and desktop adjustments*/
-@media (min-width: 800px) {
+.AddComment_form > textarea {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/*tablet adjustments*/
+@media (min-width: 768px) {
     .AddComment {
         width: 95%;
         border-top: 1px solid gray;
@@ -15,5 +30,12 @@
     .AddComment_form > input {
         width: 50%;
         height: 5em;
+    }
+}
+
+/* desktop adjustments */
+@media (min-width: 1200px) {
+    .AddComment_form > textarea {
+        width: 50%;
     }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import SearchedVid from '../SearchedVid/SearchedVid';
@@ -77,7 +78,7 @@ class BrowseVideos extends Component {
                 filteredVids: { value: videoMatches, touched: true }
             })
         }
-    }
+    };
 
     renderSearchedVid = () => {
         const searchedVid = this.context.videos.find(({ title }) => title === this.state.searchedVid.value);
@@ -95,9 +96,24 @@ class BrowseVideos extends Component {
                 />
             )
         }
-    }
+    };
+
+    getCleanDate = (dte) => {
+        const date = new Date(dte);
+        const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+        return cleanDate;
+    };
 
     render() {
+        const sortDates = this.context.videos.sort(function(a,b){
+            return new Date(b.date_posted) - new Date(a.date_posted);
+        });
+        const latestVid = sortDates[0] || {};
+        const latestVidText = latestVid.title ? latestVid.title.replace(/\s+/g, '-').toLowerCase() : '';
+        const latestVidThumb = 'https://img.youtube.com/vi/' + latestVid.youtube_id + '/hqdefault.jpg';
+        const latestVidDesc = latestVid.description ? latestVid.description.substring(0, 200) : '';
+
         // populate all videos by default
         if (this.context.videos.length > 1 && this.state.filteredVids.touched === false) {
             this.setState({
@@ -138,7 +154,7 @@ class BrowseVideos extends Component {
                             className='BrowseVideos_form'
                         >
                             <label htmlFor='search'>
-                                Search by Title
+                                Search by Title:
                             </label>
                             <Select
                                 id='search'
@@ -147,7 +163,7 @@ class BrowseVideos extends Component {
                                 value={vidTitles.filter(obj => obj.value === this.state.searchedVid.value)}
                                 required
                             />
-                            <label htmlFor='tagsRef'>
+                            <label htmlFor='tagsRef' className='browseVidsFilter'>
                                 Filter by content:
                             </label>
                             <select
@@ -165,6 +181,22 @@ class BrowseVideos extends Component {
                                 )}
                             </select>
                         </form>
+                        <section className='BrowseVideos_desktopFeature'>
+                        <h2>Latest Video</h2>
+                        <h3>
+                            <Link 
+                                className='browseVideosVidLink' 
+                                to={`/videos/${latestVid.id}/${latestVidText}`}>
+                                    {latestVid.title}
+                            </Link>
+                        </h3>
+                        <Link 
+                                className='browseVideosVidLink' 
+                                to={`/videos/${latestVid.id}/${latestVidText}`}><img className='browseVideosLatestVidThumb' src={latestVidThumb} alt={latestVid.title} />
+                        </Link>
+                        <p className='browseVidsLatestVidDate'>Date posted: {this.getCleanDate(latestVid.date_posted)}</p>
+                        <p className='browseVidsLatestVidDesc'>{latestVidDesc}...</p>
+                    </section>
                     </section>
                 </section>
                 <section className='BrowseVideos_videos'>

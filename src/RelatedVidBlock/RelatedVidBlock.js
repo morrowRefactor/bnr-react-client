@@ -23,7 +23,9 @@ class RelatedVidBlock extends Component {
 
         return (
             <section className='RelatedVidBlock'>
-                <img className='relatedVidBlockImage' src={thumbnail} alt={this.props.title} />
+                <Link to={`/videos/${this.props.vid}/${linkText}`}>
+                    <img className='relatedVidBlockImage' src={thumbnail} alt={this.props.title} />
+                </Link>
                 <section className='RelatedVidBlock_details'>
                     <Link 
                         className='relatedVidBlockLink' 

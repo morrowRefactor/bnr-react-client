@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import TokenService from '../services/token-service';
 import APIContext from '../APIContext';
@@ -10,6 +10,7 @@ class Navbar extends Component {
 
     handleLogoutClick = () => {
         TokenService.clearAuthToken()
+        this.handleMenuToggle();
     };
 
     handleMenuToggle = () => {
@@ -18,10 +19,17 @@ class Navbar extends Component {
         }
     };
 
+    homeMenuToggle = () => {
+      if(this.context.navbar === 'show') {
+        this.context.toggleNav();
+      }
+    };
+
     renderLogoutLink() {
         return (
-          <li className='topNavLink'>
+          <li>
             <Link
+              className='topNavLink'
               onClick={this.handleLogoutClick}
               to='/'>
               Logout
@@ -37,8 +45,9 @@ class Navbar extends Component {
       const text = user.id === 1 ? 'Admin' : 'My Account';
       
         return (
-          <li className='topNavLink'>
+          <li>
             <Link
+              className='topNavLink'
               to={link}
               onClick={() => {this.handleMenuToggle()}}>
               {text}
@@ -80,10 +89,11 @@ class Navbar extends Component {
   };
 
     render() {
+      const classAdj = this.props.location.pathname.includes('browse-videos') ? 'Topnav browseVids' : 'Topnav';
         return (
-            <nav className='Topnav'>
+            <nav className={classAdj}>
                 <div className='topNavLogo'><img className='topNavLogoImage' src='https://user-images.githubusercontent.com/58446465/107416221-15b3ae80-6ac9-11eb-8174-17dadab597d2.png' alt='Beer and News Report Logo' title='Beer and News Report' /></div>
-                <div className='topNavHeader'><Link className='topnavHeaderLink' to='/'>Beer and News Report</Link></div>
+                <div className='topNavHeader'><Link className='topnavHeaderLink' to='/' onClick={() => {this.homeMenuToggle()}}>Beer and News Report</Link></div>
                 <div className='hamburger'><button className='hamburgerButton' onClick={() => {this.context.toggleNav()}}>&#9776;</button></div>
                 <div className='break'></div>
                 <section className={this.context.navbar}>
@@ -122,4 +132,4 @@ class Navbar extends Component {
     };
 };
 
-export default Navbar;
+export default withRouter(Navbar);

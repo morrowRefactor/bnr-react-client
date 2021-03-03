@@ -460,7 +460,6 @@ class AddVideos extends Component {
                 <label htmlFor='date'>
                     Date posted
                 </label>
-                <p className='dateHelperText'>(date uploaded to YouTube, not this site)</p>
                 <section className='adminVideos_formInput'>
                   <input
                       type='date'
@@ -469,6 +468,7 @@ class AddVideos extends Component {
                       onChange={e => this.updateDate(e.target.value)}
                       required
                   />
+                  <p className='dateHelperText'>(date uploaded to YouTube, not this site)</p>
                   {this.state.date.touched && (
                       <ValidationError message={dateError} />
                   )}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 import ValidationError from '../ValidationError/ValidationError';
 import AuthApiService from '../services/auth-api-service';
 import TokenService from '../services/token-service';
@@ -33,8 +34,19 @@ class UserLogin extends Component {
                 })
             }
             
-            TokenService.saveAuthToken(res.authToken)
-            this.props.history.push(`/`);
+            TokenService.saveAuthToken(res.authToken);
+            const token = TokenService.getAuthToken();
+            const user = jwt_decode(token);
+            if(user.id === 1) {
+                this.context.setAdmin();
+            }
+
+            if(this.props.location.state) {
+                this.props.history.push(`/videos/${this.props.location.state.vid}`);
+            }
+            else {
+                this.props.history.push(`/`);
+            }  
         })
         .catch(res => {
             this.setState({ error: res.error })

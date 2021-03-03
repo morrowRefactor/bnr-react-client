@@ -1,10 +1,9 @@
 .SearchedVid {
-    border: 1px solid gray;
     border-radius: 3px;
     width: 90%;
     margin: 0px auto 20px auto;
     padding: 10px;
-    background-color: rgb(192, 191, 191);
+    background-color: rgb(230, 230, 230);
 }
 
 .searchedVidImage {
@@ -32,12 +31,22 @@
 
 .searchedVidClear > button {
     border: none;
-    background-color: rgb(192, 191, 191);
+    background-color: rgb(230, 230, 230);
     margin-bottom: 10px;
 }
 
-/*tablet and desktop adjustments*/
-@media (min-width: 800px) {
+.searchedVidPostDate {
+    font-size: 12px;
+    margin-top: 0px;
+    color: rgb(120, 120, 120);
+}
+
+/*desktop adjustments*/
+@media (min-width: 1200px) {
+    .SearchedVid {
+        padding: 10px 20px 20px 20px;
+    }
+
     .SearchedVid_content {
         display: flex;
         flex-direction: row;
@@ -66,10 +75,5 @@
 
     .searchedVidDesc {
         margin: 5px auto 5px auto;
-    }
-
-    .searchedVidPostDate {
-        font-size: 12px;
-        margin-top: 0px;
     }
 }

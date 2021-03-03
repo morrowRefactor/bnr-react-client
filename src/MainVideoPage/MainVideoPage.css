@@ -20,9 +20,17 @@
     height: 100%;
 }
 
+.mainVideoPageTitle {
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
 .mainVideoDate {
-    margin-top: 0px;
-    font-size: 14px;
+    margin: 0px auto 0px auto;
+    font-size: 12px;
+    color: rgb(120, 120, 120);
+    text-align: left;
+    padding-left: 5%;
 }
 
 .mainVideoDesc {
@@ -33,9 +41,14 @@
 .MainVideoPage_resources,
 .MainVideoPage_comments,
 .MainVideoPage_relatedVids {
-    border: 1px solid gray;
+    border: 1px solid rgb(210, 210, 210);
     border-radius: 3px;
     margin-bottom: 20px;
+}
+
+.MainVideoPage_resources,
+.MainVideoPage_comments {
+    padding: 0px 20px 10px 20px;
 }
 
 .mainVideoPage_resourcesHeader,
@@ -52,6 +65,16 @@
 
 .mainVideoPageLoginPrompt {
     text-align: left;
+    font-size: 14px;
+}
+
+.MainVideoPage_admin {
+    font-size: 14px;
+}
+
+.firstToComment {
+    font-size: 14px;
+    color: rgb(120, 120, 120);
 }
 
 /* tablet adjustments */
@@ -104,6 +127,9 @@
 
     .MainVideoPage_resources,
     .MainVideoPage_comments {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
         padding: 0px 0px 30px 20px;
     }
 

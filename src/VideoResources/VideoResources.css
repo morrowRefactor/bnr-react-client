@@ -1,8 +1,13 @@
+.VideoResources {
+    text-align: left;
+}
+
 .videoResourcesDesc {
     margin-bottom: 0px;
 }
 
 .videoResourcesLink {
+    font-size: 14px;
     margin-top: 0px;
 }
 

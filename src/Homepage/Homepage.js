@@ -7,6 +7,13 @@ import './Homepage.css';
 class Homepage extends Component {
     static contextType = APIContext;
 
+    getCleanDate = (dte) => {
+        const date = new Date(dte);
+        const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+        return cleanDate;
+    };
+
     render() {
         const sortDates = this.context.videos.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
@@ -52,13 +59,15 @@ class Homepage extends Component {
                         </h3>
                         <Link 
                                 className='homepageVidLink' 
-                                to={`/videos/${latestVid.id}/${latestVidText}`}><img className='homepageLatestVidThumb' src={latestVidThumb} alt={latestVid.title} /></Link>
+                                to={`/videos/${latestVid.id}/${latestVidText}`}><img className='homepageLatestVidThumb' src={latestVidThumb} alt={latestVid.title} />
+                        </Link>
+                        <p className='latestVidDate'>Date posted: {this.getCleanDate(latestVid.date_posted)}</p>
                         <p>{latestVid.description}</p>
                     </section>
                 </section>
                 <div className='homepageSpacer'></div>
                 <section className='RecentVideos'>
-                    <h3 className='recentVideosTitle'><span>Recent Videos</span></h3>
+                    <h3 className='recentVideosTitle'>Recent Videos</h3>
                     {recentVids}
                 </section>
             </section>

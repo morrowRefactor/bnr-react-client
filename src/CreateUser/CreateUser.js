@@ -131,7 +131,12 @@ class CreateUser extends Component {
             if(res.authToken) {
                 TokenService.saveAuthToken(res.authToken);
                 this.context.refreshState();
-                this.props.history.push(`/my-account/${res.id}`);
+                if(this.props.location.state.vid) {
+                    this.props.history.push(`/videos/${this.props.location.state.vid}`)
+                }
+                else {
+                    this.props.history.push(`/my-account/${res.id}`);
+                }
             }
         })
         .catch(res => {
@@ -204,6 +209,7 @@ class CreateUser extends Component {
                             onChange={e => this.updatePass(e.target.value)}
                             required
                         />
+                        <br/>
                         <button className='createUserToggleChar' onClick={() => this.toggleChars()}>Show characters</button>
                         {this.state.passwordError.status
                             ? <div className='createUserError'>{this.state.passwordError.value}</div>

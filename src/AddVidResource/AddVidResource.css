@@ -1,8 +1,8 @@
 .AdminVideos_formResources {
-    width: 90%;
+    width: 100%;
     background-color: rgb(233, 233, 233);
     margin: 0px auto 10px auto;
-    padding: 20px;
+    padding: 10px;
     text-align: left;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .AdminVideos_formResources > input {
-    width: 80%;
+    width: 100%;
     margin-bottom: 10px;
 }
 

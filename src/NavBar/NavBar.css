@@ -40,7 +40,10 @@
     top: 100%;
     width: 150px;
     z-index: 1;
-    background-color: rgb(235, 235, 235, 0.75);
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+    background-color: rgb(235, 235, 235, 0.9);
     text-align: right;
     margin-right: 10px;
 }
@@ -81,7 +84,6 @@
 
 .hamburgerButton,
 .topNavLink {
-    background-color: rgb(235, 235, 235, 0.75);
     color: rgb(84, 84, 84);
     border: none;
     text-decoration: none;
@@ -127,6 +129,12 @@ button:hover,
         background-color: white;
         border-bottom: solid 1px rgb(217, 217, 217);
         padding: auto 20px auto 20px;
+    }
+
+    .browseVids {
+        position: fixed;
+        top: 0;
+        left: 0;
     }
 
     .topNavLogo {

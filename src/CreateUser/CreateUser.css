@@ -1,5 +1,12 @@
+.CreateUser {
+    width: 30%;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .CreateUser_form {
-    width: 60%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -24,4 +31,11 @@
     border: none;
     background-color: white;
     padding: 0px;
+}
+
+/* desktop adjustments */
+@media (min-width: 1200px) {
+    .CreateUser {
+        width: 20%;
+    }
 }

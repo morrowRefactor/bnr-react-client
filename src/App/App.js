@@ -30,7 +30,8 @@ class App extends Component {
       comments: [],
       users: [],
       tagsRef: [],
-      vidTags: []
+      vidTags: [],
+      isAdmin: ''
     };
   };
 
@@ -85,6 +86,12 @@ class App extends Component {
     });
   };
 
+  setAdmin = () => {
+    this.setState({
+      isAdmin: true
+    });
+  };
+
   render() {
     const value = {
       navbar: this.state.navbar,
@@ -94,8 +101,10 @@ class App extends Component {
       users: this.state.users,
       tagsRef: this.state.tagsRef,
       vidTags: this.state.vidTags,
+      isAdmin: this.state.isAdmin,
       refreshState: this.updateState,
-      toggleNav: this.toggleNav
+      toggleNav: this.toggleNav,
+      setAdmin: this.setAdmin
     };
 
     return (

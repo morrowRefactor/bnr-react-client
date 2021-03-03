@@ -1,10 +1,29 @@
+.Comments {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
 .commentsUserName,
 .commentsText {
     margin-bottom: 0px;
 }
 
 .commentsDetails {
-    margin-top: 0px;
+    margin: 0px auto 0px auto;
+    font-size: 14px;
+    color: rgb(120, 120, 120);
+}
+
+.commentDelete {
+    border: none;
+    background-color: white;
+    margin: 0px;
+    padding: 0px;
+    color: gray;
+}
+
+.userProfileDelete {
+    color: rgb(180, 180, 180);
 }
 
 /*tablet and desktop adjustments*/

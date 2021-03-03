@@ -20,7 +20,9 @@ class VideoBlock extends Component {
 
         return (
             <section className='VideoBlock'>
-                <img className='videoBlockImage' src={thumbnail} alt={this.props.title} />
+                <Link to={`/videos/${this.props.vid}/${linkText}`}>
+                    <img className='videoBlockImage' src={thumbnail} alt={this.props.title} />
+                </Link>
                 <section className='VideoBlock_details'>
                     <Link 
                         className='videoBlockLink' 
