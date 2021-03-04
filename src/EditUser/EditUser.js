@@ -72,6 +72,7 @@ class EditUser extends Component {
                 })
             }
 
+            this.context.refreshState();
             this.props.history.push(`/my-account/${currInfo.id}`);
         })
         .catch(error => {
