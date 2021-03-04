@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import {FacebookShareButton, FacebookIcon, LinkedinShareButton, LinkedinIcon, TwitterShareButton, TwitterIcon} from "react-share";
 import VideoResources from '../VideoResources/VideoResources';
 import AddComment from '../AddComment/AddComment';
 import Comments from '../Comments/Comments';
@@ -25,6 +26,36 @@ class MainVideoPage extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
+    }
+
+    renderShareButtons = title => {
+        const linkText = title.replace(/\s+/g, '-').toLowerCase();
+        const url = `http://www.beerandnewsreport.com/videos/${this.props.match.params.vid}/${linkText}`;
+        return (
+            <p className='mainVideoShareIcons'>
+                    <FacebookShareButton 
+                        url={url}
+                        quote={`${title} - Beer and News Report`}
+                        hashtag="#beerandnewsreport"
+                        className='socialShareButton'>
+                        <FacebookIcon size={20} />
+                    </FacebookShareButton>
+                    <TwitterShareButton 
+                        url={url}
+                        quote={`${title} - Beer and News Report`}
+                        hashtag="#beerandnewsreport"
+                        className='socialShareButton'>
+                        <TwitterIcon size={20} />
+                    </TwitterShareButton>
+                    <LinkedinShareButton 
+                        url={url}
+                        quote={`${title} - Beer and News Report`}
+                        hashtag="#beerandnewsreport"
+                        className='socialShareButton'>
+                        <LinkedinIcon size={20} />
+                    </LinkedinShareButton>
+            </p>
+        )
     }
 
     render() {
@@ -217,7 +248,11 @@ class MainVideoPage extends Component {
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
                     <div className='mainVideoPageVideo' id='iframe'><iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
-                    <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
+                    <div className='mainVideoDetails'>
+                        <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
+                        <p className='mainVideoShare'>Share:</p>
+                        {this.renderShareButtons(video.title)}
+                    </div>
                     <section className='mainVideoPage_featureAbout'>
                         <h1 className='mainVideoPageTitle'>{video.title}</h1>
                         {userID === 1
