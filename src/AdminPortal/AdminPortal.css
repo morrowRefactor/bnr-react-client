@@ -1,0 +1,10 @@
+.AdminPortal {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto auto auto;
+}
+
+.adminLink {
+    display: inline-block;
+    margin-bottom: 10px;
+}

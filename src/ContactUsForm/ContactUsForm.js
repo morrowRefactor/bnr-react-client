@@ -138,7 +138,7 @@ class ContactUsForm extends Component {
         if(TokenService.hasAuthToken()) {
             const token = TokenService.getAuthToken();
             const decode = jwt_decode(token);
-            const user = this.context.users.find(({ id }) => id === decode.id);
+            const user = this.context.users.find(({ id }) => id === decode.id) || {};
 
             return (
                 <input

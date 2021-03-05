@@ -8,6 +8,7 @@ export default React.createContext({
     users: [],
     tagsRef: [],
     vidTags: [],
+    siteText: [],
     isAdmin: '',
     refreshState: () => {},
     toggleNav: () => {},

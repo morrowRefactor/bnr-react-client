@@ -35,6 +35,10 @@
     border-bottom: 1px solid rgb(195, 195, 195);
 }
 
+.aboutFieldText {
+    white-space: pre-wrap;
+}
+
 /* tablet adjustments */
 @media (min-width: 768px) {
     .About_introHeader {

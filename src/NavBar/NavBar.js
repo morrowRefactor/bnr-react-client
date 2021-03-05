@@ -41,7 +41,7 @@ class Navbar extends Component {
     renderAccountLink() {
       const token = TokenService.getAuthToken();
       const user = jwt_decode(token);
-      const link = user.id === 1 ? `/add-video` : `/my-account/${user.id}`;
+      const link = user.id === 1 ? `/admin` : `/my-account/${user.id}`;
       const text = user.id === 1 ? 'Admin' : 'My Account';
       
         return (

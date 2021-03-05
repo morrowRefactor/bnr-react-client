@@ -49,6 +49,10 @@
     border-bottom: 1px solid rgb(195, 195, 195);
 }
 
+.homepageAbout > p {
+    white-space: pre-wrap;
+}
+
 .RecentVideos {
     width: 90%;
     margin-left: auto;

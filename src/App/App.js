@@ -14,6 +14,8 @@ import EditUser from '../EditUser/EditUser';
 import ResetPassword from '../ResetPassword/ResetPassword';
 import TempPasswordConfirm from '../TempPasswordConfirm/TempPasswordConfirm';
 import ChangePassword from '../ChangePassword/ChangePassword';
+import AdminPortal from '../AdminPortal/AdminPortal';
+import EditSiteText from '../EditSiteText/EditSiteText';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
 import APIContext from '../APIContext';
@@ -31,6 +33,7 @@ class App extends Component {
       users: [],
       tagsRef: [],
       vidTags: [],
+      siteText: [],
       isAdmin: ''
     };
   };
@@ -42,9 +45,10 @@ class App extends Component {
       fetch(`${config.API_ENDPOINT}/api/comments`),
       fetch(`${config.API_ENDPOINT}/api/users`),
       fetch(`${config.API_ENDPOINT}/api/tags`),
-      fetch(`${config.API_ENDPOINT}/api/vid-tags`)
+      fetch(`${config.API_ENDPOINT}/api/vid-tags`),
+      fetch(`${config.API_ENDPOINT}/api/site-text`)
     ])
-    .then(([vidRes, vidResoRes, commRes, userRes, tagsRes, vidTagsRes]) => {
+    .then(([vidRes, vidResoRes, commRes, userRes, tagsRes, vidTagsRes, siteTextRes]) => {
       if (!vidRes.ok)
         return vidRes.json().then(e => Promise.reject(e));
       if (!vidResoRes.ok)
@@ -57,16 +61,19 @@ class App extends Component {
         return tagsRes.json().then(e => Promise.reject(e));
       if (!vidTagsRes.ok)
         return vidTagsRes.json().then(e => Promise.reject(e));
-      return Promise.all([vidRes.json(), vidResoRes.json(), commRes.json(), userRes.json(), tagsRes.json(), vidTagsRes.json()]);
+      if (!siteTextRes.ok)
+        return siteTextRes.json().then(e => Promise.reject(e));
+      return Promise.all([vidRes.json(), vidResoRes.json(), commRes.json(), userRes.json(), tagsRes.json(), vidTagsRes.json(), siteTextRes.json()]);
     })
-    .then(([videos, vidResources, comments, users, tags, vidTags]) => {
+    .then(([videos, vidResources, comments, users, tags, vidTags, siteText]) => {
       this.setState({
         videos: videos,
         vidResources: vidResources,
         comments: comments,
         users: users,
         tagsRef: tags,
-        vidTags: vidTags
+        vidTags: vidTags,
+        siteText: siteText
       })
     })
     .catch(error => {
@@ -101,6 +108,7 @@ class App extends Component {
       users: this.state.users,
       tagsRef: this.state.tagsRef,
       vidTags: this.state.vidTags,
+      siteText: this.state.siteText,
       isAdmin: this.state.isAdmin,
       refreshState: this.updateState,
       toggleNav: this.toggleNav,
@@ -151,6 +159,14 @@ class App extends Component {
           <PrivateRoute
             path='/edit-account/:uid'
             component={EditUser}
+          />
+          <PrivateRoute
+            path='/admin'
+            component={AdminPortal}
+          />
+          <PrivateRoute
+            path='/edit-site-text'
+            component={EditSiteText}
           />
           <PublicOnlyRoute
             exact
