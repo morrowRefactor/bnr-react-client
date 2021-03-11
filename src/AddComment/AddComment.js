@@ -13,11 +13,33 @@ class AddComment extends Component {
         super(props)
         this.state = {
           comment: { value: '', touched: false },
+          errorText: { value: '', status: false }
         };
     };
 
     handleSubmit = e => {
-        e.preventDefault()
+        e.preventDefault();
+
+        // clear any previous errors
+        const commentVal = this.state.comment.value.trim();
+        if(this.state.errorText.status === true && commentVal.length > 0) {
+            this.setState({
+                errorText: { value: '', status: false }
+            });
+        }
+
+        if(commentVal.length < 1) {
+            this.setState({
+                comment: { value: '', touched: false },
+                errorText: { value: 'Text is required to submit a comment', status: true }
+            });
+        }
+        else {
+            this.postComment();
+        }
+    };
+
+    postComment = () => {
         const timeElapsed = Date.now();
         const today = new Date(timeElapsed).toISOString();
         const newComment = {
@@ -42,13 +64,16 @@ class AddComment extends Component {
                 })
             }
 
+            const field = document.getElementById('comment');
+            field.value = '';
             this.setState({comment: { value: '', touched: false }});
             this.context.refreshState();
+            window.scrollTo(0, 0);
         })
         .catch(error => {
             this.setState({ error })
         })
-    }
+    };
 
     updateComment(comm) {
         this.setState({comment: {value: comm, touched: true}});
@@ -57,13 +82,20 @@ class AddComment extends Component {
     validateComment() {
         const comment = this.state.comment.value.trim();
 
+        if(this.state.errorText.status === true && comment.length > 0) {
+            this.setState({
+                errorText: { value: '', status: false }
+            });
+        }
+
         if (comment.length === 0) {
           return 'A comment is required';
         };
     };
 
     handleClickCancel = () => {
-        this.props.history.push('/');
+        const field = document.getElementById('comment');
+        field.value = '';
     };
 
       
@@ -88,6 +120,7 @@ class AddComment extends Component {
                     {this.state.comment.touched && (
                         <ValidationError message={commError} />
                     )}
+                    {this.state.errorText.status === true ? <p id='commentError'>{this.state.errorText.value}</p> : ''}
                     <div className='AddCommentForm_buttons'>
                         <button 
                             type='submit'

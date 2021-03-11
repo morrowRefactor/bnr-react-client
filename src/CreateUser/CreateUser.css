@@ -1,5 +1,5 @@
 .CreateUser {
-    width: 30%;
+    width: 60%;
     text-align: left;
     margin-left: auto;
     margin-right: auto;
@@ -21,9 +21,17 @@
     width: 100%;
 }
 
+.CreateUser_formField > input{
+    width: 100%;
+}
+
 .createUserError {
     font-size: 12px;
     color: red;
+}
+
+.CreateUserForm_buttons > button {
+    margin-right: 10px;
 }
 
 .createUserToggleChar {
@@ -31,6 +39,17 @@
     border: none;
     background-color: white;
     padding: 0px;
+}
+
+/* tablet adjustments */
+@media (min-width: 768px) {
+    .CreateUser {
+        width: 30%;
+    }
+
+    .CreateUser > h1 {
+        text-align: center;
+    }
 }
 
 /* desktop adjustments */

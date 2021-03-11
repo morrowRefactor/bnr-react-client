@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TokenService from '../services/token-service';
-import jwt_decode from 'jwt-decode';
 import Popup from 'reactjs-popup';
 import APIContext from '../APIContext';
 import config from '../config';

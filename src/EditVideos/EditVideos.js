@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import Popup from 'reactjs-popup';
 import AddVidTag from '../AddVidTag/AddVidTag';
 import AddVidResource from '../AddVidResource/AddVidResource';
 import ValidationError from '../ValidationError/ValidationError';
@@ -191,7 +192,6 @@ class EditVideos extends Component {
       if(this.state.vidResources.value[i].id === parseInt(id)) {
         const newArr = this.state.vidResources.value;
         newArr.splice(i, 1);
-        const delReso = this.state.deletedResos.push(parseInt(id));
         this.setState({
           vidResources: { value: newArr, touched: true }
         });
@@ -322,7 +322,6 @@ class EditVideos extends Component {
     }
 
     if(this.state.tags.touched === true) {
-      totalUpdates++;
       this.state.tags.value.forEach(tag => {
         const tagCheck = this.state.currTagIds.find(id => id === tag);
         if(!tagCheck) {
@@ -379,12 +378,10 @@ class EditVideos extends Component {
         }
       })
       .then(res => {
-        if(res.ok === true) {
-          resCheck++;
-          if(resCheck === totalUpdates) {
-            this.context.refreshState();
-            this.props.history.push(`/videos/${this.state.currVid.id}`);
-          }
+        resCheck++;
+        if(resCheck === totalUpdates) {
+          this.context.refreshState();
+          this.props.history.push(`/videos/${this.state.currVid.id}`);
         }
       });
     }
@@ -398,12 +395,10 @@ class EditVideos extends Component {
         }
       })
       .then(res => {
-        if(res.ok === true) {
-          resCheck++;
-          if(resCheck === totalUpdates) {
-            this.context.refreshState();
-            this.props.history.push(`/videos/${this.state.currVid.id}`);
-          }
+        resCheck++;
+        if(resCheck === totalUpdates) {
+          this.context.refreshState();
+          this.props.history.push(`/videos/${this.state.currVid.id}`);
         }
       });
     }
@@ -417,12 +412,10 @@ class EditVideos extends Component {
         }
       })
       .then(res => {
-        if(res.ok === true) {
-          resCheck++;
-          if(resCheck === totalUpdates) {
-            this.context.refreshState();
-            this.props.history.push(`/videos/${this.state.currVid.id}`);
-          }
+        resCheck++;
+        if(resCheck === totalUpdates) {
+          this.context.refreshState();
+          this.props.history.push(`/videos/${this.state.currVid.id}`);
         }
       });
     }
@@ -436,12 +429,10 @@ class EditVideos extends Component {
         }
       })
       .then(res => {
-        if(res.ok === true) {
-          resCheck++;
-          if(resCheck === totalUpdates) {
-            this.context.refreshState();
-            this.props.history.push(`/videos/${this.state.currVid.id}`);
-          }
+        resCheck++;
+        if(resCheck === totalUpdates) {
+          this.context.refreshState();
+          this.props.history.push(`/videos/${this.state.currVid.id}`);
         }
       });
     }
@@ -455,16 +446,69 @@ class EditVideos extends Component {
         }
       })
       .then(res => {
-        if(res.ok === true) {
-          resCheck++;
-          if(resCheck === totalUpdates) {
-            this.context.refreshState();
-            this.props.history.push(`/videos/${this.state.currVid.id}`);
-          }
+        resCheck++;
+        if(resCheck === totalUpdates) {
+          this.context.refreshState();
+          this.props.history.push(`/videos/${this.state.currVid.id}`);
         }
       });
     }
+    this.props.history.push(`/videos/${this.state.currVid.id}`);
   };
+
+  handleDelete = () => {
+    fetch(`${config.API_ENDPOINT}/api/videos/${this.props.match.params.vid}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(error => {
+            throw error
+          })
+        }
+        
+        this.context.refreshState();
+        this.props.history.push(`/browse-videos`);
+      })
+      .catch(error => {
+        this.setState({ error })
+      })
+  };
+
+  deletePopup = () => (
+    <Popup trigger={<button type='button' className='userProfileDelete' id='deleteButton'> Delete Video </button>} modal nested>
+      {close => (
+        <div className="modal">
+            <button className="close" onClick={close}>
+            &times;
+            </button>
+            <div className="header"> Delete Video </div>
+            <div className="content">
+             {' '}
+                Are you sure you want to delete this video?
+            </div>
+            <div className="actions">
+                <button 
+                    className="button" 
+                    onClick={() => this.handleDelete()}
+                > 
+                        Yes, delete 
+                </button>
+                <button
+                    className="button"
+                    onClick={() => close()}
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+        )}
+    </Popup>
+);
 
   handleClickCancel = () => {
     this.props.history.push('/');
@@ -595,7 +639,7 @@ class EditVideos extends Component {
                   {newResources}
                   <button type='button' className='editVideosAddResos' onClick={() => this.addResource()}>Add Resource</button>
                 </section>
-                <div className='AddDestinationForm_buttons'>
+                <div className='EditVideosForm_buttons'>
                     <button 
                         type='button'
                         onClick={() => this.handleSubmit()}
@@ -606,6 +650,8 @@ class EditVideos extends Component {
                     <button type='button' onClick={() => this.handleClickCancel()}>
                         Cancel
                     </button>
+                    {' '}
+                    {this.deletePopup()}
                 </div>
             </form>
         </section>

@@ -113,7 +113,7 @@ class UserLogin extends Component {
                             Password
                         </label>
                         <input
-                            type='text'
+                            type='password'
                             id='userPass'
                             placeholder='Letmein123!'
                             onChange={e => this.updatePass(e.target.value)}

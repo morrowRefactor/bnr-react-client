@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Switch } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import NavBar from '../NavBar/NavBar';
 import Homepage from '../Homepage/Homepage';
 import About from '../About/About';
@@ -16,6 +18,7 @@ import TempPasswordConfirm from '../TempPasswordConfirm/TempPasswordConfirm';
 import ChangePassword from '../ChangePassword/ChangePassword';
 import AdminPortal from '../AdminPortal/AdminPortal';
 import EditSiteText from '../EditSiteText/EditSiteText';
+import NotFound from '../NotFound/NotFound';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
 import APIContext from '../APIContext';
@@ -34,7 +37,8 @@ class App extends Component {
       tagsRef: [],
       vidTags: [],
       siteText: [],
-      isAdmin: ''
+      isAdmin: '',
+      loading: true
     };
   };
 
@@ -73,7 +77,8 @@ class App extends Component {
         users: users,
         tagsRef: tags,
         vidTags: vidTags,
-        siteText: siteText
+        siteText: siteText,
+        loading: false
       })
     })
     .catch(error => {
@@ -119,73 +124,87 @@ class App extends Component {
       <APIContext.Provider value={value}>
         <div className="App">
           <NavBar />
-          <Route 
-            path='/about'
-            component={About}
-          />
-          <Route
-            path='/videos/:vid'
-            component={MainVideoPage}
-          />
-          <Route
-            exact
-            path='/browse-videos'
-            component={BrowseVideos}
-          />
-          <Route
-            exact
-            path='/add-video'
-            component={AddVideos}
-          />
-          <Route
-            exact
-            path='/edit-video/:vid'
-            component={EditVideos}
-          />
-          <Route
-            exact
-            path='/create-account'
-            component={CreateUser}
-          />
-          <Route
-            exact
-            path='/login'
-            component={UserLogin}
-          />
-          <PrivateRoute
-            path='/my-account/:uid'
-            component={UserProfile}
-          />
-          <PrivateRoute
-            path='/edit-account/:uid'
-            component={EditUser}
-          />
-          <PrivateRoute
-            path='/admin'
-            component={AdminPortal}
-          />
-          <PrivateRoute
-            path='/edit-site-text'
-            component={EditSiteText}
-          />
-          <PublicOnlyRoute
-            exact
-            path='/reset-password'
-            component={ResetPassword}
-          />
-          <PublicOnlyRoute
-            path='/reset-password-confirm/:id'
-            component={TempPasswordConfirm}
-          />
-          <PrivateRoute
-            path='/change-password/:uid'
-            component={ChangePassword}
-          />
-          <Route 
-            exact
-            path='/'
-            component={Homepage}
-          />
+          <Switch>
+            <Route 
+              path='/about'
+              component={About}
+            />
+            <Route
+              path='/videos/:vid'
+              component={MainVideoPage}
+            />
+            <Route
+              exact
+              path='/browse-videos'
+              component={BrowseVideos}
+            />
+            <Route
+              exact
+              path='/add-video'
+              component={AddVideos}
+            />
+            <Route
+              exact
+              path='/edit-video/:vid'
+              component={EditVideos}
+            />
+            <Route
+              exact
+              path='/create-account'
+              component={CreateUser}
+            />
+            <Route
+              exact
+              path='/login'
+              component={UserLogin}
+            />
+            <PrivateRoute
+              path='/my-account/:uid'
+              component={UserProfile}
+            />
+            <PrivateRoute
+              path='/edit-account/:uid'
+              component={EditUser}
+            />
+            <PrivateRoute
+              path='/admin'
+              component={AdminPortal}
+            />
+            <PrivateRoute
+              path='/edit-site-text'
+              component={EditSiteText}
+            />
+            <PublicOnlyRoute
+              exact
+              path='/reset-password'
+              component={ResetPassword}
+            />
+            <PublicOnlyRoute
+              path='/reset-password-confirm/:id'
+              component={TempPasswordConfirm}
+            />
+            <PrivateRoute
+              path='/change-password/:uid'
+              component={ChangePassword}
+            />
+            <Route 
+              exact
+              path='/'
+              component={Homepage}
+            />
+            <Route
+              component={NotFound}
+            />
+          </Switch>
+          {this.state.loading === true ? 
+            <Loader
+              type="Puff"
+              color="#00BFFF"
+              height={100}
+              width={100}
+            />
+            : ''
+          }
         </div>
       </APIContext.Provider>
     );

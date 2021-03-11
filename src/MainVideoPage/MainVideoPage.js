@@ -261,7 +261,7 @@ class MainVideoPage extends Component {
                         }
                         <p className='mainVideoDesc'>{video.description}</p>
                     </section>
-                    <div className='MainVideoPage_resources'>
+                    <div className={vidResources.length > 0 ? 'MainVideoPage_resources' : 'MainVideoPage_noResos'}>
                         {renderResourcesHeader()}
                         {renderResourcesList()}
                     </div>

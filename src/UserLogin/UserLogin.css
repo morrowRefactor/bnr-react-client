@@ -1,5 +1,5 @@
 .UserLogin {
-    width: 25%;
+    width: 60%;
     margin-right: auto;
     margin-left: auto;
     text-align: left;
@@ -14,8 +14,13 @@
     width: 100%;
 }
 
+.UserLogin_formField > input {
+    width: 100%;
+}
+
 .UserLogin_formField > p {
     margin-top: 0px;
+    width: 100%;
 }
 
 .userLoginForgotPassword {
@@ -27,6 +32,22 @@
     color: red;
 }
 
+.UserLoginForm_buttons > button {
+    margin-right: 10px;
+}
+
+/* tablet adjustments */
+@media (min-width: 768px) {
+    .UserLogin {
+        width: 40%;
+    }
+
+    .UserLogin > h1 {
+        text-align: center;
+    }
+}
+
+/* desktop adjustments */
 @media (min-width: 1200px) {
     .UserLogin {
         width: 20%;
