@@ -16,6 +16,7 @@
 
 .UserLogin_formField > input {
     width: 100%;
+    padding: 2px 5px 2px 5px;
 }
 
 .UserLogin_formField > p {

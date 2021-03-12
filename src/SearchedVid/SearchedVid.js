@@ -11,7 +11,11 @@ class SearchedVid extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
-    }
+    };
+
+    scrollUp = () => {
+        window.scrollTo(0, 0)
+    };
 
     render() {
         const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
@@ -23,10 +27,17 @@ class SearchedVid extends Component {
                     <button onClick={() => this.props.clearSearch()}>Clear</button>
                 </div>
                 <section className='SearchedVid_content'>
-                    <img className='searchedVidImage' src={thumbnail} alt={this.props.title} />
+                    <Link 
+                        className='searchedVidLink'
+                        onClick={() => this.scrollUp()} 
+                        to={`/videos/${this.props.vid}/${linkText}`}
+                    >
+                        <img className='searchedVidImage' src={thumbnail} alt={this.props.title} />
+                    </Link>
                     <section className='SearchedVid_details'>
                         <Link 
-                            className='searchedVidLink' 
+                            className='searchedVidLink'
+                            onClick={() => this.scrollUp()} 
                             to={`/videos/${this.props.vid}/${linkText}`}
                         >
                             <h3 className='searchedVidTitle'>{this.props.title}</h3>

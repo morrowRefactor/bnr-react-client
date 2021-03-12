@@ -15,7 +15,11 @@ class RelatedVidBlock extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
-    }
+    };
+
+    scrollUp = () => {
+        window.scrollTo(0, 0)
+    };
 
     render() {
         const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
@@ -23,12 +27,13 @@ class RelatedVidBlock extends Component {
 
         return (
             <section className='RelatedVidBlock'>
-                <Link to={`/videos/${this.props.vid}/${linkText}`}>
+                <Link to={`/videos/${this.props.vid}/${linkText}`} onClick={() => this.scrollUp()}>
                     <img className='relatedVidBlockImage' src={thumbnail} alt={this.props.title} />
                 </Link>
                 <section className='RelatedVidBlock_details'>
                     <Link 
                         className='relatedVidBlockLink' 
+                        onClick={() => this.scrollUp()}
                         to={`/videos/${this.props.vid}/${linkText}`}
                     >
                         <h3 className='relatedVidBlockTitle'>{this.props.title}</h3>

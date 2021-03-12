@@ -11,7 +11,11 @@ class VideoBlock extends Component {
         const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 
         return cleanDate;
-    }
+    };
+
+    scrollUp = () => {
+        window.scrollTo(0, 0)
+    };
 
     render() {
         const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
@@ -20,12 +24,13 @@ class VideoBlock extends Component {
 
         return (
             <section className='VideoBlock'>
-                <Link to={`/videos/${this.props.vid}/${linkText}`}>
+                <Link to={`/videos/${this.props.vid}/${linkText}`} onClick={() => this.scrollUp()}>
                     <img className='videoBlockImage' src={thumbnail} alt={this.props.title} />
                 </Link>
                 <section className='VideoBlock_details'>
                     <Link 
                         className='videoBlockLink' 
+                        onClick={() => this.scrollUp()}
                         to={`/videos/${this.props.vid}/${linkText}`}
                     >
                         <h3 className='videoBlockTitle'>{this.props.title}</h3>

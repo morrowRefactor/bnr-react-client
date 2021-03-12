@@ -5,7 +5,7 @@
 
 .mainVideoPageVideo {
     position: relative;
-    width: 90%;
+    width: 95%;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 56.25%;
@@ -28,7 +28,7 @@
 .mainVideoDetails {
     display: flex;
     flex-direction: row;
-    width: 85%;
+    width: 95%;
     margin-left: auto;
     margin-right: auto;
 }

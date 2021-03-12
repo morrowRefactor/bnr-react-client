@@ -73,6 +73,7 @@ class CreateUser extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
+        let flagged = 0;
 
         // clear any previous error messages
         if(this.state.emailError.status === true || this.state.passwordError.status === true || this.state.confirmPassError.status === true) {
@@ -82,6 +83,18 @@ class CreateUser extends Component {
                 confirmPassError: { value: '', status: false},
             })
         }
+
+        // check that email address doesn't already exist
+        const dupeCheck = this.context.users.find(({ email }) => email === this.state.email.value);
+        if(dupeCheck) {
+            flagged++;
+            this.setState({
+                emailError : {
+                    value: 'An account with this email address already exists',
+                    status: true
+                }
+            });
+        }
         
         // validate that email and password have required characters
         const emailCheck1 = this.state.email.value.indexOf('@');
@@ -89,6 +102,7 @@ class CreateUser extends Component {
         const regexPasswordCheck = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
         
         if(emailCheck1 === -1 || !emailCheck2 == -1) {
+            flagged++;
             this.setState({
                 emailError : {
                     value: 'A valid email address is required',
@@ -97,6 +111,7 @@ class CreateUser extends Component {
             });
         }
         else if(!regexPasswordCheck.test(this.state.password.value) || this.state.password.value.length < 8) {
+            flagged++;
             this.setState({
                 passwordError: { 
                     value: 'Password must contain at least one capital letter, one number, one special character, and be at least 8 characters long',
@@ -105,6 +120,7 @@ class CreateUser extends Component {
             });
         }
         else if(this.state.password.value !== this.state.confirmPassword.value) {
+            flagged++;
             this.setState({
                 confirmPassError: { 
                     value: 'Passwords must be an identical character match',
@@ -113,7 +129,9 @@ class CreateUser extends Component {
             });
         }
         else {
-            this.postUser();
+            if(flagged === 0) {
+                this.postUser();
+            }     
         }
     };
 

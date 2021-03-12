@@ -13,10 +13,6 @@ import './MainVideoPage.css';
 class MainVideoPage extends Component {
     static contextType = APIContext;
 
-    componentDidMount() {
-        window.scrollTo(0, 0)
-    }
-
     getVideos() {
         this.context.refreshState();
     }
@@ -74,7 +70,7 @@ class MainVideoPage extends Component {
         if(loggedInUser) {
             const token = TokenService.getAuthToken();
             const user = jwt_decode(token);
-            userID = user.id;
+            userID = user.user_id;
         }
 
         // since component is stateless, check context to fetch data if needed
@@ -247,12 +243,14 @@ class MainVideoPage extends Component {
         return (
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
-                    <div className='mainVideoPageVideo' id='iframe'><iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div>
-                    <div className='mainVideoDetails'>
-                        <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
-                        <p className='mainVideoShare'>Share:</p>
-                        {this.renderShareButtons(video.title)}
+                    <div className='mainVideoPageVideo' id='iframe'>
+                        <iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                     </div>
+                    <div className='mainVideoDetails'>
+                            <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
+                            <p className='mainVideoShare'>Share:</p>
+                            {this.renderShareButtons(video.title)}
+                        </div>
                     <section className='mainVideoPage_featureAbout'>
                         <h1 className='mainVideoPageTitle'>{video.title}</h1>
                         {userID === 1
