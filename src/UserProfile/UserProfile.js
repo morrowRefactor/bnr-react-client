@@ -41,36 +41,38 @@ class UserProfile extends Component {
         })
     };
 
-    deletePopup = () => (
-        <Popup trigger={<button className='userProfileDelete'> Delete account </button>} modal nested>
-          {close => (
-            <div className="modal">
-                <button className="close" onClick={close}>
-                &times;
-                </button>
-                <div className="header"> Delete Account </div>
-                <div className="content">
-                 {' '}
-                    Are you sure you want to delete your account?
-                </div>
-                <div className="actions">
-                    <button 
-                        className="button" 
-                        onClick={() => this.handleDelete()}
-                    > 
-                            Yes, delete 
+    deletePopup = () => {
+        return (
+            <Popup trigger={<button className='userProfileDelete'> Delete account </button>} modal nested>
+            {close => (
+                <div className="modal">
+                    <button className="close" onClick={close}>
+                    &times;
                     </button>
-                    <button
-                        className="button"
-                        onClick={() => close()}
-                    >
-                        Cancel
-                    </button>
+                    <div className="header"> Delete Account </div>
+                    <div className="content">
+                    {' '}
+                        Are you sure you want to delete your account?
+                    </div>
+                    <div className="actions">
+                        <button 
+                            className="button" 
+                            onClick={() => this.handleDelete()}
+                        > 
+                                Yes, delete 
+                        </button>
+                        <button
+                            className="button"
+                            onClick={() => close()}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
-            </div>
-            )}
-        </Popup>
-    );
+                )}
+            </Popup>
+        )
+    };
       
     render() {
         // check for user data
@@ -98,7 +100,7 @@ class UserProfile extends Component {
                     <p className='userProfileSubHeader'>Manage your account</p>
                     <Link className='userProfileLink' to={passwordLink}>Change password</Link>
                     <p></p>
-                    {this.deletePopup()}
+                    {user.id === 1 ? '' : this.deletePopup()}
                 </section>
             </section>
         );
