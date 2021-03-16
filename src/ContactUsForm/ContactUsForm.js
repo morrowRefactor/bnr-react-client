@@ -58,7 +58,7 @@ class ContactUsForm extends Component {
     };
 
     validateMessage() {
-        const email = this.state.email.value.trim();
+        const email = this.state.message.value.trim();
 
         if (email.length === 0) {
           return 'A message is required';
@@ -74,49 +74,82 @@ class ContactUsForm extends Component {
                 emailError: { value: '', status: false}
             })
         }
-        
-        // validate that email and password have required characters
-        const emailCheck1 = this.state.email.value.indexOf('@');
-        const emailCheck2 = this.state.email.value.indexOf('.');
-        if(emailCheck1 === -1 || !emailCheck2 == -1) {
-            this.setState({
-                emailError : {
-                    value: 'A valid email address is required',
-                    status: true
-                }
-            });
-        }
-        else {
-            const contactMessage = {
-                name: this.state.name.value,
-                email: this.state.email.value,
-                message: this.state.message.value
-            };
 
-            fetch(`${config.API_ENDPOINT}/api/contact-us`, {
-                method: 'POST',
-                body: JSON.stringify(contactMessage),
-                headers: {
-                  'content-type': 'application/json'
-                }
-              })
-            .then(res => {
-                if (!res.ok) {
-                    return res.json().then(error => {
-                        throw error
-                    })
-                }
-                else {
-                    this.setState({
-                        sendConfirm: true
-                    });
-                }
-            })
-            .catch(error => {
-                this.setState({ error })
-            })
+        const token = TokenService.getAuthToken();
+        if(token) {
+            const decode = jwt_decode(token);
+            const user = this.context.users.find(({ id }) => id === decode.id) || {};
+            if(this.state.email.value.length < 1 && user.id) {
+                this.setState({
+                    email: { value: user.email, touched: true },
+                    name: { value: user.name, touched: true }
+                })
+            }
+
+            this.submitComment();
+        }
+
+        // validate that email and password have required characters
+        if(!token) {
+            const emailCheck1 = this.state.email.value.indexOf('@');
+            const emailCheck2 = this.state.email.value.indexOf('.');
+            if(emailCheck1 === -1 || emailCheck2 == -1) {
+                this.setState({
+                    emailError : {
+                        value: 'A valid email address is required',
+                        status: true
+                    }
+                });
+            }
+            else {
+                this.submitComment();
+            }
         }
     };
+
+    submitComment = () => {
+        let contactMessage = {
+            name: this.state.name.value,
+            email: this.state.email.value,
+            message: this.state.message.value
+        };
+
+        const token = TokenService.getAuthToken();
+        if(token) {
+            const decode = jwt_decode(token);
+            const user = this.context.users.find(({ id }) => id === decode.id) || {};
+
+            contactMessage = {
+                name: user.name,
+                email: user.email,
+                message: this.state.message.value
+            };
+        }      
+
+        
+        fetch(`${config.API_ENDPOINT}/api/contact-us`, {
+            method: 'POST',
+            body: JSON.stringify(contactMessage),
+            headers: {
+              'content-type': 'application/json'
+            }
+          })
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(error => {
+                    throw error
+                })
+            }
+            else {
+                this.setState({
+                    sendConfirm: true
+                });
+            }
+        })
+        .catch(error => {
+            this.setState({ error })
+        })
+    }
 
     confirmationText = () => {
         return (
@@ -145,7 +178,7 @@ class ContactUsForm extends Component {
                     type='text'
                     id={field}
                     defaultValue={field === 'name' ? user.name : user.email}
-                    onChange={e => this.updateName(e.target.value)}
+                    onChange={e => field === 'name' ? this.updateName(e.target.value) : this.updateEmail(e.target.value)}
                     required
                 />
             )
@@ -156,7 +189,7 @@ class ContactUsForm extends Component {
                     type='text'
                     id={field}
                     placeholder={field === 'name' ? 'Jane Doe' : 'jane-doe@gmail.com'}
-                    onChange={e => this.updateName(e.target.value)}
+                    onChange={e => field === 'name' ? this.updateName(e.target.value) : this.updateEmail(e.target.value)}
                     required
                 />
             )
