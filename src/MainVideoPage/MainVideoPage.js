@@ -70,7 +70,7 @@ class MainVideoPage extends Component {
         if(loggedInUser) {
             const token = TokenService.getAuthToken();
             const user = jwt_decode(token);
-            userID = user.user_id;
+            userID = user.id;
         }
 
         // since component is stateless, check context to fetch data if needed
@@ -222,6 +222,7 @@ class MainVideoPage extends Component {
                         uid={comm.uid}
                         comment={comm.comment}
                         date_posted={comm.date_posted}
+                        isAdmin={userID === 1 ? true : false}
                     />
                 );
             }

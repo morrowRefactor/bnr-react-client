@@ -72,12 +72,12 @@ class Comments extends Component {
 
     render() {
         const user = this.context.users.find(({id}) => id === this.props.uid);
-
+        
         return (
             <section className='Comments'>
                 <p className='commentsText'>{this.props.comment}</p>
                 <p className='commentsDetails'>{user.name}, {this.getCleanDate(this.props.date_posted)}</p>
-                {this.context.isAdmin === true ? this.deletePopup() : ''}
+                {this.props.isAdmin === true ? this.deletePopup() : ''}
             </section>
         );
     }
