@@ -68,9 +68,11 @@ class MainVideoPage extends Component {
         // check for logged in users and admin
         const loggedInUser = TokenService.hasAuthToken();
         if(loggedInUser) {
+            console.log('userID called');
             const token = TokenService.getAuthToken();
             const user = jwt_decode(token);
             userID = user.id;
+            console.log('userID', userID)
         }
 
         // since component is stateless, check context to fetch data if needed
