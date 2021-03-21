@@ -71,6 +71,7 @@ class MainVideoPage extends Component {
             console.log('userID called');
             const token = TokenService.getAuthToken();
             const user = jwt_decode(token);
+            console.log('user', user)
             userID = user.id;
             console.log('userID', userID)
         }
