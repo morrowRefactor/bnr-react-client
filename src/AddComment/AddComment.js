@@ -48,7 +48,6 @@ class AddComment extends Component {
             comment: this.state.comment.value,
             date_posted: today
         };
-        console.log('newComment', newComment)
         
         fetch(`${config.API_ENDPOINT}/api/comments`, {
             method: 'POST',

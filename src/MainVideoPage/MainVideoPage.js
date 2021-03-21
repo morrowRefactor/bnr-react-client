@@ -70,7 +70,7 @@ class MainVideoPage extends Component {
         if(loggedInUser) {
             const token = TokenService.getAuthToken();
             const user = jwt_decode(token);
-            userID = user.user_id;
+            userID = user.id || user.user_id;
         }
 
         // since component is stateless, check context to fetch data if needed
