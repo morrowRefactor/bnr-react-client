@@ -117,13 +117,16 @@ class Navbar extends Component {
                     </ul>
                     <section className='TopNav_socialIcons'>
                         <div className='topNavSocialIcon'>
-                            <a href='https://www.youtube.com/channel/UCZlO4MI8tj0kwA_gOXsdVFQ'><img className='topNavSocialImage' alt='YouTube Social Link' src='https://user-images.githubusercontent.com/58446465/110840664-dad4a000-8259-11eb-89b4-f440d92f335c.png' /></a>
+                            <a href='https://www.youtube.com/channel/UCZlO4MI8tj0kwA_gOXsdVFQ' target='_blank'><img className='topNavSocialImage' alt='YouTube Social Link' src='https://user-images.githubusercontent.com/58446465/110840664-dad4a000-8259-11eb-89b4-f440d92f335c.png' /></a>
                         </div>
                         <div className='topNavSocialIcon'>
-                            <a href='https://www.linkedin.com/in/amaurice/'><img className='topNavSocialImage' alt='LinkedIn Social Link' src='https://user-images.githubusercontent.com/58446465/110840663-da3c0980-8259-11eb-865f-b4ed1b6276d3.png' /></a>
+                            <a href='https://www.linkedin.com/in/amaurice/' target='_blank'><img className='topNavSocialImage' alt='LinkedIn Social Link' src='https://user-images.githubusercontent.com/58446465/110840663-da3c0980-8259-11eb-865f-b4ed1b6276d3.png' /></a>
                         </div>
                         <div className='topNavSocialIcon'>
-                            <a href='https://www.facebook.com/beerandnewsreport/'><img className='topNavSocialImage' alt='Facebook Social Link' src='https://user-images.githubusercontent.com/58446465/110840665-dad4a000-8259-11eb-9061-b1cda4086eec.png' /></a>
+                            <a href='https://twitter.com/artmaurice' target='_blank'><img className='topNavSocialImage' alt='Twitter Social Link' src='https://user-images.githubusercontent.com/58446465/112043705-2f9fd280-8b06-11eb-98f9-d58b2bb551c6.png' /></a>
+                        </div>
+                        <div className='topNavSocialIcon'>
+                            <a href='https://www.facebook.com/beerandnewsreport/' target='_blank'><img className='topNavSocialImage' alt='Facebook Social Link' src='https://user-images.githubusercontent.com/58446465/110840665-dad4a000-8259-11eb-9061-b1cda4086eec.png' /></a>
                         </div>
                     </section>
                   </section>

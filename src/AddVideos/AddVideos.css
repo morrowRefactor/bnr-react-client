@@ -21,10 +21,15 @@
     width: 80%;
 }
 
-.tagsRefHelperText,
-.dateHelperText {
+.tagsRefHelperText {
     margin-top: 0px;
     margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.dateHelperText {
+    margin-top: 0px;
+    margin-bottom: 0px;
     font-size: 14px;
 }
 
@@ -74,5 +79,9 @@
 
     .AddDestinationForm_buttons {
         width: 20%;
+    }
+
+    .AdminVideos_form > .AdminVideos_formResources {
+        width: 80%;
     }
 }

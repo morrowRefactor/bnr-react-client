@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import {FacebookShareButton, FacebookIcon, LinkedinShareButton, LinkedinIcon, TwitterShareButton, TwitterIcon} from "react-share";
+import {FacebookShareButton, FacebookIcon, LinkedinShareButton, LinkedinIcon, TwitterShareButton, TwitterIcon, RedditShareButton, RedditIcon} from "react-share";
 import VideoResources from '../VideoResources/VideoResources';
 import AddComment from '../AddComment/AddComment';
 import Comments from '../Comments/Comments';
@@ -50,6 +50,13 @@ class MainVideoPage extends Component {
                         className='socialShareButton'>
                         <LinkedinIcon size={20} />
                     </LinkedinShareButton>
+                    <RedditShareButton 
+                        url={url}
+                        quote={`${title} - Beer and News Report`}
+                        hashtag="#beerandnewsreport"
+                        className='socialShareButton'>
+                        <RedditIcon size={20} />
+                    </RedditShareButton>
             </p>
         )
     }

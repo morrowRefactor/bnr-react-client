@@ -148,6 +148,14 @@ class AddVideos extends Component {
       date_posted: this.state.date.value 
     };
 
+    Date.prototype.addDays = function (days) {
+      let date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+    const newDate = new Date(newVideo.date_posted);
+    newVideo.date_posted = newDate.addDays(1);
+
     // if new tags were provided with video, post as well
     if(this.state.tagCount.length > 0) {
       for(let i = 0; i < this.state.tagCount.length; i++) {
@@ -469,6 +477,7 @@ class AddVideos extends Component {
                       required
                   />
                   <p className='dateHelperText'>(date uploaded to YouTube, not this site)</p>
+                  <p className='dateHelperText'>(Safari Note: accepted date formats include "MM/DD/YYYY" and "YYYY-MM-DD")</p>
                   {this.state.date.touched && (
                       <ValidationError message={dateError} />
                   )}

@@ -110,7 +110,9 @@ class ChangePassword extends Component {
                             onChange={e => this.updateNewPass(e.target.value)}
                             required
                         />
-                        <button className='changePasswordFieldToggle' onClick={() => this.toggleField()}>Show characters</button>
+                        <div className='changePasswordToggle'>
+                            <button className='changePasswordFieldToggle' onClick={() => this.toggleField()}>Show characters</button>
+                        </div>
                     </section>
                     <section className='ChangePassword_formField'>
                         <label htmlFor='confirmPass'>
