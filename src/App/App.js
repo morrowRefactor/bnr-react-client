@@ -115,6 +115,7 @@ class App extends Component {
       vidTags: this.state.vidTags,
       siteText: this.state.siteText,
       isAdmin: this.state.isAdmin,
+      loading: this.state.loading,
       refreshState: this.updateState,
       toggleNav: this.toggleNav,
       setAdmin: this.setAdmin
@@ -196,7 +197,7 @@ class App extends Component {
               component={NotFound}
             />
           </Switch>
-          {this.state.loading === true ? 
+          {this.state.loading === true && window.innerWidth < 1200 ? 
             <Loader
               type="Puff"
               color="#00BFFF"

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import APIContext from '../APIContext';
 import './Homepage.css';
@@ -69,6 +71,15 @@ class Homepage extends Component {
                 <section className='RecentVideos'>
                     <h3 className='recentVideosTitle'>Recent Videos</h3>
                     {recentVids}
+                    {this.context.loading === true ? 
+                        <Loader
+                            type="Puff"
+                            color="#00BFFF"
+                            height={200}
+                            width={200}
+                            />
+                            : ''
+                    }
                 </section>
             </section>
         );

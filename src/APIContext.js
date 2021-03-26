@@ -10,6 +10,7 @@ export default React.createContext({
     vidTags: [],
     siteText: [],
     isAdmin: '',
+    loading: '',
     refreshState: () => {},
     toggleNav: () => {},
     setAdmin: () => {}
