@@ -55,6 +55,7 @@
     .aboutImage {
         display: inline-block;
         width: 125px;
+        height: 125px;
         border-radius: 90px;
         border: 2px solid rgb(195, 195, 195);
     }
