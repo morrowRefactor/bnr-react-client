@@ -71,7 +71,7 @@ class Homepage extends Component {
                 <section className='RecentVideos'>
                     <h3 className='recentVideosTitle'>Recent Videos</h3>
                     {recentVids}
-                    {this.context.loading === true ? 
+                    {this.context.loading === true && window.innerWidth > 767 ? 
                         <Loader
                             type="Puff"
                             color="#00BFFF"

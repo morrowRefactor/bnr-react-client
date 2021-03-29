@@ -88,7 +88,7 @@ class UserLogin extends Component {
 
         return (
             <section className='UserLogin'>
-                <h1 className='UserLoginHeader'>Login to your account</h1>
+                <h1 className='UserLoginHeader'>Log in to your account</h1>
                 <form 
                     className='UserLogin_form'
                     onSubmit={this.handleSubmit}

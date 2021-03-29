@@ -197,7 +197,7 @@ class App extends Component {
               component={NotFound}
             />
           </Switch>
-          {this.state.loading === true && window.innerWidth < 1200 ? 
+          {this.state.loading === true && window.innerWidth < 768 ? 
             <Loader
               type="Puff"
               color="#00BFFF"

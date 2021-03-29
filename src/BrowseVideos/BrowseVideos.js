@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Select from 'react-select';
 import VideoBlock from '../VideoBlock/VideoBlock';
 import SearchedVid from '../SearchedVid/SearchedVid';
@@ -134,6 +136,7 @@ class BrowseVideos extends Component {
         const recentVids = this.state.filteredVids.value.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
+        const getRecents = window.innerWidth >= 1200 ? recentVids.shift() : recentVids;
         const videos = recentVids.map(vid => 
             <VideoBlock
                 key={vid.id}
@@ -210,6 +213,15 @@ class BrowseVideos extends Component {
                         : ''
                     }
                     {videos}
+                    {this.context.loading === true && window.innerWidth > 767 ? 
+                        <Loader
+                            type="Puff"
+                            color="#00BFFF"
+                            height={200}
+                            width={200}
+                            />
+                            : ''
+                    }
                 </section>
             </section>
         );

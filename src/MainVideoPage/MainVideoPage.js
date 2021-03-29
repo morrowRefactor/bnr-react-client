@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import {FacebookShareButton, FacebookIcon, LinkedinShareButton, LinkedinIcon, TwitterShareButton, TwitterIcon, RedditShareButton, RedditIcon} from "react-share";
 import VideoResources from '../VideoResources/VideoResources';
 import AddComment from '../AddComment/AddComment';
@@ -252,7 +254,15 @@ class MainVideoPage extends Component {
             <section className='MainVideoPage'>
                 <section className='MainVideoPage_feature'>
                     <div className='mainVideoPageVideo' id='iframe'>
-                        <iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        {this.context.loading === true ? 
+                            <Loader
+                                type="Puff"
+                                color="#00BFFF"
+                                height={200}
+                                width={200}
+                                />
+                                : <iframe src={vidLink} title={video.title} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        }
                     </div>
                     <div className='mainVideoDetails'>
                             <p className='mainVideoDate'>Date posted: {this.getCleanDate(video.date_posted)}</p>
