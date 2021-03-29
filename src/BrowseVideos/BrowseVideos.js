@@ -136,8 +136,8 @@ class BrowseVideos extends Component {
         const recentVids = this.state.filteredVids.value.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
-        const getRecents = window.innerWidth >= 1200 ? recentVids.shift() : recentVids;
-        const videos = recentVids.map(vid => 
+        const filteredVids = recentVids.slice(1, (recentVids.length - 1));
+        const videos = filteredVids.map(vid => 
             <VideoBlock
                 key={vid.id}
                 vid={vid.id}
