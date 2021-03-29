@@ -19,7 +19,8 @@ class CreateUser extends Component {
           passwordError: { value: '', status: false },
           confirmPassError: { value: '', status: false },
           emailError: { value: '', status: false },
-          showChar: false
+          showChar: false,
+          showDetails: false
         };
     };
 
@@ -163,6 +164,12 @@ class CreateUser extends Component {
         })
     }
 
+    showAccountDetails = () => {
+        this.setState({
+            showDetails: this.state.showDetails === true ? false : true
+        });
+    };
+
     toggleChars = () => {
         this.setState({ showChar: this.state.showChar ? false : true });
     };
@@ -180,6 +187,11 @@ class CreateUser extends Component {
         return (
             <section className='CreateUser'>
                 <h1 className='createUserHeader'>Create an Account</h1>
+                <button id='createUserWhyAccount' onClick={() => this.showAccountDetails()}>Why create an account?</button>
+                <div id={this.state.showDetails === true ? 'createAccountWhyDetails' : 'hiddenAcctDetails'}>
+                    <p>Accounts are primarily used for commenting on videos. They're a means for us to authenticate user contributions.</p>
+                    <p><strong>Accounts are not required to access content.  All BNR videos are openly available.</strong></p>
+                </div>
                 <form 
                     className='CreateUser_form'
                     onSubmit={this.handleSubmit}
@@ -222,6 +234,7 @@ class CreateUser extends Component {
                         <label htmlFor='userPass'>
                             Password
                         </label>
+                        <p id='createAccountPassDetails'>Minimum 8 characters, at least one capital letter, and at least one special character required.</p>
                         <input
                             type={showChar}
                             id='userPass'

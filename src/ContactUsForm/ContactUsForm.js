@@ -164,6 +164,12 @@ class ContactUsForm extends Component {
             message: { value: '', touched: false },
             emailError: { value: '', status: false }
         });
+
+        const fields = ['name', 'email', 'message'];
+        fields.forEach(field => {
+            const elem = document.getElementById(field);
+            elem.value = '';
+        });
     };
 
     // adjust form fields for logged in users
@@ -242,7 +248,7 @@ class ContactUsForm extends Component {
                         </label>
                         <textarea
                             type='text'
-                            id='cmessage'
+                            id='message'
                             className='contactUsMessage'
                             onChange={e => this.updateMessage(e.target.value)}
                             required

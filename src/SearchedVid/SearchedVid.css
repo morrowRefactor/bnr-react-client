@@ -47,6 +47,11 @@
         padding: 10px 20px 20px 20px;
     }
 
+    .SearchedVid:hover {
+        border: 2px solid rgb(210, 210, 210);
+        box-shadow: 8px 8px 2px -2px rgb(192, 192, 192);
+    }
+
     .SearchedVid_content {
         display: flex;
         flex-direction: row;
@@ -62,7 +67,6 @@
     }
 
     .searchedVidImage {
-        width: 20%;
         height: 90%;
         margin-top: 10px;
     }

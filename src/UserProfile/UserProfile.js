@@ -92,12 +92,13 @@ class UserProfile extends Component {
                     <p>
                         Joined: {this.getCleanDate(user.joined_date)}<br/>
                         Email: {user.email}<br/>
-                        About: {user.about}
+                        About: {user.about || '(Add some information about yourself)'}
                     </p>
                     <Link className='userProfileLink' to={editLink}>Edit info</Link>
                 </section>
                 <section className='UserProfile_manage'>
                     <p className='userProfileSubHeader'>Manage your account</p>
+                    <br />
                     <Link className='userProfileLink' to={passwordLink}>Change password</Link>
                     <p></p>
                     {user.id === 1 ? '' : this.deletePopup()}

@@ -10,8 +10,11 @@
 }
 
 .userProfileSubHeader {
+    display: inline-block;
+    width: 100%;
     font-weight: bold;
     color: rgb(75, 75, 75);
+    border-bottom: 1px solid gray;
 }
 
 .userProfileLink {
@@ -58,3 +61,17 @@
     border-radius: 18px;
     border: 1px solid #cfcece;
   }
+
+/* tablet adjustments */
+@media (min-width: 768px) {
+  .UserProfile {
+    width: 50%;
+  }
+}
+
+/* desktop adjustments */
+@media (min-width: 1200px) {
+  .UserProfile {
+    width: 30%;
+  }
+}
