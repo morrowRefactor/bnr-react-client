@@ -439,7 +439,7 @@ class AddVideos extends Component {
                     Video description
                 </label>
                 <section className='adminVideos_formInput'>
-                  <input
+                  <textarea
                       type='text'
                       id='vidDesc'
                       placeholder='This is the most amazig video yet!'

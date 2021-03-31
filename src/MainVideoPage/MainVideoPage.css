@@ -59,6 +59,7 @@
     padding: 10px;
     margin-bottom: 30px;
     text-align: left;
+    white-space: pre-wrap;
 }
 
 .MainVideoPage_resources,
@@ -131,6 +132,7 @@
     .mainVideoPage_featureAbout {
         text-align: left;
         padding-left: 20px;
+        width: 100%;
     }
 
     .mainVideoPageTitle {
@@ -150,7 +152,7 @@
 
     .MainVideoPage_resources,
     .MainVideoPage_comments {
-        width: 90%;
+        width: 95%;
         margin-left: auto;
         margin-right: auto;
         padding: 0px 0px 30px 20px;

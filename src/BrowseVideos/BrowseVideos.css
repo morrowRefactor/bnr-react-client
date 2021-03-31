@@ -63,13 +63,13 @@
 
     .BrowseVideos_formInfo {
         width: 35%;
-        margin-right: auto 20px auto auto;
-        border-right: 1px solid gray;
+        margin-right: auto 20px auto auto;   
     }
 
     .browseVideos_desktopAdj {
         position: fixed;
         width: 30%;
+        border-right: 1px solid gray;
     }
 
     .BrowseVideos_desktopFeature {

@@ -17,8 +17,13 @@
     margin-bottom: 20px;
 }
 
-.adminVideos_formInput > input {
+.adminVideos_formInput > input,
+.adminVideos_formInput > textarea {
     width: 80%;
+}
+
+.adminVideos_formInput > textarea {
+    height: 100px;
 }
 
 .tagsRefHelperText {

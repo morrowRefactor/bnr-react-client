@@ -585,8 +585,8 @@ class EditVideos extends Component {
                     Video description
                 </label>
                 <section className='adminVideos_formInput'>
-                  <input
-                      type="textarea"
+                  <textarea
+                      type="text"
                       id="vidDesc"
                       defaultValue={thisVideo.description}
                       onChange={e => this.updateDesc(e.target.value)}

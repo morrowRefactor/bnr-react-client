@@ -16,7 +16,8 @@ class BrowseVideos extends Component {
         this.state = {
             filteredVids: { value: [], touched: false },
             searchedVid: { value: '', touched: false },
-            foundVid: false
+            foundVid: false,
+            filterVal: 'all'
         }
     };
 
@@ -52,7 +53,8 @@ class BrowseVideos extends Component {
     updateFilter = e => {
         if(e === 'all') {
             this.setState({
-                filteredVids: { value: this.context.videos, touched: true }
+                filteredVids: { value: this.context.videos, touched: true },
+                filterVal: 'all'
             })
         }
         else {
@@ -75,9 +77,9 @@ class BrowseVideos extends Component {
             vidIDArr.forEach(vid =>
                 videoMatches.push(vid[0])
             )
-
             this.setState({
-                filteredVids: { value: videoMatches, touched: true }
+                filteredVids: { value: videoMatches, touched: true },
+                filterVal: e
             })
         }
     };
@@ -136,7 +138,7 @@ class BrowseVideos extends Component {
         const recentVids = this.state.filteredVids.value.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
-        const filteredVids = recentVids.slice(1, (recentVids.length - 1));
+        const filteredVids = this.state.filterVal === 'all' && window.innerWidth > 1199 ? recentVids.slice(1, (recentVids.length - 1)) : recentVids;
         const videos = filteredVids.map(vid => 
             <VideoBlock
                 key={vid.id}
