@@ -4,6 +4,7 @@ import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Select from 'react-select';
 import VideoBlock from '../VideoBlock/VideoBlock';
+import VideoGrid from '../VideoGrid/VideoGrid';
 import SearchedVid from '../SearchedVid/SearchedVid';
 import APIContext from '../APIContext';
 import './BrowseVideos.css';
@@ -17,7 +18,8 @@ class BrowseVideos extends Component {
             filteredVids: { value: [], touched: false },
             searchedVid: { value: '', touched: false },
             foundVid: false,
-            filterVal: 'all'
+            filterVal: 'all',
+            viewOption: 'showDetails'
         }
     };
 
@@ -109,6 +111,12 @@ class BrowseVideos extends Component {
         return cleanDate;
     };
 
+    changeView = view => {
+        this.setState({
+            viewOption: view
+        });
+    };
+
     render() {
         const sortDates = this.context.videos.sort(function(a,b){
             return new Date(b.date_posted) - new Date(a.date_posted);
@@ -139,12 +147,22 @@ class BrowseVideos extends Component {
             return new Date(b.date_posted) - new Date(a.date_posted);
         });
         const filteredVids = this.state.filterVal === 'all' && window.innerWidth > 1199 ? recentVids.slice(1, (recentVids.length - 1)) : recentVids;
-        const videos = filteredVids.map(vid => 
+        const videoDetails = filteredVids.map(vid => 
             <VideoBlock
                 key={vid.id}
                 vid={vid.id}
                 title={vid.title}
                 description={vid.description}
+                date_posted={vid.date_posted}
+                youtube_id={vid.youtube_id}
+            />
+        );
+
+        const videoGrids = filteredVids.map(vid => 
+            <VideoGrid
+                key={vid.id}
+                vid={vid.id}
+                title={vid.title}
                 date_posted={vid.date_posted}
                 youtube_id={vid.youtube_id}
             />
@@ -205,6 +223,15 @@ class BrowseVideos extends Component {
                     </section>
                 </section>
                 <section className='BrowseVideos_videos'>
+                    <div className={window.innerWidth > 767 ? 'browseVideosFilterOptions' : 'hidden'}>
+                        <p className='filterOptionsText'>SELECT VIEW:</p>
+                        <div className='filterOptionButton' onClick={() => this.changeView('showDetails')}>
+                            <img className='filterOptionImage' src='https://user-images.githubusercontent.com/58446465/113230817-b400fc80-924e-11eb-8d6f-a5e78fff6a0e.png' alt='Detailed Video View' />
+                        </div>
+                        <div className='filterOptionButton' onClick={() => this.changeView('showGrid')}>
+                            <img className='filterOptionImage' src='https://user-images.githubusercontent.com/58446465/113230818-b4999300-924e-11eb-96ae-2f76970f9348.png' alt='Grid Video View' />
+                        </div>
+                    </div>
                     {this.state.foundVid
                         ? <h3 className='browseVideos_subHeader'>Your search</h3>
                         : ''
@@ -214,16 +241,18 @@ class BrowseVideos extends Component {
                         ? <h3 className='browseVideos_subHeader'>All videos</h3>
                         : ''
                     }
-                    {videos}
-                    {this.context.loading === true && window.innerWidth > 767 ? 
-                        <Loader
-                            type="Puff"
-                            color="#00BFFF"
-                            height={200}
-                            width={200}
-                            />
-                            : ''
-                    }
+                    <section className={this.state.viewOption}>
+                        {this.state.viewOption === 'showDetails' ? videoDetails : videoGrids}
+                        {this.context.loading === true && window.innerWidth > 767 ? 
+                            <Loader
+                                type="Puff"
+                                color="#00BFFF"
+                                height={200}
+                                width={200}
+                                />
+                                : ''
+                        }
+                    </section>
                 </section>
             </section>
         );

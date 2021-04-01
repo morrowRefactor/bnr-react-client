@@ -1,0 +1,28 @@
+/* tablet and desktop adjustments */
+@media (min-width: 768px) {
+    .VideoGrid {
+        width: 23%;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid rgb(210, 210, 210);
+        box-shadow: 4px 4px 2px -2px rgb(192, 192, 192);
+        border-radius: 3px;
+    }
+    
+    .videoGridImage {
+        margin-right: auto;
+        margin-left: auto;
+        width: 70%;
+        border: 1px solid gray;
+    }
+    
+    .VideoGrid:hover {
+        border: 2px solid rgb(210, 210, 210);
+        box-shadow: 8px 8px 2px -2px rgb(192, 192, 192);
+    }
+
+    .videoGridPostDate {
+        font-size: 12px;
+        color: rgb(120, 120, 120);
+    }
+}

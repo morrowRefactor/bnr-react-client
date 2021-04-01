@@ -1,0 +1,44 @@
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import APIContext from '../APIContext';
+import './VideoGrid.css';
+
+class VideoGrid extends Component {
+    static contextType = APIContext;
+
+    getCleanDate = (dte) => {
+        const date = new Date(dte);
+        const cleanDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+        return cleanDate;
+    };
+
+    scrollUp = () => {
+        window.scrollTo(0, 0)
+    };
+
+    render() {
+        const linkText = this.props.title.replace(/\s+/g, '-').toLowerCase();
+        const thumbnail = 'https://img.youtube.com/vi/' + this.props.youtube_id + '/hqdefault.jpg';
+
+        return (
+            <section className='VideoGrid'>
+                <Link to={`/videos/${this.props.vid}/${linkText}`} onClick={() => this.scrollUp()}>
+                    <img className='videoGridImage' src={thumbnail} alt={this.props.title} />
+                </Link>
+                <section className='VideoGrid_details'>
+                    <Link 
+                        className='videoGridLink' 
+                        onClick={() => this.scrollUp()}
+                        to={`/videos/${this.props.vid}/${linkText}`}
+                    >
+                        <h3 className='videoGridTitle'>{this.props.title}</h3>
+                    </Link>
+                    <p className='videoGridPostDate'>Posted: {this.getCleanDate(this.props.date_posted)}</p>
+                </section>
+            </section>
+        );
+    }
+}
+
+export default VideoGrid;

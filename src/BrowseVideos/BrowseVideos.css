@@ -51,6 +51,46 @@
     .BrowseVideos_form {
         width: 60%;
     }
+
+    .browseVideosFilterOptions {
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        margin: auto auto 20px auto;
+        text-align: left;
+    }
+
+    .filterOptionsText {
+        color: gray;
+        font-size: 14px;
+        line-height: 30px;
+        margin: 0px 10px 0px auto;
+    }
+
+    .filterOptionButton {
+        padding: 0px;
+        margin-left: 5px;
+    }
+
+    .filterOptionButton:hover {
+        cursor: pointer;
+    }
+
+    .filterOptionImage {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+
+    .showGrid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (min-width: 1200px) {
