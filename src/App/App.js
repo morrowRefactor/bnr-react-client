@@ -21,6 +21,7 @@ import EditSiteText from '../EditSiteText/EditSiteText';
 import NotFound from '../NotFound/NotFound';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute';
+import AdminOnlyRoute from '../Utils/AdminOnlyRoute';
 import APIContext from '../APIContext';
 import config from '../config';
 import './App.css';
@@ -139,12 +140,12 @@ class App extends Component {
               path='/browse-videos'
               component={BrowseVideos}
             />
-            <Route
+            <AdminOnlyRoute
               exact
               path='/add-video'
               component={AddVideos}
             />
-            <Route
+            <AdminOnlyRoute
               exact
               path='/edit-video/:vid'
               component={EditVideos}
@@ -167,11 +168,11 @@ class App extends Component {
               path='/edit-account/:uid'
               component={EditUser}
             />
-            <PrivateRoute
+            <AdminOnlyRoute
               path='/admin'
               component={AdminPortal}
             />
-            <PrivateRoute
+            <AdminOnlyRoute
               path='/edit-site-text'
               component={EditSiteText}
             />
