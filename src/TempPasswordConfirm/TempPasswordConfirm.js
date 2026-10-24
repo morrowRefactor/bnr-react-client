@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import APIContext from '../APIContext';
 import TokenService from '../services/token-service';
-import config from '../config';
+import AuthApiService from '../services/auth-api-service';
 import './TempPasswordConfirm.css';
 
 class TempPasswordConfirm extends Component {
@@ -11,108 +11,33 @@ class TempPasswordConfirm extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          email: '',
+          email: (props.location.state && props.location.state.email) || '',
           password: { value: '', touched: true },
-          emailError: { value: '', status: false },
           validError: { value: '', status: false }
         };
     };
     
     handleSubmit = e => {
         e.preventDefault();
-        
-        const checkEmail = this.context.users.find(({ email }) => email === this.state.email);
-        if(!checkEmail) {
-            this.setState({
-                emailError: { value: 'An account with this email address does not exist', status: true }
-            });
-        }
-        else {
-            if(this.state.emailError.status === true || this.state.validError.status === true) {
-                this.setState({
-                    emailError: { value: '', status: false },
-                    validError: { value: '', status: false }
-                });
-            }
+        this.setState({ validError: { value: '', status: false } });
 
-            const tempLogin = {
-                id: this.props.match.params.id,
-                uid: checkEmail.id,
-                email: this.state.email,
-                password: this.state.password.value
-            };
-
-            fetch(`${config.API_ENDPOINT}/api/reset-password/${this.props.match.params.id}`, {
-                method: 'POST',
-                body: JSON.stringify(tempLogin),
-                headers: {
-                  'content-type': 'application/json'
-                }
-              })
-                .then(res => {
-                  if (!res.ok) {
-                    return res.json().then(error => {
-                      throw error
-                    })
-                  }
-
-                  return res.json().then(newPass => {
-                    TokenService.saveAuthToken(newPass.authToken);
-                    this.removeTempPass();
-                    this.props.history.push(`/change-password/${tempLogin.uid}`);
-                  }) 
-                })
-                .catch(error => {
-                  this.setState({ error })
-                })
-        }
-    };
-
-    getEmail = () => {
-        fetch(`${config.API_ENDPOINT}/api/reset-password/${this.props.match.params.id}`, {
-            method: 'GET',
-            body: JSON.stringify(),
-            headers: {
-              'content-type': 'application/json'
-            }
-          })
+        AuthApiService.postTempLogin({
+            email: this.state.email.trim(),
+            password: this.state.password.value
+        })
             .then(res => {
-              if (!res.ok) {
-                return res.json().then(error => {
-                  throw error
-                })
-              }
-
-              return res.json().then(newPass => {
-                this.setState({
-                    email: newPass.email
-                });
-              }) 
+                TokenService.saveAuthToken(res.authToken);
+                this.props.history.push(`/change-password/${res.uid}`);
             })
-            .catch(error => {
-              this.setState({ error })
+            .catch(() => {
+                this.setState({
+                    validError: { value: 'Incorrect email or temporary password', status: true }
+                });
             })
     };
 
-    removeTempPass = () => {
-        fetch(`${config.API_ENDPOINT}/api/reset-password/${this.props.match.params.id}`, {
-            method: 'DELETE',
-            body: JSON.stringify(),
-            headers: {
-              'content-type': 'application/json',
-              'authorization': `bearer ${TokenService.getAuthToken()}`
-            }
-          })
-            .then(res => {
-              if (!res.ok) {
-                return res.json().then(error => {
-                  throw error
-                })
-              }
-            })
-            .catch(error => {
-              this.setState({ error })
-            })
+    updateEmail = email => {
+        this.setState({ email });
     };
 
     updateTempPass = pass => {
@@ -124,14 +49,6 @@ class TempPasswordConfirm extends Component {
     };
   
     render() {
-        if(this.state.email.length < 2) {
-            this.getEmail();
-        }
-
-        if(this.context.users.length < 1) {
-            this.context.refreshState();
-        }
-
         return (
             <section className='TempPasswordConfirm'>
                 <h1 className='TempPasswordConfirmHeader'>Enter temporary password</h1>
@@ -149,7 +66,9 @@ class TempPasswordConfirm extends Component {
                         <input
                             type='text'
                             id='email'
-                            defaultValue={this.state.email}
+                            value={this.state.email}
+                            onChange={e => this.updateEmail(e.target.value)}
+                            required
                         />
                     </section>
                     <section className='TempPasswordConfirm_formField'>

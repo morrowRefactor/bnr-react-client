@@ -4,6 +4,7 @@ import APIContext from '../APIContext';
 import ValidationError from '../ValidationError/ValidationError';
 import TokenService from '../services/token-service';
 import config from '../config';
+import AuthApiService from '../services/auth-api-service';
 import './EditUser.css';
 
 class EditUser extends Component {
@@ -15,8 +16,15 @@ class EditUser extends Component {
           name: { value: '', touched: false },
           email: { value: '', touched: false },
           about: { value: '', touched: false },
-          emailError: { value: '', status: false }
+          emailError: { value: '', status: false },
+          currentEmail: ''
         };
+    };
+
+    componentDidMount() {
+        AuthApiService.getOwnAccount(this.props.match.params.uid)
+            .then(account => this.setState({ currentEmail: account.email || '' }))
+            .catch(() => {})
     };
     
     handleSubmit = e => {
@@ -53,7 +61,7 @@ class EditUser extends Component {
         const updatedInfo = {
             id: currInfo.id,
             name: this.state.name.touched ? this.state.name.value : currInfo.name,
-            email: this.state.email.touched ? this.state.email.value : currInfo.email,
+            email: this.state.email.touched ? this.state.email.value : undefined,
             about: this.state.about.touched ? this.state.about.value : currInfo.about
         };
         
@@ -76,6 +84,11 @@ class EditUser extends Component {
             this.props.history.push(`/my-account/${currInfo.id}`);
         })
         .catch(error => {
+            if (error && error.error === 'User email already taken') {
+                this.setState({
+                    emailError: { value: 'An account with this email address already exists', status: true }
+                });
+            }
             this.setState({ error })
         })
     }
@@ -147,7 +160,7 @@ class EditUser extends Component {
                         <input
                             type='text'
                             id='email'
-                            placeholder={user.email}
+                            placeholder={this.state.currentEmail}
                             onChange={e => this.updateEmail(e.target.value)}
                         />
                         {this.state.emailError.status

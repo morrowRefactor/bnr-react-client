@@ -4,11 +4,20 @@ import TokenService from '../services/token-service';
 import Popup from 'reactjs-popup';
 import APIContext from '../APIContext';
 import config from '../config';
+import AuthApiService from '../services/auth-api-service';
 import 'reactjs-popup/dist/index.css';
 import './UserProfile.css';
 
 class UserProfile extends Component {
     static contextType = APIContext;
+
+    state = { email: '' };
+
+    componentDidMount() {
+        AuthApiService.getOwnAccount(this.props.match.params.uid)
+            .then(account => this.setState({ email: account.email || '' }))
+            .catch(() => {})
+    };
 
     getCleanDate = (dte) => {
         const date = new Date(dte);
@@ -91,7 +100,7 @@ class UserProfile extends Component {
                     <p className='userProfileSubHeader'>Info</p>
                     <p>
                         Joined: {this.getCleanDate(user.joined_date)}<br/>
-                        Email: {user.email}<br/>
+                        Email: {this.state.email}<br/>
                         About: {user.about || '(Add some information about yourself)'}
                     </p>
                     <Link className='userProfileLink' to={editLink}>Edit info</Link>

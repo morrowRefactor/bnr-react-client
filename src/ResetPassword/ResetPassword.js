@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ValidationError from '../ValidationError/ValidationError';
 import APIContext from '../APIContext';
-import config from '../config';
+import AuthApiService from '../services/auth-api-service';
 import './ResetPassword.css';
 
 class ResetPassword extends Component {
@@ -16,59 +16,24 @@ class ResetPassword extends Component {
         };
     };
 
-    randomString = (length, chars) => {
-        let result = '';
-        for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-        return result;
-    }
-    
-
     handleSubmit = e => {
         e.preventDefault();
-        
-        const checkEmail = this.context.users.find(({ email }) => email === this.state.email.value);
-        if(!checkEmail) {
-            this.setState({
-                emailError: { value: 'An account with this email address does not exist', status: true }
-            });
-        }
-        else {
-            if(this.state.emailError.status === true) {
-                this.setState({
-                    emailError: { value: '', status: false }
+        const email = this.state.email.value.trim();
+
+        // The server creates the temporary password and emails it; it responds the same way
+        // whether or not the email has an account
+        AuthApiService.requestPasswordReset(email)
+            .then(() => {
+                this.props.history.push({
+                    pathname: '/reset-password-confirm/sent',
+                    state: { email }
                 });
-            }
-            
-            const tempPass = this.randomString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-            const newTempLogin = {
-                uid: checkEmail.id,
-                email: this.state.email.value,
-                password: tempPass
-            };
-            console.log('tempass', tempPass);
-
-            fetch(`${config.API_ENDPOINT}/api/reset-password`, {
-                method: 'POST',
-                body: JSON.stringify(newTempLogin),
-                headers: {
-                  'content-type': 'application/json'
-                }
-              })
-                .then(res => {
-                  if (!res.ok) {
-                    return res.json().then(error => {
-                      throw error
-                    })
-                  }
-
-                  return res.json().then(newPass => {
-                    this.props.history.push(`/reset-password-confirm/${newPass.id}`);
-                  }) 
-                })
-                .catch(error => {
-                  this.setState({ error })
-                })
-        }
+            })
+            .catch(error => {
+                this.setState({
+                    emailError: { value: 'Something went wrong. Please try again.', status: true }
+                });
+            })
     }
 
     updateEmail = email => {
@@ -89,10 +54,6 @@ class ResetPassword extends Component {
 
       
     render() {
-        if(this.context.users.length < 1) {
-            this.context.refreshState();
-        }
-
         const emailError = this.validateUserEmail();
 
         return (

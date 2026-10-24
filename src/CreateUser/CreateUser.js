@@ -85,18 +85,6 @@ class CreateUser extends Component {
             })
         }
 
-        // check that email address doesn't already exist
-        const dupeCheck = this.context.users.find(({ email }) => email === this.state.email.value);
-        if(dupeCheck) {
-            flagged++;
-            this.setState({
-                emailError : {
-                    value: 'An account with this email address already exists',
-                    status: true
-                }
-            });
-        }
-        
         // validate that email and password have required characters
         const emailCheck1 = this.state.email.value.indexOf('@');
         const emailCheck2 = this.state.email.value.indexOf('.');
@@ -160,6 +148,14 @@ class CreateUser extends Component {
             }
         })
         .catch(res => {
+            if (res && res.error === 'User email already taken') {
+                this.setState({
+                    emailError : {
+                        value: 'An account with this email address already exists',
+                        status: true
+                    }
+                });
+            }
             this.setState({ error: res.error })
         })
     }
